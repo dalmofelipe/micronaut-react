@@ -1,5 +1,5 @@
 
-# Micronaut React Skeleton
+# Micronaut React
 
 > Estrutura fullstack moderna com backend em Micronaut (Java) e frontend em React (Vite + TypeScript).
 
