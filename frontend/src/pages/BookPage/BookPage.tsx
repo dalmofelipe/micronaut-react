@@ -4,8 +4,11 @@ import { BookCounter } from "../../components/BookCounter";
 
 const BookPageWrapper = styled(Box)`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 20px;
   width: 100%;
+  max-width: 800px;
   padding: 25px;
 `
 const BookPageButtons = styled('div')`
