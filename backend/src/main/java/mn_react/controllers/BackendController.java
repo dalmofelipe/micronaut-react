@@ -1,4 +1,4 @@
-package mn_react;
+package mn_react.controllers;
 
 import io.micronaut.http.annotation.*;
 
