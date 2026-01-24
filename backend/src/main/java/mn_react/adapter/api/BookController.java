@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import mn_react.adapter.api.dto.BookResponse;
 import mn_react.adapter.api.dto.CreateBookRequest;
 import mn_react.core.domain.entities.Book;
+import mn_react.core.domain.exception.NotFoundException;
 import mn_react.core.repository.BookRepository;
 import mn_react.core.usecase.CreateBookUseCase;
 
@@ -42,10 +43,10 @@ public class BookController {
     
     @Get("/{id}")
     HttpResponse<BookResponse> getBook(@PathVariable Long id) {
-        Book book = bookRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Book not found with ID " + id));
-            
-        return HttpResponse.ok(toResponse(book));
+        Book response = bookRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Book", id));
+
+        return HttpResponse.ok(this.toResponse(response));
     }
 
     @Post
