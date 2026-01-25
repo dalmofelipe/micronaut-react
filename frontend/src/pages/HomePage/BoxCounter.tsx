@@ -1,5 +1,5 @@
 import { Button, styled, Typography } from "@mui/material";
-import { useCounter } from "../../../../store/useCounterStore";
+import { useCounter } from "../../store/useCounterStore";
 
 const BoxCounterWrapper = styled('div')`
   display: flex;

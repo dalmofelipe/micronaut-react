@@ -1,21 +1,7 @@
-import { Box, Button, styled, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { BookCounter } from "../../components/BookCounter";
-
-const BookPageWrapper = styled(Box)`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto auto;
-  gap: 20px;
-  width: 100%;
-  max-width: 800px;
-  padding: 25px;
-`
-const BookPageButtons = styled('div')`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
+import { BookPageButtons, BookPageWrapper } from "./styles/BookPage.styled";
 
 export const BookPage = () => {
   const navigate = useNavigate()

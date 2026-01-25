@@ -1,10 +1,10 @@
 import { styled } from '@mui/material';
-import axiosLogo from '../../../../assets/axios.svg';
-import muiLogo from '../../../../assets/mui.svg';
-import reactQueryLogo from '../../../../assets/query.png';
-import reactLogo from '../../../../assets/react.svg';
-import zustandLogo from '../../../../assets/zustand.svg';
-import { TechLogo, type TechLogoProps } from './components/TechLogo';
+import axiosLogo from '../../assets/axios.svg';
+import muiLogo from '../../assets/mui.svg';
+import reactQueryLogo from '../../assets/query.png';
+import reactLogo from '../../assets/react.svg';
+import zustandLogo from '../../assets/zustand.svg';
+import { TechLogo, type TechLogoProps } from './TechLogo';
 import viteLogo from '/vite.svg';
 
 const LogoList: TechLogoProps[] = [
@@ -21,7 +21,6 @@ const TechLogosWrapper = styled('div')`
   justify-content: space-around;
   align-items: center;
   gap: 20px;
-
   width: 100%;
 `
 
