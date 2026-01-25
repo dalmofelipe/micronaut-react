@@ -1,11 +1,12 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { DefaultLayout } from './layouts/DefaultLayout';
+import { DefaultLayout } from './layouts/default/DefaultLayout';
 import { BookPage } from "./pages/BookPage/BookPage";
 import { HomePage } from "./pages/HomePage/HomePage";
 import { useThemeStore } from "./store/useThemeStore";
 import { darkTheme, lightTheme } from "./theme";
+import { TestPage } from "./pages/TestPage/TestPage";
 
 export const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ export const Router = () => {
             <Route element={<DefaultLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/books" element={<BookPage />} />  
+              <Route path="/test" element={<TestPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
