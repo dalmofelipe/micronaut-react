@@ -6,9 +6,14 @@ import { BookPageButtons, BookPageWrapper } from "./styles/BookPage.styled";
 export const BookPage = () => {
   const navigate = useNavigate()
 
-  const handleOnClick = () => {
+  const handleToHome = () => {
     console.log('navitage to home')
     navigate('/')
+  }
+
+  const handleToTest = () => {
+    console.log('navitage to test')
+    navigate('/test')
   }
 
   return (
@@ -21,8 +26,12 @@ export const BookPage = () => {
       <BookCounter />
 
       <BookPageButtons>
-        <Button variant="contained" color="secondary" onClick={handleOnClick}>
+        <Button variant="contained" color="secondary" onClick={handleToHome}>
           Home
+        </Button>
+
+        <Button variant="contained" color="secondary" onClick={handleToTest}>
+          Test
         </Button>
       </BookPageButtons>
     </BookPageWrapper>

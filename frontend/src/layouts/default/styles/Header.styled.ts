@@ -1,18 +1,27 @@
 import { Container, Paper, styled } from "@mui/material";
 
-export const HeaderWrapper = styled(Paper)(({ theme }) => ({
+export const HeaderWrapper = styled(Paper)<{
+    headerheight: number
+}>(({
+    theme,
+    headerheight
+}) => ({
     width: '100%',
-    minHeight: '55px',
+    height: headerheight,
     position: 'fixed',
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[4],
     zIndex: theme.zIndex.appBar,
 }));
 
-export const HeaderContainer = styled(Container)({
+export const HeaderContainer = styled(Container)<{
+    headerheight: number
+}>(({
+    headerheight
+}) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    minHeight: '55px',
+    height: headerheight,
     padding: '8px',
-});
+}));

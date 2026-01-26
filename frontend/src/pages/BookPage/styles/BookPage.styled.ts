@@ -7,11 +7,12 @@ export const BookPageWrapper = styled(Box)(({ theme }) => ({
   gap: theme.spacing(2.5),
   width: "100%",
   maxWidth: 800,
-  padding: 25,
+  padding: "25px 0",
 }))
 
 export const BookPageButtons = styled('div')({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  gap: "15px",
 })
