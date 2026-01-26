@@ -13,7 +13,11 @@ export const BoxCounter = () => {
 
   return (
     <BoxCounterWrapper>
-      <Button variant="outlined" color="secondary" onClick={() => increment()}>
+      <Button 
+        variant="outlined" 
+        color="secondary" 
+        onClick={() => increment()}
+      >
         count is {count}
       </Button>
 

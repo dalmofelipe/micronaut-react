@@ -26,11 +26,19 @@ export const BookPage = () => {
       <BookCounter />
 
       <BookPageButtons>
-        <Button variant="contained" color="secondary" onClick={handleToHome}>
+        <Button 
+          variant="contained" 
+          color="secondary" 
+          onClick={handleToHome}
+        >
           Home
         </Button>
 
-        <Button variant="contained" color="secondary" onClick={handleToTest}>
+        <Button 
+          variant="contained" 
+          color="secondary" 
+          onClick={handleToTest}
+        >
           Test
         </Button>
       </BookPageButtons>

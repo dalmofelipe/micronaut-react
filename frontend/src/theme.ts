@@ -7,10 +7,7 @@ export const lightTheme = createTheme({
     mode: 'light',
     background: {
       default: '#d3d6d9',
-    },
-     primary: {
-      main: '#fc5c6c',
-    },
+    }
   },
   typography: {
     fontFamily: 'Open Sans'

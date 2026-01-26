@@ -21,6 +21,12 @@ public class DataLoader implements ApplicationEventListener<ServerStartupEvent> 
             bookJdbcRepository.save(BookEntity.builder().title("The Lord of the Rings").pages(1178).build());
             bookJdbcRepository.save(BookEntity.builder().title("The Hobbit").pages(310).build());
             bookJdbcRepository.save(BookEntity.builder().title("Harry Potter").pages(223).build());
+            bookJdbcRepository.save(BookEntity.builder().title("The Lord of the Rings").pages(1178).build());
+            bookJdbcRepository.save(BookEntity.builder().title("The Hobbit").pages(310).build());
+            bookJdbcRepository.save(BookEntity.builder().title("Harry Potter").pages(223).build());
+            bookJdbcRepository.save(BookEntity.builder().title("The Lord of the Rings").pages(1178).build());
+            bookJdbcRepository.save(BookEntity.builder().title("The Hobbit").pages(310).build());
+            bookJdbcRepository.save(BookEntity.builder().title("Harry Potter").pages(223).build());
         }
     }
 }
