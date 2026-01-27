@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DefaultLayout } from './layouts/default/DefaultLayout';
 import { BookPage } from "./pages/BookPage/BookPage";
+import { BookDetailsPage } from "./pages/BookDetailsPage/BookDetailsPage";
 import { HomePage } from "./pages/HomePage/HomePage";
 import { useThemeStore } from "./store/useThemeStore";
 import { darkTheme, lightTheme } from "./theme";
@@ -23,6 +24,7 @@ export const Router = () => {
             <Route element={<DefaultLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/books" element={<BookPage />} />  
+              <Route path="/books/:id" element={<BookDetailsPage />} />
               <Route path="/test" element={<TestPage />} />
             </Route>
           </Routes>

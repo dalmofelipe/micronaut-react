@@ -1,4 +1,4 @@
-import { Container, Paper, styled } from "@mui/material";
+import { Box, Container, Paper, styled } from "@mui/material";
 
 export const HeaderWrapper = styled(Paper)<{
     headerheight: number
@@ -24,4 +24,10 @@ export const HeaderContainer = styled(Container)<{
     alignItems: 'center',
     height: headerheight,
     padding: '8px',
+}));
+
+export const HeaderActions = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
 }));

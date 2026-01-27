@@ -9,11 +9,11 @@ export const lightTheme = createTheme({
       default: '#d3d6d9',
     },
      primary: {
-      main: '#fc5c6c',
+      main: '#500aff',
     },
   },
   typography: {
-    fontFamily: 'Open Sans'
+    fontFamily: 'Montserrat'
   }
 });
 
@@ -21,7 +21,7 @@ export const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#ff8772',
+      main: '#777eff',
     },
     secondary: {
       main: '#b7cc00'

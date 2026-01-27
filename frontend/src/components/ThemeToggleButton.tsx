@@ -1,10 +1,13 @@
-import { Button } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { useThemeStore } from "../store/useThemeStore";
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 
 export const ThemeToggleButton = () => {
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
-  
-  return <Button variant="contained" color="info" onClick={toggleTheme}>
-    Alternar tema
-  </Button>;
+  const mode = useThemeStore((state) => state.mode);
+
+  return <IconButton onClick={toggleTheme}>
+    {mode === "light" ? <DarkModeIcon /> : <LightModeIcon />}
+  </IconButton>;
 }

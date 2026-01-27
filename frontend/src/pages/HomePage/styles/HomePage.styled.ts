@@ -1,17 +1,21 @@
-import { styled } from "@mui/material"
+import { Box, styled } from "@mui/material"
 
 export const HomeWrapper = styled('div')({
   display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
   flexDirection: "column",
   gap: 16,
-  padding: 25,
+  padding: '25px 0',
+  width: '100%',
 })
 
-export const HomeButtons = styled('div')({
-  display: "flex",
-  justifyContent: "center",
-  gap: 34,
-  width: "100%",
+export const HomeTitle = styled(Box)({
+  textAlign: 'left',
+  marginBottom: 16,
 })
+
+export const BooksGrid = styled(Box)(({ theme }) => ({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+  gap: theme.spacing(3),
+  width: '100%',
+}))
