@@ -7,5 +7,5 @@ import mn_react.adapter.persistence.entity.BookEntity;
 
 @JdbcRepository(dialect = Dialect.POSTGRES)
 public interface BookJdbcRepository extends CrudRepository<BookEntity, Long> {
-
+    boolean existsByTitleIgnoreCase(String title);
 }

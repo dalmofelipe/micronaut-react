@@ -4,22 +4,31 @@ import { useGetAllBooks } from "../../hooks/useBooks";
 import { BookCard } from "../../components/BookCard";
 import { HeroSearch } from "../../components/HeroSearch";
 import type { TBook } from "../../types/book.type";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 export const HomePage = () => {
   const { allBooks, isLoadingAllBooks, isErrorAllBooks, errorAllBooks } = useGetAllBooks();
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   const filteredBooks = useMemo(() => {
     if (!allBooks) return [];
-    if (!searchTerm.trim()) return allBooks;
+    if (!debouncedSearchTerm.trim()) return allBooks;
     
-    const search = searchTerm.toLowerCase();
+    const search = debouncedSearchTerm.toLowerCase();
     return allBooks.filter((book: TBook) => 
       book.title.toLowerCase().includes(search) ||
       (book.author && book.author.toLowerCase().includes(search))
     );
-  }, [allBooks, searchTerm]);
+  }, [allBooks, debouncedSearchTerm]);
 
   if (isLoadingAllBooks) {
     return (

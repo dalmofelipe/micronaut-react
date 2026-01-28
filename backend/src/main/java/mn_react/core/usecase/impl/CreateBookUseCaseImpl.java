@@ -50,15 +50,11 @@ public class CreateBookUseCaseImpl implements CreateBookUseCase {
     }
 
     private String normalizeTitle(String title) {
-        String trimmed = title.trim().replaceAll("\\s+", " ");
-        return trimmed.substring(0, 1).toUpperCase() + trimmed.substring(1);
+        return title.trim().replaceAll("\\s+", " ");
     }
 
     private void checkForDuplicates(String title) {
-        boolean exists = bookRepository.findAll().stream()
-            .anyMatch(book -> book.getTitle().equalsIgnoreCase(title));
-        
-        if (exists) {
+        if (bookRepository.existsByTitleIgnoreCase(title)) {
             throw new ConflictException("A book with title '" + title + "' already exists");
         }
     }

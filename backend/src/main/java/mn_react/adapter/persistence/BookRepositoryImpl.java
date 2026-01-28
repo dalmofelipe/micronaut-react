@@ -38,6 +38,11 @@ public class BookRepositoryImpl implements BookRepository {
         return toDomain(saved);
     }
 
+    @Override
+    public boolean existsByTitleIgnoreCase(String title) {
+        return jdbcRepository.existsByTitleIgnoreCase(title);
+    }
+
     // mappers
     private Book toDomain(BookEntity entity) {
         return Book.builder()

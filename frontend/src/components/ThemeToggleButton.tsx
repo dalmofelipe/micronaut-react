@@ -7,7 +7,7 @@ export const ThemeToggleButton = () => {
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
   const mode = useThemeStore((state) => state.mode);
 
-  return <IconButton onClick={toggleTheme}>
+  return <IconButton color="inherit" onClick={toggleTheme}>
     {mode === "light" ? <DarkModeIcon /> : <LightModeIcon />}
   </IconButton>;
 }
