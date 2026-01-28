@@ -8,26 +8,26 @@ export function useQueryParams() {
   const {
     filters,
     setSearch,
-    setAutor,
-    setGenero,
-    setDisponibilidade,
+    setAuthor,
+    setGenre,
+    setAvailability,
     setPage
   } = useBookFiltersStore();
 
   // Sincronizar query params -> store (na montagem)
   useEffect(() => {
     const search = searchParams.get('search') || '';
-    const autor = searchParams.get('autor') || '';
-    const genero = searchParams.get('genero') || '';
-    const disponibilidade = 
-      (searchParams.get('disponibilidade') as IBookFilters['disponibilidade']) 
-      || 'todos';
+    const author = searchParams.get('author') || '';
+    const genre = searchParams.get('genre') || '';
+    const availability = 
+      (searchParams.get('availability') as IBookFilters['availability']) 
+      || 'all';
     const page = parseInt(searchParams.get('page') || '1', 10);
 
     if (search) setSearch(search);
-    if (autor) setAutor(autor);
-    if (genero) setGenero(genero);
-    if (disponibilidade !== 'todos') setDisponibilidade(disponibilidade);
+    if (author) setAuthor(author);
+    if (genre) setGenre(genre);
+    if (availability !== 'all') setAvailability(availability);
     if (page !== 1) setPage(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -37,9 +37,9 @@ export function useQueryParams() {
     const params = new URLSearchParams();
 
     if (filters.search) params.set('search', filters.search);
-    if (filters.autor) params.set('autor', filters.autor);
-    if (filters.genero) params.set('genero', filters.genero);
-    if (filters.disponibilidade !== 'todos') params.set('disponibilidade', filters.disponibilidade);
+    if (filters.author) params.set('author', filters.author);
+    if (filters.genre) params.set('genre', filters.genre);
+    if (filters.availability !== 'all') params.set('availability', filters.availability);
     if (filters.page > 1) params.set('page', filters.page.toString());
 
     setSearchParams(params, { replace: true });

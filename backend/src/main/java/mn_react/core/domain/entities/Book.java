@@ -15,4 +15,13 @@ public class Book {
     private Long id;
     private String title;
     private int pages;
+    // Future properties (Fase 1):
+    private String author;
+    private String isbn;
+    private String genre; // Will use GenreEnum when implemented
+    private Integer totalQuantity;
+    private Integer availableQuantity;
+    private String summary;
+    private String imageUrl;
+    private Boolean active;
 }

@@ -3,12 +3,12 @@ export interface IBook {
   title: string;
   pages: number;
   // Campos futuros (Fase 1):
-  autor?: string;
+  author?: string;
   isbn?: string;
-  genero?: string;
-  quantidadeTotal?: number;
-  quantidadeDisponivel?: number;
-  resumo?: string;
-  imagemUrl?: string;
-  ativo?: boolean;
+  genre?: string;
+  totalQuantity?: number;
+  availableQuantity?: number;
+  summary?: string;
+  imageUrl?: string;
+  active?: boolean;
 }

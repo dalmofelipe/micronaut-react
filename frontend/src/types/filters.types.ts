@@ -1,7 +1,7 @@
 export interface IBookFilters {
   search: string;
-  autor: string;
-  genero: string;
-  disponibilidade: 'todos' | 'disponiveis' | 'indisponiveis';
+  author: string;
+  genre: string;
+  availability: 'all' | 'available' | 'unavailable';
   page: number;
 }

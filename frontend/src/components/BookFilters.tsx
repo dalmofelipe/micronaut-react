@@ -33,9 +33,9 @@ export function BookFilters({ variant = 'sidebar' }: IBookFiltersProps) {
 
   const {
     filters,
-    setAutor,
-    setGenero,
-    setDisponibilidade,
+    setAuthor,
+    setGenre,
+    setAvailability,
     resetFilters
   } = useBookFiltersStore();
 
@@ -49,13 +49,13 @@ export function BookFilters({ variant = 'sidebar' }: IBookFiltersProps) {
     );
   };
 
-  const renderAutorFilter = () => (
+  const renderAuthorFilter = () => (
     <Tooltip title="Disponível após Fase 1 do backend" placement="top">
       <span>
         <TextField
           label="Autor"
-          value={filters.autor}
-          onChange={(e) => setAutor(e.target.value)}
+          value={filters.author}
+          onChange={(e) => setAuthor(e.target.value)}
           fullWidth
           size="small"
           disabled
@@ -64,14 +64,14 @@ export function BookFilters({ variant = 'sidebar' }: IBookFiltersProps) {
     </Tooltip>
   );
 
-  const renderGeneroFilter = () => (
+  const renderGenreFilter = () => (
     <Tooltip title="Disponível após Fase 1 do backend" placement="top">
       <span>
         <FormControl fullWidth size="small" disabled>
           <InputLabel>Gênero</InputLabel>
           <Select 
-            value={filters.genero} 
-            onChange={(e) => setGenero(e.target.value)} 
+            value={filters.genre} 
+            onChange={(e) => setGenre(e.target.value)} 
             label="Gênero"
           >
             <MenuItem value="">Todos</MenuItem>
@@ -86,21 +86,21 @@ export function BookFilters({ variant = 'sidebar' }: IBookFiltersProps) {
     </Tooltip>
   );
 
-  const renderDisponibilidadeFilter = () => (
+  const renderAvailabilityFilter = () => (
     <Tooltip title="Disponível após Fase 1 do backend" placement="top">
       <span>
         <FormControl fullWidth size="small" disabled>
           <InputLabel>Disponibilidade</InputLabel>
           <Select
-            value={filters.disponibilidade}
+            value={filters.availability}
             onChange={(e) =>
-              setDisponibilidade(e.target.value as typeof filters.disponibilidade)
+              setAvailability(e.target.value as typeof filters.availability)
             }
             label="Disponibilidade"
           >
-            <MenuItem value="todos">Todos</MenuItem>
-            <MenuItem value="disponiveis">Disponíveis</MenuItem>
-            <MenuItem value="indisponiveis">Indisponíveis</MenuItem>
+            <MenuItem value="all">Todos</MenuItem>
+            <MenuItem value="available">Disponíveis</MenuItem>
+            <MenuItem value="unavailable">Indisponíveis</MenuItem>
           </Select>
         </FormControl>
       </span>
@@ -123,9 +123,9 @@ export function BookFilters({ variant = 'sidebar' }: IBookFiltersProps) {
 
       <Divider />
 
-      {renderAutorFilter()}
-      {renderGeneroFilter()}
-      {renderDisponibilidadeFilter()}
+      {renderAuthorFilter()}
+      {renderGenreFilter()}
+      {renderAvailabilityFilter()}
 
       <Button variant="outlined" onClick={resetFilters} sx={{ mt: 'auto' }}>
         Limpar Filtros

@@ -31,8 +31,8 @@ export function BookDetailModal({ bookId, open, onClose }: IBookDetailModalProps
     errorBook: error 
   } = useGetBookById(bookId ?? 0);
 
-  const disponivel = book?.quantidadeDisponivel !== undefined 
-    ? book.quantidadeDisponivel > 0 
+  const isAvailable = book?.availableQuantity !== undefined 
+    ? book.availableQuantity > 0 
     : true;
 
   const renderLoading = () => (
@@ -48,25 +48,25 @@ export function BookDetailModal({ bookId, open, onClose }: IBookDetailModalProps
   );
 
   const renderBookImage = () => {
-    if (!book?.imagemUrl) return null;
+    if (!book?.imageUrl) return null;
 
-    return <StyledBookImage src={book.imagemUrl} alt={book.title} />;
+    return <StyledBookImage src={book.imageUrl} alt={book.title} />;
   };
 
-  const renderAutor = () => {
-    if (!book?.autor) return null;
+  const renderAuthor = () => {
+    if (!book?.author) return null;
 
     return (
       <Typography variant="subtitle1" color="text.secondary">
-        {book.autor}
+        {book.author}
       </Typography>
     );
   };
 
-  const renderGenero = () => {
-    if (!book?.genero) return null;
+  const renderGenre = () => {
+    if (!book?.genre) return null;
 
-    return <Chip label={book.genero} variant="outlined" />;
+    return <Chip label={book.genre} variant="outlined" />;
   };
 
   const renderIsbn = () => {
@@ -75,13 +75,13 @@ export function BookDetailModal({ bookId, open, onClose }: IBookDetailModalProps
     return <Chip label={`ISBN: ${book.isbn}`} variant="outlined" />;
   };
 
-  const renderResumo = () => {
+  const renderSummary = () => {
     if (!book) return null;
 
-    if (book.resumo) {
+    if (book.summary) {
       return (
         <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
-          {book.resumo}
+          {book.summary}
         </Typography>
       );
     }
@@ -93,23 +93,23 @@ export function BookDetailModal({ bookId, open, onClose }: IBookDetailModalProps
     );
   };
 
-  const renderQuantidades = () => {
+  const renderQuantities = () => {
     if (!book) return null;
 
-    const hasQuantidades =
-      book.quantidadeTotal !== undefined || book.quantidadeDisponivel !== undefined;
+    const hasQuantities =
+      book.totalQuantity !== undefined || book.availableQuantity !== undefined;
 
-    if (!hasQuantidades) return null;
+    if (!hasQuantities) return null;
 
     return (
       <>
         <Divider />
         <StyledContentContainer>
           <Typography variant="body2" color="text.secondary">
-            Quantidade Total: {book.quantidadeTotal ?? 'N/A'}
+            Quantidade Total: {book.totalQuantity ?? 'N/A'}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Disponíveis: {book.quantidadeDisponivel ?? 'N/A'}
+            Disponíveis: {book.availableQuantity ?? 'N/A'}
           </Typography>
         </StyledContentContainer>
       </>
@@ -125,7 +125,7 @@ export function BookDetailModal({ bookId, open, onClose }: IBookDetailModalProps
           <Typography variant="h5" component="div">
             {book.title}
           </Typography>
-          {renderAutor()}
+          {renderAuthor()}
         </DialogTitle>
 
         <DialogContent dividers>
@@ -134,26 +134,26 @@ export function BookDetailModal({ bookId, open, onClose }: IBookDetailModalProps
 
             <StyledChipsContainer>
               <Chip
-                label={disponivel ? 'Disponível' : 'Indisponível'}
-                color={disponivel ? 'success' : 'error'}
+                label={isAvailable ? 'Disponível' : 'Indisponível'}
+                color={isAvailable ? 'success' : 'error'}
               />
-              {renderGenero()}
+              {renderGenre()}
               {renderIsbn()}
               <Chip label={`${book.pages} páginas`} variant="outlined" />
             </StyledChipsContainer>
 
             <Divider />
 
-            {renderResumo()}
+            {renderSummary()}
 
-            {renderQuantidades()}
+            {renderQuantities()}
           </StyledContentContainer>
         </DialogContent>
 
         <DialogActions>
           <Button onClick={onClose}>Fechar</Button>
-          <Button variant="contained" disabled={!disponivel}>
-            {disponivel ? 'Solicitar Empréstimo' : 'Indisponível'}
+          <Button variant="contained" disabled={!isAvailable}>
+            {isAvailable ? 'Solicitar Empréstimo' : 'Indisponível'}
           </Button>
         </DialogActions>
       </>

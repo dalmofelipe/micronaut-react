@@ -13,43 +13,43 @@ interface IBookCardProps {
 }
 
 export function BookCard({ book, onClick }: IBookCardProps) {
-  const disponivel = book.quantidadeDisponivel !== undefined 
-    ? book.quantidadeDisponivel > 0 
+  const isAvailable = book.availableQuantity !== undefined 
+    ? book.availableQuantity > 0 
     : true;
 
-  const renderAutor = () => {
-    if (!book.autor) return null;
+  const renderAuthor = () => {
+    if (!book.author) return null;
 
     return (
       <Typography variant="body2" color="text.secondary" noWrap>
-        {book.autor}
+        {book.author}
       </Typography>
     );
   };
 
-  const renderGenero = () => {
-    if (!book.genero) return null;
+  const renderGenre = () => {
+    if (!book.genre) return null;
 
-    return <Chip label={book.genero} size="small" variant="outlined" />;
+    return <Chip label={book.genre} size="small" variant="outlined" />;
   };
 
   return (
     <StyledCard onClick={() => onClick(book)}>
-      <StyledCardMedia image={book.imagemUrl} title={book.title}>
-        {!book.imagemUrl && '📚'}
+      <StyledCardMedia image={book.imageUrl} title={book.title}>
+        {!book.imageUrl && '📚'}
       </StyledCardMedia>
       <StyledCardContent>
         <Typography variant="h6" component="h3" gutterBottom noWrap>
           {book.title}
         </Typography>
-        {renderAutor()}
+        {renderAuthor()}
         <StyledChipsContainer>
           <Chip
-            label={disponivel ? 'Disponível' : 'Indisponível'}
-            color={disponivel ? 'success' : 'error'}
+            label={isAvailable ? 'Disponível' : 'Indisponível'}
+            color={isAvailable ? 'success' : 'error'}
             size="small"
           />
-          {renderGenero()}
+          {renderGenre()}
           <Chip label={`${book.pages} páginas`} size="small" variant="outlined" />
         </StyledChipsContainer>
       </StyledCardContent>

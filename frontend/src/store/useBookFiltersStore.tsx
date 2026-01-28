@@ -5,18 +5,18 @@ import type { IBookFilters } from '../types';
 interface IBookFiltersStore {
   filters: IBookFilters;
   setSearch: (search: string) => void;
-  setAutor: (autor: string) => void;
-  setGenero: (genero: string) => void;
-  setDisponibilidade: (disponibilidade: IBookFilters['disponibilidade']) => void;
+  setAuthor: (author: string) => void;
+  setGenre: (genre: string) => void;
+  setAvailability: (availability: IBookFilters['availability']) => void;
   setPage: (page: number) => void;
   resetFilters: () => void;
 }
 
 const defaultFilters: IBookFilters = {
   search: '',
-  autor: '',
-  genero: '',
-  disponibilidade: 'todos',
+  author: '',
+  genre: '',
+  availability: 'all',
   page: 1,
 };
 
@@ -28,17 +28,17 @@ export const useBookFiltersStore = create<IBookFiltersStore>()(
         set((state) => ({
           filters: { ...state.filters, search, page: 1 },
         })),
-      setAutor: (autor) =>
+      setAuthor: (author) =>
         set((state) => ({
-          filters: { ...state.filters, autor, page: 1 },
+          filters: { ...state.filters, author, page: 1 },
         })),
-      setGenero: (genero) =>
+      setGenre: (genre) =>
         set((state) => ({
-          filters: { ...state.filters, genero, page: 1 },
+          filters: { ...state.filters, genre, page: 1 },
         })),
-      setDisponibilidade: (disponibilidade) =>
+      setAvailability: (availability) =>
         set((state) => ({
-          filters: { ...state.filters, disponibilidade, page: 1 },
+          filters: { ...state.filters, availability, page: 1 },
         })),
       setPage: (page) =>
         set((state) => ({

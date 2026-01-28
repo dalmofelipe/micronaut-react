@@ -30,4 +30,29 @@ public class BookEntity {
     
     @MappedProperty("PAGES")
     private int pages;
+    
+    // Future properties (Fase 1):
+    @MappedProperty("AUTHOR")
+    private String author;
+    
+    @MappedProperty("ISBN")
+    private String isbn;
+    
+    @MappedProperty("GENRE")
+    private String genre;
+    
+    @MappedProperty("TOTAL_QUANTITY")
+    private Integer totalQuantity;
+    
+    @MappedProperty("AVAILABLE_QUANTITY")
+    private Integer availableQuantity;
+    
+    @MappedProperty("SUMMARY")
+    private String summary;
+    
+    @MappedProperty("IMAGE_URL")
+    private String imageUrl;
+    
+    @MappedProperty("ACTIVE")
+    private Boolean active;
 }

@@ -127,58 +127,58 @@ Este é um projeto de **aprendizado prático** com foco em:
 ### **Book (Livro)**
 ```java
 - id: Long
-- titulo: String (obrigatório, max 255)
-- autor: String (obrigatório, max 150)
+- title: String (obrigatório, max 255)
+- author: String (obrigatório, max 150)
 - isbn: String (validação ISBN-10/ISBN-13 customizada)
-- genero: GeneroEnum (obrigatório)
-- quantidadeTotal: Integer (obrigatório, min 1)
-- quantidadeDisponivel: Integer (calculado, >= 0)
-- resumo: String (opcional, max 1000)
-- imagemUrl: String (URL externa, opcional)
-- ativo: Boolean (soft delete, default true)
+- genre: GenreEnum (obrigatório)
+- totalQuantity: Integer (obrigatório, min 1)
+- availableQuantity: Integer (calculado, >= 0)
+- summary: String (opcional, max 1000)
+- imageUrl: String (URL externa, opcional)
+- active: Boolean (soft delete, default true)
 ```
 
-**GeneroEnum:**
-`FICCAO_CIENTIFICA`, `FANTASIA`, `QUADRINHOS`, `MANGA`, `TERROR`, `ROMANCE`, `BIOGRAFIA`, `TECNICO`, `OUTRO`
+**GenreEnum:**
+`SCIENCE_FICTION`, `FANTASY`, `COMICS`, `MANGA`, `HORROR`, `ROMANCE`, `BIOGRAPHY`, `TECHNICAL`, `OTHER`
 
 ### **User (Usuário)**
 ```java
 - id: Long
-- nome: String (obrigatório, max 150)
+- name: String (obrigatório, max 150)
 - email: String (obrigatório, único, validação email)
-- telefone: String (obrigatório, formato brasileiro)
-- ativo: Boolean (soft delete, default true)
-- multasAcumuladas: BigDecimal (default 0.00)
+- phone: String (obrigatório, formato brasileiro)
+- active: Boolean (soft delete, default true)
+- accumulatedFines: BigDecimal (default 0.00)
 ```
 
 ### **Loan (Empréstimo)**
 ```java
 - id: Long
-- usuario: User (many-to-one)
-- livro: Book (many-to-one)
-- dataEmprestimo: LocalDate (obrigatório)
-- dataDevolucaoPrevista: LocalDate (calculado: +14 dias)
-- dataDevolucaoReal: LocalDate (nullable)
-- numeroRenovacoes: Integer (default 0, max 2)
-- valorMulta: BigDecimal (default 0.00)
+- user: User (many-to-one)
+- book: Book (many-to-one)
+- loanDate: LocalDate (obrigatório)
+- expectedReturnDate: LocalDate (calculado: +14 dias)
+- actualReturnDate: LocalDate (nullable)
+- renewalCount: Integer (default 0, max 2)
+- fineAmount: BigDecimal (default 0.00)
 - status: LoanStatusEnum (obrigatório)
 ```
 
 **LoanStatusEnum:**
-`ATIVO`, `ATRASADO`, `DEVOLVIDO`
+`ACTIVE`, `OVERDUE`, `RETURNED`
 
 ### **WaitingQueue (Fila de Espera)**
 ```java
 - id: Long
-- usuario: User (many-to-one)
-- livro: Book (many-to-one)
-- posicao: Integer (auto-calculado FIFO)
-- dataSolicitacao: LocalDateTime (obrigatório)
+- user: User (many-to-one)
+- book: Book (many-to-one)
+- position: Integer (auto-calculado FIFO)
+- requestDate: LocalDateTime (obrigatório)
 - status: QueueStatusEnum (obrigatório)
 ```
 
 **QueueStatusEnum:**
-`AGUARDANDO`, `NOTIFICADO`, `CANCELADO`, `CONCLUIDO`
+`WAITING`, `NOTIFIED`, `CANCELED`, `COMPLETED`
 
 ---
 
@@ -189,8 +189,8 @@ Este é um projeto de **aprendizado prático** com foco em:
 2. ✅ Livro deve estar ativo
 3. ✅ Usuário não pode ter mais de 3 empréstimos ativos
 4. ✅ Usuário não pode ter multas > R$ 20,00
-5. ✅ Livro deve ter `quantidadeDisponivel > 0`
-6. ✅ Ao emprestar: `quantidadeDisponivel--`
+5. ✅ Livro deve ter `availableQuantity > 0`
+6. ✅ Ao emprestar: `availableQuantity--`
 7. ✅ Prazo padrão: 14 dias
 8. ✅ Se livro indisponível: adicionar à fila de espera
 
@@ -199,33 +199,33 @@ Este é um projeto de **aprendizado prático** com foco em:
 2. ✅ Cada renovação adiciona 7 dias
 3. ✅ **Bloqueio:** usuário com qualquer empréstimo atrasado não pode renovar nenhum
 4. ✅ **Bloqueio:** livro com fila de espera não pode ser renovado
-5. ✅ Atualiza `dataDevolucaoPrevista` e incrementa `numeroRenovacoes`
+5. ✅ Atualiza `expectedReturnDate` e incrementa `renewalCount`
 
 ### **Devolução de Livro**
-1. ✅ Marca `dataDevolucaoReal = hoje`
-2. ✅ Atualiza `status = DEVOLVIDO`
-3. ✅ `quantidadeDisponivel++`
+1. ✅ Marca `actualReturnDate = hoje`
+2. ✅ Atualiza `status = RETURNED`
+3. ✅ `availableQuantity++`
 4. ✅ Se houver fila: notifica próximo usuário (log)
 5. ✅ Multas aplicadas permanecem até pagamento
 
 ### **Cálculo de Multas**
 1. ✅ Multa: R$ 2,00 por dia de atraso
-2. ✅ Atraso = `hoje - dataDevolucaoPrevista` (se positivo)
+2. ✅ Atraso = `hoje - expectedReturnDate` (se positivo)
 3. ✅ Multa acumulada no empréstimo e no usuário
 4. ✅ Job diário atualiza multas automaticamente
-5. ✅ Bloqueio de novos empréstimos se `multasAcumuladas > R$ 20,00`
+5. ✅ Bloqueio de novos empréstimos se `accumulatedFines > R$ 20,00`
 
 ### **Fila de Espera**
 1. ✅ FIFO puro: primeiro a solicitar, primeiro notificado
 2. ✅ Posição calculada automaticamente na inserção
 3. ✅ Notificação (log) ao devolver livro para próximo da fila
-4. ✅ Status `AGUARDANDO → NOTIFICADO → CONCLUIDO`
+4. ✅ Status `WAITING → NOTIFIED → COMPLETED`
 5. ✅ Usuário pode cancelar posição na fila
 
 ### **Histórico Completo**
 1. ✅ Empréstimos devolvidos permanecem no banco
-2. ✅ Status `DEVOLVIDO` com `dataDevolucaoReal` preenchida
-3. ✅ Multas pagas zeradas em `User.multasAcumuladas`
+2. ✅ Status `RETURNED` com `actualReturnDate` preenchida
+3. ✅ Multas pagas zeradas em `User.accumulatedFines`
 4. ✅ Auditoria completa para relatórios
 
 ---
@@ -262,11 +262,11 @@ Este é um projeto de **aprendizado prático** com foco em:
 
 ### Responsabilidades:
 1. **Atualizar Status de Empréstimos**
-   - `ATIVO → ATRASADO` se `hoje > dataDevolucaoPrevista`
+   - `ACTIVE → OVERDUE` se `hoje > expectedReturnDate`
 
 2. **Calcular Multas**
    - Para todos empréstimos atrasados
-   - Atualizar `Loan.valorMulta` e `User.multasAcumuladas`
+   - Atualizar `Loan.fineAmount` e `User.accumulatedFines`
 
 3. **Gerar Notificações**
    - Lembretes (2 dias antes)
@@ -293,23 +293,23 @@ Este é um projeto de **aprendizado prático** com foco em:
    - Visualização: Tabela ordenada
 
 3. **Usuários com Atrasos/Multas**
-   - Query: `SELECT user, COUNT(*), SUM(valorMulta) WHERE status = ATRASADO`
+   - Query: `SELECT user, COUNT(*), SUM(fineAmount) WHERE status = OVERDUE`
    - Visualização: Tabela com totais
 
 4. **Total de Multas Acumuladas**
-   - Query: `SUM(User.multasAcumuladas)`
+   - Query: `SUM(User.accumulatedFines)`
    - Visualização: Card numérico
 
 5. **Taxa de Renovação**
-   - Query: `COUNT(numeroRenovacoes > 0) / COUNT(all loans) * 100`
+   - Query: `COUNT(renewalCount > 0) / COUNT(all loans) * 100`
    - Visualização: Gráfico de pizza
 
 6. **Tempo Médio de Empréstimo**
-   - Query: `AVG(dataDevolucaoReal - dataEmprestimo) WHERE DEVOLVIDO`
+   - Query: `AVG(actualReturnDate - loanDate) WHERE RETURNED`
    - Visualização: Card numérico (dias)
 
 7. **Livros com Maior Fila de Espera**
-   - Query: `COUNT(queue WHERE AGUARDANDO) GROUP BY book ORDER BY count DESC`
+   - Query: `COUNT(queue WHERE WAITING) GROUP BY book ORDER BY count DESC`
    - Visualização: Gráfico de barras
 
 ---
