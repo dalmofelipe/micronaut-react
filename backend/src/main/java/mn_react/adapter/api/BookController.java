@@ -62,6 +62,14 @@ public class BookController {
             .id(book.getId())
             .title(book.getTitle())
             .pages(book.getPages())
+            .author(book.getAuthor())
+            .isbn(book.getIsbn())
+            .genre(book.getGenre())
+            .totalQuantity(book.getTotalQuantity())
+            .availableQuantity(book.getAvailableQuantity())
+            .summary(book.getSummary())
+            .imageUrl(book.getImageUrl())
+            .active(book.getActive())
             .build();
     }
 }

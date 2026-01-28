@@ -44,6 +44,14 @@ public class BookRepositoryImpl implements BookRepository {
             .id(entity.getId())
             .title(entity.getTitle())
             .pages(entity.getPages())
+            .author(entity.getAuthor())
+            .isbn(entity.getIsbn())
+            .genre(entity.getGenre())
+            .totalQuantity(entity.getTotalQuantity())
+            .availableQuantity(entity.getAvailableQuantity())
+            .summary(entity.getSummary())
+            .imageUrl(entity.getImageUrl())
+            .active(entity.getActive())
             .build();
     }
 
@@ -52,6 +60,14 @@ public class BookRepositoryImpl implements BookRepository {
             .id(domain.getId())
             .title(domain.getTitle())
             .pages(domain.getPages())
+            .author(domain.getAuthor())
+            .isbn(domain.getIsbn())
+            .genre(domain.getGenre())
+            .totalQuantity(domain.getTotalQuantity())
+            .availableQuantity(domain.getAvailableQuantity())
+            .summary(domain.getSummary())
+            .imageUrl(domain.getImageUrl())
+            .active(domain.getActive())
             .build();
     }
 }

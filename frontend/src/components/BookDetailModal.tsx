@@ -35,6 +35,21 @@ export function BookDetailModal({ bookId, open, onClose }: IBookDetailModalProps
     ? book.availableQuantity > 0 
     : true;
 
+  const formatGenre = (genre: string): string => {
+    const genreMap: Record<string, string> = {
+      'SCIENCE_FICTION': 'Ficção Científica',
+      'FANTASY': 'Fantasia',
+      'COMICS': 'Quadrinhos',
+      'MANGA': 'Mangá',
+      'HORROR': 'Terror',
+      'ROMANCE': 'Romance',
+      'BIOGRAPHY': 'Biografia',
+      'TECHNICAL': 'Técnico',
+      'OTHER': 'Outro',
+    };
+    return genreMap[genre] || genre;
+  };
+
   const renderLoading = () => (
     <StyledLoadingContainer>
       <CircularProgress />
@@ -66,30 +81,33 @@ export function BookDetailModal({ bookId, open, onClose }: IBookDetailModalProps
   const renderGenre = () => {
     if (!book?.genre) return null;
 
-    return <Chip label={book.genre} variant="outlined" />;
+    return <Chip label={formatGenre(book.genre)} variant="outlined" color="primary" />;
   };
 
   const renderIsbn = () => {
     if (!book?.isbn) return null;
 
-    return <Chip label={`ISBN: ${book.isbn}`} variant="outlined" />;
+    return <Chip label={`ISBN: ${book.isbn}`} variant="outlined" color="default" />;
   };
 
   const renderSummary = () => {
     if (!book) return null;
 
-    if (book.summary) {
-      return (
-        <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
-          {book.summary}
-        </Typography>
-      );
-    }
-
     return (
-      <Typography variant="body2" color="text.secondary" fontStyle="italic">
-        Resumo não disponível
-      </Typography>
+      <>
+        <Typography variant="h6" gutterBottom>
+          Resumo
+        </Typography>
+        {book.summary ? (
+          <Typography variant="body1" sx={{ whiteSpace: 'pre-line', lineHeight: 1.6 }}>
+            {book.summary}
+          </Typography>
+        ) : (
+          <Typography variant="body2" color="text.secondary" fontStyle="italic">
+            Resumo não disponível
+          </Typography>
+        )}
+      </>
     );
   };
 
@@ -101,16 +119,25 @@ export function BookDetailModal({ bookId, open, onClose }: IBookDetailModalProps
 
     if (!hasQuantities) return null;
 
+    const available = book.availableQuantity ?? 0;
+    const total = book.totalQuantity ?? 0;
+    const borrowed = total - available;
+
     return (
       <>
         <Divider />
         <StyledContentContainer>
-          <Typography variant="body2" color="text.secondary">
-            Quantidade Total: {book.totalQuantity ?? 'N/A'}
+          <Typography variant="h6" gutterBottom>
+            Disponibilidade
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Disponíveis: {book.availableQuantity ?? 'N/A'}
+          <Typography variant="body1" color="text.primary" gutterBottom>
+            <strong>{available}</strong> de <strong>{total}</strong> exemplares disponíveis
           </Typography>
+          {borrowed > 0 && (
+            <Typography variant="body2" color="text.secondary">
+              {borrowed} {borrowed === 1 ? 'exemplar emprestado' : 'exemplares emprestados'}
+            </Typography>
+          )}
         </StyledContentContainer>
       </>
     );
@@ -134,8 +161,13 @@ export function BookDetailModal({ bookId, open, onClose }: IBookDetailModalProps
 
             <StyledChipsContainer>
               <Chip
-                label={isAvailable ? 'Disponível' : 'Indisponível'}
+                label={
+                  isAvailable 
+                    ? `Disponível (${book.availableQuantity})` 
+                    : 'Indisponível'
+                }
                 color={isAvailable ? 'success' : 'error'}
+                size="medium"
               />
               {renderGenre()}
               {renderIsbn()}

@@ -17,4 +17,12 @@ public class BookResponse {
     private Long id;
     private String title;
     private int pages;
+    private String author;
+    private String isbn;
+    private String genre;
+    private Integer totalQuantity;
+    private Integer availableQuantity;
+    private String summary;
+    private String imageUrl;
+    private Boolean active;
 }
