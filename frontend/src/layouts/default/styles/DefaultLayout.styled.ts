@@ -1,4 +1,4 @@
-import { Box, styled } from "@mui/material";
+import { Box, Container, styled } from "@mui/material";
 
 export const DefaultLayoutWrapper = styled(Box)({
   display: 'flex',
@@ -9,3 +9,7 @@ export const DefaultLayoutWrapper = styled(Box)({
   width: '100%',
   minHeight: '100vh',
 });
+
+export const StyledMainContainer = styled(Container)<{ headerheight: number }>(({ headerheight }) => ({
+  padding: `${headerheight}px 0`,
+}));

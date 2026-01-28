@@ -1,19 +1,29 @@
 import { CardContent, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { StyledBookCard } from "./styles/BookCard.styled";
+import { StyledBookCard, StyledAuthorText } from "./styles/BookCard.styled";
 
-interface BookCardProps {
+interface IBookCardProps {
   id: number;
   title: string;
   author: string;
   description?: string;
 }
 
-export const BookCard = ({ id, title, author, description }: BookCardProps) => {
+export const BookCard = ({ id, title, author, description }: IBookCardProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
     navigate(`/books/${id}`);
+  };
+
+  const renderDescription = () => {
+    if (!description) return null;
+
+    return (
+      <Typography variant="body2" color="text.secondary">
+        {description}
+      </Typography>
+    );
   };
 
   return (
@@ -22,14 +32,10 @@ export const BookCard = ({ id, title, author, description }: BookCardProps) => {
         <Typography variant="h5" component="div" gutterBottom>
           {title}
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+        <StyledAuthorText color="text.secondary">
           {author}
-        </Typography>
-        {description && (
-          <Typography variant="body2" color="text.secondary">
-            {description}
-          </Typography>
-        )}
+        </StyledAuthorText>
+        {renderDescription()}
       </CardContent>
     </StyledBookCard>
   );

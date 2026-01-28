@@ -1,4 +1,4 @@
-import { Box, styled, Paper } from "@mui/material";
+import { Box, Button, styled, Paper } from "@mui/material";
 
 export const BookDetailsWrapper = styled(Box)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -26,4 +26,12 @@ export const BookDetailsInfo = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: theme.spacing(2),
+}));
+
+export const StyledBackButton = styled(Button)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+}));
+
+export const StyledErrorBackButton = styled(Button)(({ theme }) => ({
+  marginTop: theme.spacing(2),
 }));

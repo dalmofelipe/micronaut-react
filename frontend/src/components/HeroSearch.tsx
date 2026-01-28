@@ -1,6 +1,5 @@
 import { Typography } from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
-import { HeroContainer, HeroTitle, SearchField } from "./styles/HeroSearch.styled";
+import { HeroContainer, HeroTitle, SearchField, StyledSearchIcon } from "./styles/HeroSearch.styled";
 
 interface IHeroSearchProps {
   searchTerm: string;
@@ -26,7 +25,7 @@ export const HeroSearch = ({ searchTerm, onSearchChange }: IHeroSearchProps) => 
         onChange={(e) => onSearchChange(e.target.value)}
         slotProps={{
           input: {
-            startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />
+            startAdornment: <StyledSearchIcon />
           }
         }}
       />

@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom"
 import { Header } from "./Header"
-import { DefaultLayoutWrapper } from "./styles/DefaultLayout.styled"
-import { Container } from "@mui/material"
+import { DefaultLayoutWrapper, StyledMainContainer } from "./styles/DefaultLayout.styled"
 import { useThemeStore } from "../../store/useThemeStore"
 
 export const DefaultLayout = () => {
@@ -11,9 +10,9 @@ export const DefaultLayout = () => {
     <DefaultLayoutWrapper>
       <Header />
 
-      <Container maxWidth="lg" sx={{ padding: `${headerHeight}px 0` }}>
+      <StyledMainContainer maxWidth="lg" headerheight={headerHeight}>
         <Outlet />
-      </Container>
+      </StyledMainContainer>
     </DefaultLayoutWrapper>
   )
 }

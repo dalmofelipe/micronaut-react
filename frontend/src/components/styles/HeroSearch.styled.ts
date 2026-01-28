@@ -1,4 +1,5 @@
 import { Box, styled, TextField } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
 
 export const HeroContainer = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -21,4 +22,9 @@ export const SearchField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
     backgroundColor: theme.palette.background.paper,
   },
+}));
+
+export const StyledSearchIcon = styled(SearchIcon)(({ theme }) => ({
+  marginRight: theme.spacing(1),
+  color: theme.palette.text.secondary,
 }));

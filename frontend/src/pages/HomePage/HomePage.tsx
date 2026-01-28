@@ -30,15 +30,19 @@ export const HomePage = () => {
     );
   }, [allBooks, debouncedSearchTerm]);
 
-  if (isLoadingAllBooks) {
+  const renderLoading = () => {
+    if (!isLoadingAllBooks) return null;
+
     return (
       <HomeWrapper>
         <CircularProgress />
       </HomeWrapper>
     );
-  }
+  };
 
-  if (isErrorAllBooks) {
+  const renderError = () => {
+    if (!isErrorAllBooks) return null;
+
     return (
       <HomeWrapper>
         <Typography variant="h5" color="error">
@@ -46,35 +50,61 @@ export const HomePage = () => {
         </Typography>
       </HomeWrapper>
     );
-  }
+  };
 
-  return (
-    <HomeWrapper>
-      <HeroSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+  const renderTitle = () => {
+    const title = searchTerm 
+      ? `Resultados da busca (${filteredBooks.length})` 
+      : 'Últimos livros adicionados';
 
+    return (
       <HomeTitle>
         <Typography variant="h5">
-          {searchTerm ? `Resultados da busca (${filteredBooks.length})` : 'Últimos livros adicionados'}
+          {title}
         </Typography>
       </HomeTitle>
-      
-      {filteredBooks && filteredBooks.length > 0 ? (
-        <BooksGrid>
-          {filteredBooks.map((book: TBook) => (
-            <BookCard
-              key={book.id}
-              id={book.id}
-              title={book.title}
-              author={book.author || 'Admin'}
-              description={book.description || 'lorem ipsum...'}
-            />
-          ))}
-        </BooksGrid>
-      ) : (
+    );
+  };
+
+  const renderBooksList = () => {
+    if (!filteredBooks || filteredBooks.length === 0) {
+      const message = searchTerm 
+        ? 'Nenhum livro encontrado para sua busca.' 
+        : 'Nenhum livro encontrado.';
+
+      return (
         <Typography variant="body1">
-          {searchTerm ? 'Nenhum livro encontrado para sua busca.' : 'Nenhum livro encontrado.'}
+          {message}
         </Typography>
+      );
+    }
+
+    return (
+      <BooksGrid>
+        {filteredBooks.map((book: TBook) => (
+          <BookCard
+            key={book.id}
+            id={book.id}
+            title={book.title}
+            author={book.author || 'Admin'}
+            description={book.description || 'lorem ipsum...'}
+          />
+        ))}
+      </BooksGrid>
+    );
+  };
+
+  return (
+    <>
+      {renderLoading()}
+      {renderError()}
+      {!isLoadingAllBooks && !isErrorAllBooks && (
+        <HomeWrapper>
+          <HeroSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+          {renderTitle()}
+          {renderBooksList()}
+        </HomeWrapper>
       )}
-    </HomeWrapper>
+    </>
   );
 }

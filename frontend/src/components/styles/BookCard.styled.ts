@@ -1,4 +1,4 @@
-import { Card, styled } from "@mui/material";
+import { Card, Typography, styled } from "@mui/material";
 
 export const StyledBookCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -10,4 +10,8 @@ export const StyledBookCard = styled(Card)(({ theme }) => ({
     transform: 'translateY(-4px)',
     boxShadow: theme.shadows[8],
   },
+}));
+
+export const StyledAuthorText = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(1.5),
 }));
