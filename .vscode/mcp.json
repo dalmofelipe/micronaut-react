@@ -4,6 +4,14 @@
       "type": "http",
       "url": "https://mcp.context7.com/mcp"
     },
+    "mui-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@mui/mcp@latest"
+      ]
+    },
     "chromedevtools/chrome-devtools-mcp": {
       "type": "stdio",
       "command": "npx",
