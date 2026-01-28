@@ -1,7 +1,5 @@
 package mn_react.adapter.persistence.entity;
 
-import io.micronaut.data.annotation.GeneratedValue;
-import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.MappedProperty;
 import io.micronaut.serde.annotation.Serdeable;
@@ -10,49 +8,80 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mn_react.core.domain.entities.Book;
 
 @Serdeable
-@MappedEntity(value = "TB_BOOKS")
+@MappedEntity(value = "books")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookEntity {
+public class BookEntity extends BaseEntity {
     
-    @Id
-    @GeneratedValue(GeneratedValue.Type.IDENTITY)
-    @MappedProperty("ID")
-    private Long id;
-    
-    @MappedProperty("TITLE")
+    @MappedProperty("title")
     private String title;
     
-    @MappedProperty("PAGES")
-    private int pages;
-    
-    // Future properties (Fase 1):
-    @MappedProperty("AUTHOR")
+    @MappedProperty("author")
     private String author;
     
-    @MappedProperty("ISBN")
+    @MappedProperty("isbn")
     private String isbn;
     
-    @MappedProperty("GENRE")
+    @MappedProperty("genre")
     private String genre;
     
-    @MappedProperty("TOTAL_QUANTITY")
+    @MappedProperty("pages")
+    private Integer pages;
+    
+    @MappedProperty("total_quantity")
     private Integer totalQuantity;
     
-    @MappedProperty("AVAILABLE_QUANTITY")
+    @MappedProperty("available_quantity")
     private Integer availableQuantity;
     
-    @MappedProperty("SUMMARY")
+    @MappedProperty("summary")
     private String summary;
     
-    @MappedProperty("IMAGE_URL")
+    @MappedProperty("image_url")
     private String imageUrl;
-    
-    @MappedProperty("ACTIVE")
-    private Boolean active;
+
+    public Book toDomain() {
+        return Book.builder()
+            .id(this.getId())
+            .title(this.title)
+            .author(this.author)
+            .isbn(this.isbn)
+            .genre(this.genre)
+            .pages(this.pages)
+            .totalQuantity(this.totalQuantity)
+            .availableQuantity(this.availableQuantity)
+            .summary(this.summary)
+            .imageUrl(this.imageUrl)
+            .active(this.getActive())
+            .createdAt(this.getCreatedAt())
+            .updatedAt(this.getUpdatedAt())
+            .build();
+    }
+
+    public static BookEntity fromDomain(Book book) {
+        BookEntity entity = BookEntity.builder()
+            .title(book.getTitle())
+            .author(book.getAuthor())
+            .isbn(book.getIsbn())
+            .genre(book.getGenre())
+            .pages(book.getPages())
+            .totalQuantity(book.getTotalQuantity())
+            .availableQuantity(book.getAvailableQuantity())
+            .summary(book.getSummary())
+            .imageUrl(book.getImageUrl())
+            .build();
+        
+        entity.setId(book.getId());
+        entity.setActive(book.getActive() != null ? book.getActive() : true);
+        entity.setCreatedAt(book.getCreatedAt());
+        entity.setUpdatedAt(book.getUpdatedAt());
+        
+        return entity;
+    }
 }

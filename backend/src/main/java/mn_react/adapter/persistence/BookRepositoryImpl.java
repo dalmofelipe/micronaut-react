@@ -21,53 +21,43 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        return jdbcRepository.findAll().stream()
-            .map(this::toDomain)
+        return jdbcRepository.findByActiveTrue().stream()
+            .map(BookEntity::toDomain)
             .collect(Collectors.toList());
     }
 
     @Override
     public Optional<Book> findById(Long id) {
-        return jdbcRepository.findById(id).map(this::toDomain);
+        return jdbcRepository.findByIdAndActiveTrue(id)
+            .map(BookEntity::toDomain);
     }
 
     @Override
     public Book save(Book book) {
-        BookEntity entity = toEntity(book);
+        BookEntity entity = BookEntity.fromDomain(book);
         BookEntity saved = jdbcRepository.save(entity);
-        return toDomain(saved);
+        return saved.toDomain();
     }
 
-    // mappers
-    private Book toDomain(BookEntity entity) {
-        return Book.builder()
-            .id(entity.getId())
-            .title(entity.getTitle())
-            .pages(entity.getPages())
-            .author(entity.getAuthor())
-            .isbn(entity.getIsbn())
-            .genre(entity.getGenre())
-            .totalQuantity(entity.getTotalQuantity())
-            .availableQuantity(entity.getAvailableQuantity())
-            .summary(entity.getSummary())
-            .imageUrl(entity.getImageUrl())
-            .active(entity.getActive())
-            .build();
+    @Override
+    public Book update(Book book) {
+        BookEntity entity = BookEntity.fromDomain(book);
+        BookEntity updated = jdbcRepository.update(entity);
+        return updated.toDomain();
     }
 
-    private BookEntity toEntity(Book domain) {
-        return BookEntity.builder()
-            .id(domain.getId())
-            .title(domain.getTitle())
-            .pages(domain.getPages())
-            .author(domain.getAuthor())
-            .isbn(domain.getIsbn())
-            .genre(domain.getGenre())
-            .totalQuantity(domain.getTotalQuantity())
-            .availableQuantity(domain.getAvailableQuantity())
-            .summary(domain.getSummary())
-            .imageUrl(domain.getImageUrl())
-            .active(domain.getActive())
-            .build();
+    @Override
+    public void softDelete(Long id) {
+        jdbcRepository.findById(id).ifPresent(entity -> {
+            entity.setActive(false);
+            jdbcRepository.update(entity);
+        });
     }
+
+    @Override
+    public Optional<Book> findByIsbn(String isbn) {
+        return jdbcRepository.findByIsbnAndActiveTrue(isbn)
+            .map(BookEntity::toDomain);
+    }
+
 }

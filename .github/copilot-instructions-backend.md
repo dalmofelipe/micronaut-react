@@ -46,7 +46,7 @@ src/main/java/mn_react/
 - **Response DTO:** `BookResponse`, `LoanResponse`
 
 ### Repositories
-- **Interface:** `IBookRepository` (em `core/repository`)
+- **Interface:** `BookRepository` (em `core/repository`)
 - **Implementação:** `BookRepositoryImpl` ou usar Micronaut Data (em `adapter/persistence`)
 
 ### Use Cases
@@ -148,13 +148,13 @@ package mn_react.core.usecase;
 
 import jakarta.inject.Singleton;
 import mn_react.core.domain.entities.Book;
-import mn_react.core.repository.IBookRepository;
+import mn_react.core.repository.BookRepository;
 
 @Singleton
 public class CreateBookUseCase {
-    private final IBookRepository bookRepository;
+    private final BookRepository bookRepository;
 
-    public CreateBookUseCase(IBookRepository bookRepository) {
+    public CreateBookUseCase(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
@@ -219,14 +219,14 @@ public class CreateBookRequest {
 CREATE TABLE books (
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
-    autor VARCHAR(255),
+    author VARCHAR(255),
     isbn VARCHAR(13) UNIQUE,
-    genero VARCHAR(100),
-    quantidade_total INTEGER NOT NULL DEFAULT 1,
-    quantidade_disponivel INTEGER NOT NULL DEFAULT 1,
-    resumo TEXT,
-    imagem_url VARCHAR(500),
-    ativo BOOLEAN NOT NULL DEFAULT true,
+    genre VARCHAR(100),
+    total_quantity INTEGER NOT NULL DEFAULT 1,
+    available_quantity INTEGER NOT NULL DEFAULT 1,
+    summary TEXT,
+    image_url VARCHAR(500),
+    active BOOLEAN NOT NULL DEFAULT true,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

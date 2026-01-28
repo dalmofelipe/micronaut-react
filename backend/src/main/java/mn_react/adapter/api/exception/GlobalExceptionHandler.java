@@ -45,7 +45,7 @@ public class GlobalExceptionHandler implements ExceptionHandler<Exception, HttpR
                 createErrorResponse(request, HttpStatus.FORBIDDEN, e.getMessage());
             
             default -> 
-                createErrorResponse(request, HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
+                createErrorResponse(request, HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred: " + exception.getMessage());
         };
     }
 

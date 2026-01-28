@@ -8,5 +8,8 @@ import mn_react.core.domain.entities.Book;
 public interface BookRepository {
     List<Book> findAll();
     Optional<Book> findById(Long id);
+    Optional<Book> findByIsbn(String isbn);
     Book save(Book book);
+    Book update(Book book);
+    void softDelete(Long id);
 }
