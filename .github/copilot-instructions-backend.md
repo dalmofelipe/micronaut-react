@@ -46,7 +46,7 @@ src/main/java/mn_react/
 - **Response DTO:** `BookResponse`, `LoanResponse`
 
 ### Repositories
-- **Interface:** `IBookRepository` (em `core/repository`)
+- **Interface:** `BookRepository` (em `core/repository`)
 - **Implementação:** `BookRepositoryImpl` ou usar Micronaut Data (em `adapter/persistence`)
 
 ### Use Cases
@@ -148,13 +148,13 @@ package mn_react.core.usecase;
 
 import jakarta.inject.Singleton;
 import mn_react.core.domain.entities.Book;
-import mn_react.core.repository.IBookRepository;
+import mn_react.core.repository.BookRepository;
 
 @Singleton
 public class CreateBookUseCase {
-    private final IBookRepository bookRepository;
+    private final BookRepository bookRepository;
 
-    public CreateBookUseCase(IBookRepository bookRepository) {
+    public CreateBookUseCase(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
