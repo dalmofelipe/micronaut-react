@@ -1,11 +1,11 @@
-package mn_react.core.usecase.impl;
+package mn_react.core.usecase.user.impl;
 
 import jakarta.inject.Singleton;
 import mn_react.core.domain.entities.User;
 import mn_react.core.domain.exception.ConflictException;
 import mn_react.core.domain.exception.NotFoundException;
 import mn_react.core.repository.UserRepository;
-import mn_react.core.usecase.UpdateUserUseCase;
+import mn_react.core.usecase.user.UpdateUserUseCase;
 
 @Singleton
 public class UpdateUserUseCaseImpl implements UpdateUserUseCase {

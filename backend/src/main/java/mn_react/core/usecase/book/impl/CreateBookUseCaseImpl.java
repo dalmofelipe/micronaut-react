@@ -1,11 +1,11 @@
-package mn_react.core.usecase.impl;
+package mn_react.core.usecase.book.impl;
 
 import jakarta.inject.Singleton;
 import mn_react.core.domain.entities.Book;
 import mn_react.core.domain.exception.ConflictException;
 import mn_react.core.domain.exception.ValidationException;
 import mn_react.core.repository.BookRepository;
-import mn_react.core.usecase.CreateBookUseCase;
+import mn_react.core.usecase.book.CreateBookUseCase;
 
 @Singleton
 public class CreateBookUseCaseImpl implements CreateBookUseCase {
@@ -32,15 +32,15 @@ public class CreateBookUseCaseImpl implements CreateBookUseCase {
     }
 
     private void validateBook(Book book) {
+
         if (book.getAvailableQuantity() > book.getTotalQuantity()) {
             throw new ValidationException(
-                "Quantidade disponível (" + book.getAvailableQuantity() + 
-                ") não pode ser maior que quantidade total (" + book.getTotalQuantity() + ")"
+                String.format(
+                    "Quantidade disponível (%d) não pode ser maior que a quantidade total (%d)",
+                    book.getAvailableQuantity(),
+                    book.getTotalQuantity()
+                )
             );
-        }
-
-        if (book.getAvailableQuantity() < 0) {
-            throw new ValidationException("Quantidade disponível não pode ser negativa");
         }
     }
 }

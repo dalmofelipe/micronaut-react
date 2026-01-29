@@ -1,10 +1,9 @@
-package mn_react.core.usecase.impl;
+package mn_react.core.usecase.user.impl;
 
 import jakarta.inject.Singleton;
-import mn_react.core.domain.entities.User;
 import mn_react.core.domain.exception.NotFoundException;
 import mn_react.core.repository.UserRepository;
-import mn_react.core.usecase.DeleteUserUseCase;
+import mn_react.core.usecase.user.DeleteUserUseCase;
 
 @Singleton
 public class DeleteUserUseCaseImpl implements DeleteUserUseCase {
@@ -17,9 +16,10 @@ public class DeleteUserUseCaseImpl implements DeleteUserUseCase {
 
     @Override
     public void execute(Long id) {
-        User user = userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Usuário não encontrado com ID: " + id));
-
-        userRepository.softDelete(id);
+        int rowsAffected = userRepository.softDelete(id);
+        
+        if (rowsAffected == 0) {
+            throw new NotFoundException("Usuário não encontrado ou já inativo com ID: " + id);
+        }
     }
 }

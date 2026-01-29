@@ -53,10 +53,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        jdbcRepository.findById(id).ifPresent(entity -> {
-            entity.setActive(false);
-            jdbcRepository.update(entity);
-        });
+    public int softDelete(Long id) {
+        return jdbcRepository.softDeleteById(id);
     }
 }

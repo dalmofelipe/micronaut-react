@@ -1,10 +1,9 @@
-package mn_react.core.usecase.impl;
+package mn_react.core.usecase.book.impl;
 
 import jakarta.inject.Singleton;
-import mn_react.core.domain.entities.Book;
 import mn_react.core.domain.exception.NotFoundException;
 import mn_react.core.repository.BookRepository;
-import mn_react.core.usecase.DeleteBookUseCase;
+import mn_react.core.usecase.book.DeleteBookUseCase;
 
 @Singleton
 public class DeleteBookUseCaseImpl implements DeleteBookUseCase {
@@ -17,9 +16,10 @@ public class DeleteBookUseCaseImpl implements DeleteBookUseCase {
 
     @Override
     public void execute(Long id) {
-        Book book = bookRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Livro não encontrado com ID: " + id));
-
-        bookRepository.softDelete(id);
+        int rowsAffected = bookRepository.softDelete(id);
+        
+        if (rowsAffected == 0) {
+            throw new NotFoundException("Livro não encontrado ou já inativo com ID: " + id);
+        }
     }
 }

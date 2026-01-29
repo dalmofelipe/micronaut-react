@@ -1,4 +1,4 @@
-package mn_react.core.usecase;
+package mn_react.core.usecase.user;
 
 import mn_react.core.domain.entities.User;
 

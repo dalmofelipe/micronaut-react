@@ -13,18 +13,22 @@ import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.Status;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import mn_react.adapter.api.dto.CreateUserRequest;
-import mn_react.adapter.api.dto.UpdateUserRequest;
-import mn_react.adapter.api.dto.UserResponse;
+import jakarta.validation.groups.ConvertGroup;
+import mn_react.adapter.api.dto.request.UserRequest;
+import mn_react.adapter.api.dto.response.UserResponse;
+import mn_react.adapter.api.dto.validation.OnCreate;
+import mn_react.adapter.api.dto.validation.OnUpdate;
 import mn_react.core.domain.entities.User;
 import mn_react.core.domain.exception.NotFoundException;
 import mn_react.core.repository.UserRepository;
-import mn_react.core.usecase.CreateUserUseCase;
-import mn_react.core.usecase.DeleteUserUseCase;
-import mn_react.core.usecase.UpdateUserUseCase;
+import mn_react.core.usecase.user.CreateUserUseCase;
+import mn_react.core.usecase.user.DeleteUserUseCase;
+import mn_react.core.usecase.user.UpdateUserUseCase;
 
 @Controller("/users")
+@Tag(name = "Users")
 public class UserController {
 
     private final UserRepository userRepository;
@@ -64,7 +68,9 @@ public class UserController {
 
     @Post
     @Status(HttpStatus.CREATED)
-    HttpResponse<UserResponse> createUser(@Valid @Body CreateUserRequest request) {
+    HttpResponse<UserResponse> createUser(
+        @Valid @ConvertGroup(to = OnCreate.class) @Body UserRequest request
+    ) {
         User user = request.toUser();
         User created = createUserUseCase.execute(user);
 
@@ -74,14 +80,9 @@ public class UserController {
     @Put("/{id}")
     HttpResponse<UserResponse> updateUser(
         @PathVariable Long id,
-        @Valid @Body UpdateUserRequest request
+        @Valid @ConvertGroup(to = OnUpdate.class) @Body UserRequest request
     ) {
-        User user = User.builder()
-            .name(request.getName())
-            .email(request.getEmail())
-            .phone(request.getPhone())
-            .build();
-        
+        User user = request.toUser();
         User updated = updateUserUseCase.execute(id, user);
 
         return HttpResponse.ok(UserResponse.fromDomain(updated));

@@ -1,5 +1,5 @@
 -- Create users table
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS tb_users (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(150) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -11,11 +11,11 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Create index for common queries
-CREATE INDEX idx_users_active ON users(active);
-CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_active ON tb_users(active);
+CREATE INDEX idx_users_email ON tb_users(email);
 
 -- Seed data: 5 example users (famous computer scientists)
-INSERT INTO users (name, email, phone, accumulated_fines, active) VALUES
+INSERT INTO tb_users (name, email, phone, accumulated_fines, active) VALUES
 ('Ada Lovelace', 'ada.lovelace@example.com', '(11) 98765-4321', 0.00, true),
 ('Alan Turing', 'alan.turing@example.com', '(21) 99876-5432', 0.00, true),
 ('Grace Hopper', 'grace.hopper@example.com', '(31) 97654-3210', 0.00, true),

@@ -11,5 +11,5 @@ public interface UserRepository {
     Optional<User> findByEmail(String email);
     User save(User user);
     User update(User user);
-    void softDelete(Long id);
+    int softDelete(Long id);
 }

@@ -1,4 +1,4 @@
-package mn_react.core.usecase;
+package mn_react.core.usecase.book;
 
 import mn_react.core.domain.entities.Book;
 

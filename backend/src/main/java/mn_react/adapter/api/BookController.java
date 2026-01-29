@@ -9,39 +9,54 @@ import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Patch;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.annotation.Status;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import mn_react.adapter.api.dto.BookResponse;
-import mn_react.adapter.api.dto.CreateBookRequest;
-import mn_react.adapter.api.dto.UpdateBookRequest;
+import jakarta.validation.groups.ConvertGroup;
+import mn_react.adapter.api.dto.request.AddStockRequest;
+import mn_react.adapter.api.dto.request.BookRequest;
+import mn_react.adapter.api.dto.request.UpdateIsbnRequest;
+import mn_react.adapter.api.dto.response.BookResponse;
+import mn_react.adapter.api.dto.validation.OnCreate;
+import mn_react.adapter.api.dto.validation.OnUpdate;
 import mn_react.core.domain.entities.Book;
 import mn_react.core.domain.exception.NotFoundException;
 import mn_react.core.repository.BookRepository;
-import mn_react.core.usecase.CreateBookUseCase;
-import mn_react.core.usecase.DeleteBookUseCase;
-import mn_react.core.usecase.UpdateBookUseCase;
+import mn_react.core.usecase.book.AddBookStockUseCase;
+import mn_react.core.usecase.book.CreateBookUseCase;
+import mn_react.core.usecase.book.DeleteBookUseCase;
+import mn_react.core.usecase.book.UpdateBookDetailsUseCase;
+import mn_react.core.usecase.book.UpdateBookIsbnUseCase;
 
 @Controller("/books")
+@Tag(name = "Books")
 public class BookController {
 
     private final BookRepository bookRepository;
     private final CreateBookUseCase createBookUseCase;
-    private final UpdateBookUseCase updateBookUseCase;
+    private final UpdateBookDetailsUseCase updateBookDetailsUseCase;
+    private final UpdateBookIsbnUseCase updateBookIsbnUseCase;
+    private final AddBookStockUseCase addBookStockUseCase;
     private final DeleteBookUseCase deleteBookUseCase;
 
     public BookController(
         BookRepository bookRepository,
         CreateBookUseCase createBookUseCase,
-        UpdateBookUseCase updateBookUseCase,
+        UpdateBookDetailsUseCase updateBookDetailsUseCase,
+        UpdateBookIsbnUseCase updateBookIsbnUseCase,
+        AddBookStockUseCase addBookStockUseCase,
         DeleteBookUseCase deleteBookUseCase
     ) {
         this.bookRepository = bookRepository;
         this.createBookUseCase = createBookUseCase;
-        this.updateBookUseCase = updateBookUseCase;
+        this.updateBookDetailsUseCase = updateBookDetailsUseCase;
+        this.updateBookIsbnUseCase = updateBookIsbnUseCase;
+        this.addBookStockUseCase = addBookStockUseCase;
         this.deleteBookUseCase = deleteBookUseCase;
     }
 
@@ -65,7 +80,9 @@ public class BookController {
 
     @Post
     @Status(HttpStatus.CREATED)
-    HttpResponse<BookResponse> createBook(@Valid @Body CreateBookRequest request) {
+    HttpResponse<BookResponse> createBook(
+        @Valid @ConvertGroup(to = OnCreate.class) @Body BookRequest request
+    ) {
         Book book = request.toBook();
         Book created = createBookUseCase.execute(book);
 
@@ -75,23 +92,30 @@ public class BookController {
     @Put("/{id}")
     HttpResponse<BookResponse> updateBook(
         @PathVariable Long id,
-        @Valid @Body UpdateBookRequest request
+        @Valid @ConvertGroup(to = OnUpdate.class) @Body BookRequest request
     ) {
-        Book book = Book.builder()
-            .title(request.getTitle())
-            .author(request.getAuthor())
-            .isbn(request.getIsbn())
-            .genre(request.getGenre())
-            .pages(request.getPages())
-            .totalQuantity(request.getTotalQuantity())
-            .availableQuantity(request.getAvailableQuantity())
-            .summary(request.getSummary())
-            .imageUrl(request.getImageUrl())
-            .build();
-        
-        Book updated = updateBookUseCase.execute(id, book);
+        Book book = request.toBook();
+        Book updated = updateBookDetailsUseCase.execute(id, book);
 
         return HttpResponse.ok(BookResponse.fromDomain(updated));
+    }
+
+    @Patch("/{id}/isbn")
+    HttpResponse<BookResponse> updateIsbn(
+        @PathVariable Long id,
+        @Valid @Body UpdateIsbnRequest request
+    ) {
+        Book book = updateBookIsbnUseCase.execute(id, request.getIsbn());
+        return HttpResponse.ok(BookResponse.fromDomain(book));
+    }
+
+    @Post("/{id}/stock")
+    HttpResponse<BookResponse> addStock(
+        @PathVariable Long id,
+        @Valid @Body AddStockRequest request
+    ) {
+        Book book = addBookStockUseCase.execute(id, request.getQuantity());
+        return HttpResponse.ok(BookResponse.fromDomain(book));
     }
 
     @Delete("/{id}")

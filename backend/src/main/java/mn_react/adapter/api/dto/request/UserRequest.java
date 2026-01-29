@@ -1,4 +1,4 @@
-package mn_react.adapter.api.dto;
+package mn_react.adapter.api.dto.request;
 
 import java.math.BigDecimal;
 
@@ -20,19 +20,19 @@ import mn_react.core.domain.entities.User;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateUserRequest {
-    
+public class UserRequest {
+
     @NotBlank(message = "Nome é obrigatório")
     @Size(max = 150, message = "Nome não pode exceder 150 caracteres")
     private String name;
-    
+
     @NotBlank(message = "Email é obrigatório")
     @Email(message = "Email inválido")
     private String email;
-    
+
     @NotBlank(message = "Telefone é obrigatório")
     @Pattern(
-        regexp = "\\(\\d{2}\\) \\d{5}-\\d{4}", 
+        regexp = "\\(\\d{2}\\) \\d{5}-\\d{4}",
         message = "Formato esperado: (XX) XXXXX-XXXX"
     )
     private String phone;

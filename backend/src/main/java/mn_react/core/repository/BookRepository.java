@@ -11,5 +11,5 @@ public interface BookRepository {
     Optional<Book> findByIsbn(String isbn);
     Book save(Book book);
     Book update(Book book);
-    void softDelete(Long id);
+    int softDelete(Long id);
 }

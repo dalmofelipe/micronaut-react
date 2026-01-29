@@ -3,6 +3,7 @@ package mn_react.adapter.persistence.jdbc;
 import java.util.List;
 import java.util.Optional;
 
+import io.micronaut.data.annotation.Query;
 import io.micronaut.data.jdbc.annotation.JdbcRepository;
 import io.micronaut.data.model.query.builder.sql.Dialect;
 import io.micronaut.data.repository.CrudRepository;
@@ -14,4 +15,7 @@ public interface UserJdbcRepository extends CrudRepository<UserEntity, Long> {
     List<UserEntity> findByActiveTrue();
     Optional<UserEntity> findByIdAndActiveTrue(Long id);
     Optional<UserEntity> findByEmailAndActiveTrue(String email);
+    
+    @Query("UPDATE library_users SET active = false WHERE id = :id AND active = true")
+    int softDeleteById(Long id);
 }

@@ -1,4 +1,4 @@
-package mn_react.core.usecase.impl;
+package mn_react.core.usecase.user.impl;
 
 import java.math.BigDecimal;
 
@@ -6,7 +6,7 @@ import jakarta.inject.Singleton;
 import mn_react.core.domain.entities.User;
 import mn_react.core.domain.exception.ConflictException;
 import mn_react.core.repository.UserRepository;
-import mn_react.core.usecase.CreateUserUseCase;
+import mn_react.core.usecase.user.CreateUserUseCase;
 
 @Singleton
 public class CreateUserUseCaseImpl implements CreateUserUseCase {

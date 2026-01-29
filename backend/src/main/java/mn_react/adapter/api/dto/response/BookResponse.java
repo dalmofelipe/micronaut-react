@@ -1,4 +1,4 @@
-package mn_react.adapter.api.dto;
+package mn_react.adapter.api.dto.response;
 
 import java.time.LocalDateTime;
 
