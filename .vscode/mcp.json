@@ -17,9 +17,9 @@
       "command": "npx",
       "args": [
         "chrome-devtools-mcp@latest",
-        "--channel=canary",
-        "--headless=true",
-        "--isolated=true"
+        "--channel=stable",
+        "--headless=false",
+        "--isolated=false"
       ]
     }
   },

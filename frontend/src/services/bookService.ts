@@ -1,24 +1,33 @@
 import api from "../config/axios";
+import type { IBook, ICreateBookRequest, IUpdateBookRequest, IPagedResponse } from "../types";
 
 export const bookService = {
-  getBookById: async (id: number) => {
-    if (typeof id !== 'number' || id <= 0) {
-      throw new Error("Invalid book ID. It must be a positive number.");
-    }
-    try {
-      const response = await api.get(`/books/${id}`);
-      return response.data;
-    } catch (error: any) {
-      throw new Error(`Error fetching book with id ${id}: ${error.message}`);
-    }
+  getAll: async (page = 0, size = 10, search = ""): Promise<IPagedResponse<IBook>> => {
+    const response = await api.get('/books', { params: { page, size, search } });
+    return response.data;
   },
-  
-  getAllBooks: async () => {
-    try {
-      const response = await api.get('/books');
-      return response.data;
-    } catch (error: any) {
-      throw new Error(`Error fetching all books: ${error.message}`);
-    }
+
+  getAllUnpaged: async (): Promise<IBook[]> => {
+    const response = await api.get('/books', { params: { page: -1 } });
+    return response.data;
+  },
+
+  getById: async (id: number): Promise<IBook> => {
+    const response = await api.get(`/books/${id}`);
+    return response.data;
+  },
+
+  create: async (data: ICreateBookRequest): Promise<IBook> => {
+    const response = await api.post('/books', data);
+    return response.data;
+  },
+
+  update: async (id: number, data: IUpdateBookRequest): Promise<IBook> => {
+    const response = await api.put(`/books/${id}`, data);
+    return response.data;
+  },
+
+  delete: async (id: number): Promise<void> => {
+    await api.delete(`/books/${id}`);
   },
 };

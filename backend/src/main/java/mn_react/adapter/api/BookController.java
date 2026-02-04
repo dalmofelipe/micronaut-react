@@ -3,41 +3,75 @@ package mn_react.adapter.api;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Put;
+import io.micronaut.http.annotation.QueryValue;
 import jakarta.validation.Valid;
 import mn_react.adapter.api.dto.BookResponse;
 import mn_react.adapter.api.dto.CreateBookRequest;
+import mn_react.adapter.api.dto.PagedResponse;
+import mn_react.adapter.api.dto.UpdateBookRequest;
 import mn_react.core.domain.entities.Book;
 import mn_react.core.domain.exception.NotFoundException;
 import mn_react.core.repository.BookRepository;
 import mn_react.core.usecase.CreateBookUseCase;
+import mn_react.core.usecase.DeleteBookUseCase;
+import mn_react.core.usecase.UpdateBookUseCase;
 
 @Controller("/books")
 public class BookController {
 
     private final BookRepository bookRepository;
     private final CreateBookUseCase createBookUseCase;
+    private final UpdateBookUseCase updateBookUseCase;
+    private final DeleteBookUseCase deleteBookUseCase;
 
     public BookController(
         BookRepository bookRepository,
-        CreateBookUseCase createBookUseCase
+        CreateBookUseCase createBookUseCase,
+        UpdateBookUseCase updateBookUseCase,
+        DeleteBookUseCase deleteBookUseCase
     ) {
         this.bookRepository = bookRepository;
         this.createBookUseCase = createBookUseCase;
+        this.updateBookUseCase = updateBookUseCase;
+        this.deleteBookUseCase = deleteBookUseCase;
     }
 
     @Get
-    HttpResponse<List<BookResponse>> getAllBooks() {
-        List<Book> books = bookRepository.findAll();
-        List<BookResponse> response = books.stream()
+    HttpResponse<?> getAllBooks(
+        @QueryValue(defaultValue = "0") int page,
+        @QueryValue(defaultValue = "10") int size,
+        @Nullable @QueryValue(defaultValue = "") String search
+    ) {
+        if (page == -1) {
+            List<Book> books = bookRepository.findAll();
+            List<BookResponse> response = books.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+            return HttpResponse.ok(response);
+        }
+
+        List<Book> books = bookRepository.findAll(page, size, search);
+        long total = bookRepository.count(search);
+        List<BookResponse> content = books.stream()
             .map(this::toResponse)
             .collect(Collectors.toList());
         
+        PagedResponse<BookResponse> response = PagedResponse.<BookResponse>builder()
+            .content(content)
+            .page(page)
+            .size(size)
+            .totalElements(total)
+            .build();
+
         return HttpResponse.ok(response);
     }
     
@@ -52,8 +86,22 @@ public class BookController {
     @Post
     HttpResponse<BookResponse> createBook(@Valid @Body CreateBookRequest request) {
         Book created = createBookUseCase.execute(request.getTitle(), request.getPages());
-
         return HttpResponse.created(toResponse(created));
+    }
+
+    @Put("/{id}")
+    HttpResponse<BookResponse> updateBook(
+        @PathVariable Long id, 
+        @Valid @Body UpdateBookRequest request
+    ) {
+        Book updated = updateBookUseCase.execute(id, request.getTitle(), request.getPages());
+        return HttpResponse.ok(toResponse(updated));
+    }
+
+    @Delete("/{id}")
+    HttpResponse<Void> deleteBook(@PathVariable Long id) {
+        deleteBookUseCase.execute(id);
+        return HttpResponse.noContent();
     }
 
     // Mapper: Domain → DTO
