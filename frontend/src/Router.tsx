@@ -1,13 +1,19 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { NotificationSnackbar } from './components/NotificationSnackbar';
+import { DashboardLayout } from './layouts/dashboard/DashboardLayout';
 import { DefaultLayout } from './layouts/default/DefaultLayout';
-import { BookPage } from "./pages/BookPage/BookPage";
+import { AdminBooksPage } from "./pages/AdminBooksPage/AdminBooksPage";
+import { AdminLoansPage } from "./pages/AdminLoansPage/AdminLoansPage";
+import { AdminUsersPage } from "./pages/AdminUsersPage/AdminUsersPage";
 import { BookDetailsPage } from "./pages/BookDetailsPage/BookDetailsPage";
+import { BookPage } from "./pages/BookPage/BookPage";
+import { DashboardHomePage } from "./pages/DashboardHomePage/DashboardHomePage";
 import { HomePage } from "./pages/HomePage/HomePage";
+import { TestPage } from "./pages/TestPage/TestPage";
 import { useThemeStore } from "./store/useThemeStore";
 import { darkTheme, lightTheme } from "./theme";
-import { TestPage } from "./pages/TestPage/TestPage";
 
 export const queryClient = new QueryClient();
 
@@ -27,7 +33,15 @@ export const Router = () => {
               <Route path="/books/:id" element={<BookDetailsPage />} />
               <Route path="/test" element={<TestPage />} />
             </Route>
+            
+            <Route path="/admin" element={<DashboardLayout />}>
+              <Route index element={<DashboardHomePage />} />
+              <Route path="users" element={<AdminUsersPage />} />
+              <Route path="books" element={<AdminBooksPage />} />
+              <Route path="loans" element={<AdminLoansPage />} />
+            </Route>
           </Routes>
+          <NotificationSnackbar />
         </BrowserRouter>
       </ThemeProvider>
     </QueryClientProvider>

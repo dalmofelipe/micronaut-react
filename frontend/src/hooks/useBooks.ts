@@ -10,12 +10,34 @@ export const useGetBooks = (page: number, size: number, search: string) => {
   });
 };
 
+export const useGetAllBooks = () => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['all-books'],
+    queryFn: bookService.getAllUnpaged,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  return {
+    allBooks: data,
+    isLoadingAllBooks: isLoading,
+    isErrorAllBooks: isError,
+    errorAllBooks: error,
+  };
+};
+
 export const useGetBookById = (id: number) => {
-  return useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['book', id],
     queryFn: () => bookService.getById(id),
     enabled: !!id,
   });
+
+  return {
+    book: data,
+    isLoadingBook: isLoading,
+    isErrorBook: isError,
+    errorBook: error,
+  };
 };
 
 export const useCreateBook = () => {

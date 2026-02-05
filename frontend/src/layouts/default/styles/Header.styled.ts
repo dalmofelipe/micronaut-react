@@ -1,6 +1,6 @@
-import { Box, Container, Paper, styled } from "@mui/material";
+import { Box, Container, styled } from "@mui/material";
 
-export const HeaderWrapper = styled(Paper)<{
+export const HeaderWrapper = styled(Box)<{
     headerheight: number
 }>(({
     theme,
