@@ -12,7 +12,7 @@ export const useGetBooks = (page: number, size: number, search: string) => {
 export const useGetAllBooks = () => {
     return useQuery({
         queryKey: ['books', 'all'],
-        queryFn: () => BookManager.getAllBooks(0, 1000, ""), // Simulate all or add real unpaged to Manager
+        queryFn: () => BookManager.getAllBooks(0, 1000, ""),
     });
 };
 

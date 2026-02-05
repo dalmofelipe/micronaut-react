@@ -1,6 +1,6 @@
 import { Grid, Typography, Box } from '@mui/material';
 import { People, MenuBook, Assignment } from '@mui/icons-material';
-import { StatsCard } from "./components/StatsCard";
+import { StatsCard } from "./StatsCard";
 import { useGetUsersCount } from "@/features/users/hooks/useUsers";
 import { useGetLoansCount } from "@/features/loans/hooks/useLoans";
 import { useQuery } from '@tanstack/react-query';

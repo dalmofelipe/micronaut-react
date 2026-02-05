@@ -27,10 +27,6 @@ export const update = async (id: number, data: IUpdateBookRequest): Promise<IBoo
   return response.data;
 };
 
-// Renamed "delete" to "remove" to avoid keyword conflict if preferred, but "delete" is allowed as property. 
-// As named export, "delete" is a reserved word in variable declaration?
-// "export const delete = ..." is INVALID in JS.
-// So I must rename it to `remove`.
 export const remove = async (id: number): Promise<void> => {
   await api.delete(`/books/${id}`);
 };

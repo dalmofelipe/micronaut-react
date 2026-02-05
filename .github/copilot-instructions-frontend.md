@@ -115,6 +115,35 @@ export function BookCard({ book }: IBookCardProps) {
 ### Zero `sx` Props (Quando possível)
 Prefira criar componentes estilizados (`styled(Box)`) em vez de poluir o JSX com `sx={{ ... }}` complexos.
 
+## 🧩 Componentização e Composição (CRÍTICO)
+
+Aplicável a **QUALQUER** componente (Páginas, Modais, Cards, etc). Se um componente ficou grande ou tem muitas responsabilidades, **QUEBRE-O**.
+
+1.  **Decomposição Obrigatória:**
+    *   **Regra Geral**: Se tem mais de ~150 linhas, provavelmente deve ser quebrado.
+    *   **Encapsulamento**: Se um trecho de UI precisa de parâmetros específicos e tem sua própria lógica (ex: handlers, state local), ele **DEVE** ser um componente.
+    *   Se um componente tem um `Dialog` interno, extraia para `views/MyDialog.tsx`.
+    *   Se um componente tem uma `Table` complexa, extraia para `views/MyTable.tsx`.
+    *   Se um componente tem blocos lógicos distintos (ex: Filtros + Lista + Paginação), extraia cada um.
+
+2.  **Estrutura de Pastas (Flat Views):**
+    Mantenha os componentes extraídos DIRETAMENTE na pasta `views/`. **NÃO** crie subpastas como `components`, `partials` ou `local`.
+    ```text
+    src/features/books/views/
+    ├── AdminBooksPage.tsx      # A página principal (Layout/Orquestração)
+    ├── BookFormDialog.tsx      # Componente extraído
+    ├── BookTable.tsx           # Componente extraído
+    ├── BookSummaryCard.tsx     # Componente menor usado dentro de outro
+    └── styles/                 # Única subpasta permitida para estilos
+        ├── AdminBooksPage.styled.ts
+        ├── BookTable.styled.ts
+        └── BookSummaryCard.styled.ts
+    ```
+
+3.  **Princípio da Responsabilidade Única (SRP):**
+    *   **Pai (Orquestrador):** Gerencia estado global, chamadas de API (via hooks) e layout. Passa dados via props.
+    *   **Filho (Apresentação):** Recebe dados e callbacks. Foca em renderizar a UI. Evite hooks de API complexos aqui se possível.
+
 ---
 
 ## 🛠️ Tech Stack & Bibliotecas

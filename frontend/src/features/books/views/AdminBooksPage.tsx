@@ -3,27 +3,10 @@ import {
   Box,
   Typography,
   Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TablePagination,
-  TextField,
   Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  CircularProgress,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
+  TextField,
 } from "@mui/material";
-import { Add, MoreVert, Edit, Delete } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 import {
   useGetBooks,
   useCreateBook,
@@ -37,6 +20,8 @@ import type {
   ICreateBookRequest,
   IUpdateBookRequest,
 } from "../types/Book";
+import { BookTable } from "./BookTable";
+import { BookFormDialog } from "./BookFormDialog";
 
 export function AdminBooksPage() {
   const [page, setPage] = useState(0);
@@ -51,85 +36,45 @@ export function AdminBooksPage() {
     (state) => state.showNotification,
   );
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedBook, setSelectedBook] = useState<IBook | null>(null);
   const [formOpen, setFormOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    title: "",
-    autor: "",
-    isbn: "",
-    genero: "",
-    quantidadeTotal: 1,
-    resumo: "",
-    imagemUrl: "",
-  });
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
 
-  const handleMenuOpen = (
-    event: React.MouseEvent<HTMLElement>,
-    book: IBook,
-  ) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedBook(book);
-  };
+  // -- Handlers for Actions --
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleOpenCreateDialog = () => {
-    setFormData({
-      title: "",
-      autor: "",
-      isbn: "",
-      genero: "",
-      quantidadeTotal: 1,
-      resumo: "",
-      imagemUrl: "",
-    });
-    setIsEditing(false);
+  const handleCreateClick = () => {
+    setSelectedBook(null);
     setFormOpen(true);
   };
 
-  const handleOpenEditDialog = () => {
-    if (selectedBook) {
-      setFormData({
-        title: selectedBook.title,
-        autor: selectedBook.autor || "",
-        isbn: selectedBook.isbn || "",
-        genero: selectedBook.genero || "",
-        quantidadeTotal: selectedBook.quantidadeTotal,
-        resumo: selectedBook.resumo || "",
-        imagemUrl: selectedBook.imagemUrl || "",
-      });
-      setIsEditing(true);
-      setFormOpen(true);
-    }
-    handleMenuClose();
+  const handleEditClick = (book: IBook) => {
+    setSelectedBook(book);
+    setFormOpen(true);
   };
 
-  const handleFormSubmit = async () => {
+  const handleDeleteClick = (book: IBook) => {
+    setSelectedBook(book);
+    setDeleteDialogOpen(true);
+  };
+
+  // -- Handlers for Submissions --
+
+  const handleFormSubmit = async (data: ICreateBookRequest | IUpdateBookRequest) => {
     try {
-      if (isEditing && selectedBook) {
+      if (selectedBook) {
         await updateMutation.mutateAsync({
           id: selectedBook.id,
-          data: formData as IUpdateBookRequest,
+          data: data as IUpdateBookRequest,
         });
         showNotification("Livro atualizado com sucesso!", "success");
       } else {
-        await createMutation.mutateAsync(formData as ICreateBookRequest);
+        await createMutation.mutateAsync(data as ICreateBookRequest);
         showNotification("Livro criado com sucesso!", "success");
       }
       setFormOpen(false);
     } catch (error) {
       showNotification("Erro ao salvar livro", "error");
     }
-  };
-
-  const handleDeleteClick = () => {
-    setDeleteDialogOpen(true);
-    handleMenuClose();
   };
 
   const handleDeleteConfirm = async () => {
@@ -147,45 +92,6 @@ export function AdminBooksPage() {
     }
   };
 
-  const renderTableContent = () => {
-    if (isLoading) {
-      return (
-        <TableRow>
-          <TableCell colSpan={6} align="center">
-            <CircularProgress />
-          </TableCell>
-        </TableRow>
-      );
-    }
-    renderTableContent;
-    if (!data || data.content.length === 0) {
-      return (
-        <TableRow>
-          <TableCell colSpan={6} align="center">
-            <Typography color="text.secondary">
-              Nenhum livro encontrado
-            </Typography>
-          </TableCell>
-        </TableRow>
-      );
-    }
-
-    return data.content.map((book) => (
-      <TableRow key={book.id} hover>
-        <TableCell>{book.id}</TableCell>
-        <TableCell>{book.title}</TableCell>
-        <TableCell>{book.autor || "-"}</TableCell>
-        <TableCell>{book.genero || "-"}</TableCell>
-        <TableCell>{book.quantidadeTotal}</TableCell>
-        <TableCell align="right">
-          <IconButton onClick={(e) => handleMenuOpen(e, book)}>
-            <MoreVert />
-          </IconButton>
-        </TableCell>
-      </TableRow>
-    ));
-  };
-
   return (
     <Box>
       <Box
@@ -200,150 +106,39 @@ export function AdminBooksPage() {
         <Button
           variant="contained"
           startIcon={<Add />}
-          onClick={handleOpenCreateDialog}
+          onClick={handleCreateClick}
         >
           Novo Livro
         </Button>
       </Box>
 
-      <Paper>
-        <Box p={2}>
-          <TextField
-            fullWidth
-            placeholder="Buscar por título..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </Box>
-
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Título</TableCell>
-                <TableCell>Autor</TableCell>
-                <TableCell>Gênero</TableCell>
-                <TableCell>Quantidade</TableCell>
-                <TableCell align="right">Ações</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>{renderTableContent()}</TableBody>
-          </Table>
-        </TableContainer>
-
-        <TablePagination
-          component="div"
-          count={data?.totalElements || 0}
-          page={page}
-          onPageChange={(_, newPage) => setPage(newPage)}
-          rowsPerPage={size}
-          onRowsPerPageChange={(e) => setSize(parseInt(e.target.value, 10))}
-          rowsPerPageOptions={[5, 10, 25, 50]}
+      <Box p={2} component={Paper} mb={3}>
+        <TextField
+          fullWidth
+          placeholder="Buscar por título..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
-      </Paper>
+      </Box>
 
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        <MenuItem onClick={handleOpenEditDialog}>
-          <ListItemIcon>
-            <Edit fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Editar</ListItemText>
-        </MenuItem>
-        <MenuItem onClick={handleDeleteClick}>
-          <ListItemIcon>
-            <Delete fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Deletar</ListItemText>
-        </MenuItem>
-      </Menu>
+      <BookTable
+        books={data?.content || []}
+        isLoading={isLoading}
+        totalElements={data?.totalElements || 0}
+        page={page}
+        size={size}
+        onPageChange={setPage}
+        onSizeChange={setSize}
+        onEdit={handleEditClick}
+        onDelete={handleDeleteClick}
+      />
 
-      <Dialog
+      <BookFormDialog
         open={formOpen}
+        bookToEdit={selectedBook}
         onClose={() => setFormOpen(false)}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle>{isEditing ? "Editar Livro" : "Novo Livro"}</DialogTitle>
-        <DialogContent>
-          <Box display="flex" flexDirection="column" gap={2} mt={1}>
-            <TextField
-              label="Título"
-              value={formData.title}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-              fullWidth
-              required
-            />
-            <TextField
-              label="Autor"
-              value={formData.autor}
-              onChange={(e) =>
-                setFormData({ ...formData, autor: e.target.value })
-              }
-              fullWidth
-            />
-            <TextField
-              label="ISBN"
-              value={formData.isbn}
-              onChange={(e) =>
-                setFormData({ ...formData, isbn: e.target.value })
-              }
-              fullWidth
-            />
-            <TextField
-              label="Gênero"
-              value={formData.genero}
-              onChange={(e) =>
-                setFormData({ ...formData, genero: e.target.value })
-              }
-              fullWidth
-            />
-            <TextField
-              label="Quantidade Total"
-              type="number"
-              value={formData.quantidadeTotal}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  quantidadeTotal: parseInt(e.target.value, 10),
-                })
-              }
-              fullWidth
-              required
-            />
-            <TextField
-              label="Resumo"
-              value={formData.resumo}
-              onChange={(e) =>
-                setFormData({ ...formData, resumo: e.target.value })
-              }
-              fullWidth
-              multiline
-              rows={3}
-            />
-            <TextField
-              label="URL da Imagem"
-              value={formData.imagemUrl}
-              onChange={(e) =>
-                setFormData({ ...formData, imagemUrl: e.target.value })
-              }
-              fullWidth
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setFormOpen(false)}>Cancelar</Button>
-          <Button onClick={handleFormSubmit} variant="contained">
-            {isEditing ? "Atualizar" : "Criar"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onSubmit={handleFormSubmit}
+      />
 
       <ConfirmDeleteDialog
         open={deleteDialogOpen}
