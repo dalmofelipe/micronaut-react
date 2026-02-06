@@ -1,5 +1,5 @@
 import { useGetBooks } from '@/features/books/shared/hooks/useBooks';
-import { useGetUsers } from '@/features/users/hooks/useUsers';
+import { useGetUsers } from '@/features/users/shared/hooks/useUsers';
 import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
 import { Add } from '@mui/icons-material';
 import { Button } from '@mui/material';

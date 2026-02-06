@@ -1,10 +1,10 @@
-import { Grid, Typography, Box } from '@mui/material';
-import { People, MenuBook, Assignment } from '@mui/icons-material';
-import { StatsCard } from "./StatsCard";
-import { useGetUsersCount } from "@/features/users/hooks/useUsers";
-import { useGetLoansCount } from "@/features/loans/shared/hooks/useLoans";
-import { useQuery } from '@tanstack/react-query';
 import * as BookManager from "@/features/books/shared/services/BookManager";
+import { useGetLoansCount } from "@/features/loans/shared/hooks/useLoans";
+import { useGetUsersCount } from "@/features/users/shared/hooks/useUsers";
+import { Assignment, MenuBook, People } from '@mui/icons-material';
+import { Box, Grid, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { StatsCard } from './StatsCard';
 
 export function DashboardHomePage() {
   const { data: usersCount, isLoading: isLoadingUsers } = useGetUsersCount();
