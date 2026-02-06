@@ -8,4 +8,4 @@ export type { IBook, ICreateBookRequest, IUpdateBookRequest, TBook } from '@/fea
 export type { IUser, IUserFilters, ICreateUserRequest, IUpdateUserRequest } from '@/features/users/types/User';
 
 // Loan types
-export type { ILoan, ILoanFilters, ICreateLoanRequest, TLoanStatus } from '@/features/loans/types/Loan';
+export type { ILoan, ILoanFilters, ICreateLoanRequest, TLoanStatus } from '@/features/loans/shared/types/Loan';

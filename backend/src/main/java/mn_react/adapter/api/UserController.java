@@ -89,11 +89,9 @@ public class UserController {
 
     @Post
     HttpResponse<UserResponse> createUser(@Valid @Body CreateUserRequest request) {
-        User created = createUserUseCase.execute(
-            request.getName(),
-            request.getEmail(),
-            request.getActive()
-        );
+        User created = createUserUseCase
+            .execute(request.getName(), request.getEmail(), request.getActive());
+        
         return HttpResponse.created(UserResponse.fromDomain(created));
     }
 
@@ -102,8 +100,8 @@ public class UserController {
             @PathVariable Long id, 
             @Valid @Body UpdateUserRequest request) {
 
-        User updated = updateUserUseCase.execute(id, request.getName(), request.getEmail(), 
-            request.getActive());
+        User updated = updateUserUseCase
+            .execute(id, request.getName(), request.getEmail(), request.getActive());
 
         return HttpResponse.ok(UserResponse.fromDomain(updated));
     }
@@ -113,8 +111,8 @@ public class UserController {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("User", id));
 
-        User updated = updateUserUseCase.execute(id, user.getName(), user.getEmail(), 
-            !user.getActive());
+        User updated = updateUserUseCase
+            .execute(id, user.getName(), user.getEmail(), !user.getActive());
 
         return HttpResponse.ok(UserResponse.fromDomain(updated));
     }

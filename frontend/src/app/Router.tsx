@@ -4,7 +4,7 @@ import { AdminBooksPage } from "@/features/books/admin/views/AdminBooksPage";
 import { BookDetailsPage } from "@/features/books/catalog/views/BookDetailsPage";
 import { DashboardHomePage } from "@/features/dashboard/views/DashboardHomePage";
 import { HomePage } from "@/features/home/views/HomePage";
-import { AdminLoansPage } from "@/features/loans/views/AdminLoansPage";
+import { AdminLoansPage } from "@/features/loans/admin/views/AdminLoansPage";
 import { AdminUsersPage } from "@/features/users/views/AdminUsersPage";
 import { NotificationSnackbar } from '@/shared/components/NotificationSnackbar';
 import { useThemeStore } from "@/shared/store/useThemeStore";

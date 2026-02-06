@@ -5,15 +5,15 @@ interface IStatusChipProps {
   status: TLoanStatus;
 }
 
-const statusConfig = {
-  ATIVO: { label: 'Ativo', color: 'info' as const },
-  DEVOLVIDO: { label: 'Devolvido', color: 'success' as const },
-  ATRASADO: { label: 'Atrasado', color: 'error' as const },
+const statusConfig: Record<TLoanStatus, { label: string; color: 'info' | 'success' | 'error' }> = {
+  ATIVO: { label: 'Ativo', color: 'info' },
+  DEVOLVIDO: { label: 'Devolvido', color: 'success' },
+  ATRASADO: { label: 'Atrasado', color: 'error' },
 };
 
 export function StatusChip({ status }: IStatusChipProps) {
   const config = statusConfig[status];
-  
+
   return (
     <Chip
       label={config.label}

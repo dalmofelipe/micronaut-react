@@ -56,9 +56,11 @@ Configurações globais que "montam" o app.
 Sempre que um componente ultrapassar **150-200 linhas** ou assumir múltiplas responsabilidades, ele **DEVE** ser refatorado:
 
 1.  **Single Responsibility Principle (SRP):** Um componente deve fazer apenas uma coisa (ex: uma tabela, um formulário, um cabeçalho).
-2.  **Logic Extraction (Custom Hooks):** Toda lógica de estado complexa, mutations ou efeitos deve ser movida para um custom hook (ex: `useBookForm.ts`).
-3.  **Styles Extraction:** CSS-in-JS (MUI Styled) deve viver na pasta `styles/` da respectiva feature/view.
+2.  **Logic Extraction (Custom Hooks):** Toda lógica de estado complexa, mutations ou efeitos deve ser movida para um custom hook (ex: `useBookForm.ts`) dentro da pasta `hooks/` da sub-feature.
+3.  **Styles Extraction:** CSS-in-JS (MUI Styled) deve viver na pasta `styles/` dentro de `views/` da respectiva feature (ex: `views/styles/NomeComponente.styled.ts`).
 4.  **Composition Over Complexity:** Quebre componentes monolíticos em componentes menores orquestrados por uma View principal.
+5.  **Flat Views Structure:** **NÃO** crie pastas como `components/` dentro de `views/`. Todos os componentes (Cards, Tables, Dialogs) vivem na raiz de `views/`.
+6.  **Sub-feature Organization:** Cada sub-feature (`admin`, `catalog`) deve ter sua própria estrutura de `hooks/`, `views/`, etc., quando necessário separar contextos.
 
 ---
 
