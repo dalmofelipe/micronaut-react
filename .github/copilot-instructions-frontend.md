@@ -22,17 +22,21 @@ Organizado por **domínio de negócio**.
 *   "Uma página é uma feature, mas nem toda feature é uma página."
 *   Cada pasta aqui representa um domínio isolado (ex: `books`, `users`, `auth`).
 
-**Estrutura Interna de uma Feature (`src/features/nome-feature/`):**
+**Sub-features (Separação de Contexto):**
+Para domínios complexos, divida em sub-pastas para separar contextos (ex: Admin vs Público):
+*   `admin/`: Telas de gestão, Dashboards administrativos.
+*   `catalog/` ou `public/`: Telas para o usuário final.
+*   `shared/`: Hooks (`useBooks`), services e types usados por ambas as sub-features.
+
+**Estrutura Interna Recomendada:**
 
 | Pasta | Responsabilidade | Exemplo |
 | :--- | :--- | :--- |
-| `views/` | Componentes visuais e páginas da feature. | `BookList.tsx`, `BookDetailsPage.tsx` |
-| `services/` | Camada de Dados (Ver regra Manager vs Repository). | `BookManager.ts`, `BookRepository.ts` |
-| `hooks/` | Hooks específicos da feature. | `useBookList.ts` |
-| `store/` | Estado local/global da feature (Zustand Slices). | `book.store.ts` |
+| `views/` | Componentes visuais e páginas. | `AdminBooksPage.tsx`, `BookCard.tsx` |
+| `services/` | Camada de Dados (Manager/Repository). | `BookManager.ts`, `BookRepository.ts` |
+| `hooks/` | Hooks de lógica de UI/Formulário. | `useBookForm.ts` |
+| `styles/` | Estilos extraídos em arquivos `.styled.ts`. | `BooksTable.styled.ts` |
 | `types/` | Tipos do domínio (DTOs, Interfaces). | `Book.ts` |
-| `utils/` | Funções auxiliares específicas da feature. | `bookFormatters.ts` |
-| `routes.tsx` | (Opcional) Rotas internas da feature. | |
 
 ### 2. `src/shared/` (Genérico)
 Código agnóstico ao negócio. 
@@ -47,6 +51,17 @@ Configurações globais que "montam" o app.
 
 ---
 
+## 🧩 Componentização & Refatoração
+
+Sempre que um componente ultrapassar **150-200 linhas** ou assumir múltiplas responsabilidades, ele **DEVE** ser refatorado:
+
+1.  **Single Responsibility Principle (SRP):** Um componente deve fazer apenas uma coisa (ex: uma tabela, um formulário, um cabeçalho).
+2.  **Logic Extraction (Custom Hooks):** Toda lógica de estado complexa, mutations ou efeitos deve ser movida para um custom hook (ex: `useBookForm.ts`).
+3.  **Styles Extraction:** CSS-in-JS (MUI Styled) deve viver na pasta `styles/` da respectiva feature/view.
+4.  **Composition Over Complexity:** Quebre componentes monolíticos em componentes menores orquestrados por uma View principal.
+
+---
+
 ## 📡 Camada de Dados: Pattern Manager vs Repository
 
 Dentro de `features/*/services/`, separamos responsabilidades:
@@ -54,31 +69,9 @@ Dentro de `features/*/services/`, separamos responsabilidades:
 ### 1. **Repository (`*Repository.ts`)**
 *   **Responsabilidade:** Apenas fazer a chamada HTTP/Banco de dados.
 *   **Regra:** ZERO regras de negócio. Retorna os dados "crus" ou tipados (DTO).
-*   **Exemplo:**
-    ```ts
-    // features/books/services/BookRepository.ts
-    import { api } from '@/shared/lib/api';
-    export const getBooks = () => api.get<IBook[]>('/books');
-    ```
 
 ### 2. **Manager (`*Manager.ts`)**
 *   **Responsabilidade:** O "Cérebro". Orquestra chamadas, trata erros, formata dados para a View.
-*   **Regra:** A View (Componente/Hook) chama o Manager. O Manager chama o Repository.
-*   **Exemplo:**
-    ```ts
-    // features/books/services/BookManager.ts
-    import * as BookRepository from './BookRepository';
-    
-    export const fetchBooksForList = async () => {
-      try {
-        const { data } = await BookRepository.getBooks();
-        return data.map(formatBookForDisplay); // Regra de negócio/transformação
-      } catch (error) {
-        // Tratamento de erro centralizado
-        throw new Error('Erro ao buscar livros');
-      }
-    };
-    ```
 
 ---
 
@@ -92,25 +85,6 @@ Dentro de `features/*/services/`, separamos responsabilidades:
 ### Organização de Componentes (Views)
 *   **Estilos:** Separados em `styles/NomeComponente.styled.ts` (Styled Components + MUI).
 *   **Lógica de Renderização:** Use funções `renderSomething()` para condicionais complexas no JSX.
-
-**Exemplo:**
-```tsx
-// features/books/views/BookCard.tsx
-import { StyledCard } from './styles/BookCard.styled';
-
-export function BookCard({ book }: IBookCardProps) {
-  const renderStatus = () => {
-    if (book.isAvailable) return <Chip label="Disponível" />;
-    return <Chip label="Indisponível" color="error" />;
-  };
-
-  return (
-    <StyledCard>
-      {renderStatus()}
-    </StyledCard>
-  );
-}
-```
 
 ### Zero `sx` Props (Quando possível)
 Prefira criar componentes estilizados (`styled(Box)`) em vez de poluir o JSX com `sx={{ ... }}` complexos.
@@ -160,6 +134,9 @@ Aplicável a **QUALQUER** componente (Páginas, Modais, Cards, etc). Se um compo
 ## 🚨 Regras para o Copilot (AI)
 
 1.  **Sempre verifique a pasta `features`** antes de criar algo novo. Não crie pastas soltas em `src/components`.
-2.  **Ao criar uma nova funcionalidade**, sugira a criação da pasta em `src/features/nome-feature`.
-3.  **Ao refatorar**, mova lógica espalhada (`pages`, `services`) para a estrutura correta (`features/*/services/Manager.ts`).
-4.  **Consulte os arquivos existentes** em `shared` antes de duplicar componentes genéricos.
+2.  **Ao criar uma nova funcionalidade**, organize em sub-pastas (`admin`, `catalog`) se houver separação de perfil de acesso.
+3.  **Componentes não devem ser arquivos gigantes.** Se notar que o arquivo está crescendo, sugira a quebra em componentes menores e extração de lógica para hooks.
+4.  **Lógica de formulário** deve ser sempre extraída para um hook dedicado.
+5.  **Imports absolutos:** Prefira `@/` para `src/` e caminhos relativos para arquivos dentro da mesma feature/sub-feature.
+6.  **Ao refatorar**, mova lógica espalhada (`pages`, `services`) para a estrutura correta (`features/*/services/Manager.ts`).
+7.  **Consulte os arquivos existentes** em `shared` antes de duplicar componentes genéricos.

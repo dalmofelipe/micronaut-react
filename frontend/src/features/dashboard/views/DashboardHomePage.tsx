@@ -4,7 +4,7 @@ import { StatsCard } from "./StatsCard";
 import { useGetUsersCount } from "@/features/users/hooks/useUsers";
 import { useGetLoansCount } from "@/features/loans/hooks/useLoans";
 import { useQuery } from '@tanstack/react-query';
-import * as BookManager from "@/features/books/services/BookManager";
+import * as BookManager from "@/features/books/shared/services/BookManager";
 
 export function DashboardHomePage() {
   const { data: usersCount, isLoading: isLoadingUsers } = useGetUsersCount();

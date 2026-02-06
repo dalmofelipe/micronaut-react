@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as LoanManager from "../services/LoanManager";
 import type { ICreateLoanRequest, TLoanStatus } from "../types/Loan";
 
@@ -12,7 +12,7 @@ export const useGetLoans = (page: number, size: number, status?: TLoanStatus, us
 export const useGetLoansCount = (status?: TLoanStatus) => {
   return useQuery({
     queryKey: ['loans-count', status],
-    queryFn: () => LoanManager.getCount(status), // Need to check if Manager has this
+    queryFn: () => LoanManager.getCount(status),
   });
 };
 

@@ -1,6 +1,6 @@
 import api from "@/app/config/axios";
-import type { IBook, ICreateBookRequest, IUpdateBookRequest } from "../types/Book";
 import type { IPagedResponse } from "@/shared/types";
+import type { IBook, ICreateBookRequest, IUpdateBookRequest } from "../types/Book";
 
 export const getAll = async (page = 0, size = 10, search = ""): Promise<IPagedResponse<IBook>> => {
   const response = await api.get('/books', { params: { page, size, search } });

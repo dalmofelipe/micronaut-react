@@ -1,12 +1,12 @@
-import { useGetBooks } from "@/features/books/hooks/useBooks";
-import { BookCard } from "@/features/books/views/BookCard";
+import { useGetBooks } from "@/features/books/shared/hooks/useBooks";
+import { BookCard } from "@/features/books/catalog/views/BookCard";
 import { CircularProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { HeroSearch } from "./HeroSearch";
 import { BooksGrid, HomeTitle, HomeWrapper } from "./styles/HomePage.styled";
 
 export const HomePage = () => {
- 
+
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
@@ -18,13 +18,13 @@ export const HomePage = () => {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  const { 
-    data: searchResults, 
+  const {
+    data: searchResults,
     isLoading: isSearchLoading,
     isError,
-    error 
+    error
   } = useGetBooks(0, 50, debouncedSearchTerm);
-  
+
   const booksToDisplay = searchResults?.content || [];
   const loading = isSearchLoading;
   const hasError = isError;
@@ -49,7 +49,7 @@ export const HomePage = () => {
   return (
     <HomeWrapper>
       <HeroSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-      
+
       <HomeTitle>
         Livros Disponíveis
       </HomeTitle>
@@ -61,10 +61,10 @@ export const HomePage = () => {
       ) : (
         <BooksGrid>
           {booksToDisplay.map((book) => (
-            <BookCard 
-              key={book.id} 
-              id={book.id} 
-              title={book.title} 
+            <BookCard
+              key={book.id}
+              id={book.id}
+              title={book.title}
               author={book.autor || book.author || ""}
               description={book.resumo || book.description}
             />

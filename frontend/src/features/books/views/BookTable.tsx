@@ -1,23 +1,23 @@
-import { useState } from "react";
+import type { IBook } from "@/shared/types";
+import { Delete, Edit, MoreVert } from "@mui/icons-material";
 import {
+  CircularProgress,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
   TablePagination,
+  TableRow,
   Typography,
-  CircularProgress,
-  IconButton,
-  Paper,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
 } from "@mui/material";
-import { MoreVert, Edit, Delete } from "@mui/icons-material";
-import type { IBook } from "../types/Book";
+import { useState } from "react";
 
 interface BookTableProps {
   books: IBook[];

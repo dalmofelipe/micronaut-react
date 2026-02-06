@@ -2,7 +2,7 @@
 export type { IPagedResponse, IBookFilters } from './common.type';
 
 // Book types
-export type { IBook, ICreateBookRequest, IUpdateBookRequest, TBook } from '@/features/books/types/Book';
+export type { IBook, ICreateBookRequest, IUpdateBookRequest, TBook } from '@/features/books/shared/types/Book';
 
 // User types
 export type { IUser, IUserFilters, ICreateUserRequest, IUpdateUserRequest } from '@/features/users/types/User';

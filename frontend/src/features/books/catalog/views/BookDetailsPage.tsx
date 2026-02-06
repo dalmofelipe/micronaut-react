@@ -1,20 +1,25 @@
 import { CircularProgress, Typography, Chip, Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useGetBookById } from "../hooks/useBooks";
-import { 
-  BookDetailsCard, 
-  BookDetailsHeader, 
-  BookDetailsInfo, 
+import { useGetBookById } from "../../shared/hooks/useBooks";
+import {
+  BookDetailsCard,
+  BookDetailsHeader,
+  BookDetailsInfo,
   BookDetailsWrapper,
   StyledBackButton,
-  StyledErrorBackButton 
-} from "./styles/BookDetailsPage.styled";
+  StyledErrorBackButton
+} from "../styles/BookDetailsPage.styled";
 
 export const BookDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: book, isLoading: isLoadingBook, isError: isErrorBook, error: errorBook } = useGetBookById(id || "");
+  const {
+    data: book,
+    isLoading: isLoadingBook,
+    isError: isErrorBook,
+    error: errorBook
+  } = useGetBookById(id || "");
 
   const renderLoading = () => {
     if (!isLoadingBook) return null;

@@ -1,6 +1,6 @@
 import { CardContent, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { StyledBookCard, StyledAuthorText } from "./styles/BookCard.styled";
+import { StyledBookCard, StyledAuthorText } from "../styles/BookCard.styled";
 
 interface IBookCardProps {
   id: number;

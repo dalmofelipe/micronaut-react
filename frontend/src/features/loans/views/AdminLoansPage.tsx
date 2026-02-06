@@ -1,44 +1,44 @@
-import { useState } from 'react';
+import { useGetBooks } from '@/features/books/shared/hooks/useBooks';
+import { useGetUsers } from '@/features/users/hooks/useUsers';
+import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
+import { StatusChip } from '@/shared/components/StatusChip';
+import { useNotificationStore } from '@/shared/store/useNotificationStore';
+import {
+  Add,
+  AssignmentReturn,
+  Delete,
+  MoreVert,
+} from '@mui/icons-material';
 import {
   Box,
-  Typography,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  IconButton,
+  InputLabel,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
   Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
   TablePagination,
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  CircularProgress,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Select,
-  FormControl,
-  InputLabel,
+  TableRow,
+  Typography,
 } from '@mui/material';
-import {
-  Add,
-  MoreVert,
-  AssignmentReturn,
-  Delete,
-} from '@mui/icons-material';
-import { useGetLoans, useCreateLoan, useReturnLoan, useDeleteLoan } from '../hooks/useLoans';
-import { useGetUsers } from '@/features/users/hooks/useUsers';
-import { useGetBooks } from '@/features/books/hooks/useBooks';
+import { useState } from 'react';
+import { useCreateLoan, useDeleteLoan, useGetLoans, useReturnLoan } from '../hooks/useLoans';
 import { useLoanFiltersStore } from '../store/useLoanFiltersStore';
-import { useNotificationStore } from '@/shared/store/useNotificationStore';
-import { StatusChip } from '@/shared/components/StatusChip';
-import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
-import type { ILoan, ICreateLoanRequest, TLoanStatus } from '../types/Loan';
+import type { ICreateLoanRequest, ILoan, TLoanStatus } from '../types/Loan';
 
 export function AdminLoansPage() {
   const filters = useLoanFiltersStore((state) => state.filters);
