@@ -1,5 +1,11 @@
-import { useState } from "react";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { ThemeToggleButton } from "@/shared/components/ThemeToggleButton";
+import {
+  Assignment as AssignmentIcon,
+  Dashboard as DashboardIcon,
+  MenuBook as MenuBookIcon,
+  Menu as MenuIcon,
+  People as PeopleIcon,
+} from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -14,14 +20,8 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import {
-  Menu as MenuIcon,
-  Dashboard as DashboardIcon,
-  People as PeopleIcon,
-  MenuBook as MenuBookIcon,
-  Assignment as AssignmentIcon,
-} from "@mui/icons-material";
-import { ThemeToggleButton } from "@/shared/components/ThemeToggleButton";
+import { useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   StyledDashboardContainer,
   StyledMainContent,
@@ -34,6 +34,7 @@ const menuItems = [
   { label: "Usuários", icon: <PeopleIcon />, path: "/admin/users" },
   { label: "Livros", icon: <MenuBookIcon />, path: "/admin/books" },
   { label: "Empréstimos", icon: <AssignmentIcon />, path: "/admin/loans" },
+  { label: "Conteúdos", icon: <AssignmentIcon />, path: "/admin/content" },
 ];
 
 export function DashboardLayout() {

@@ -1,6 +1,7 @@
-import { useGetBooks } from "@/features/books/shared/hooks/useBooks";
 import { BookCard } from "@/features/books/catalog/views/BookCard";
-import { CircularProgress, Typography } from "@mui/material";
+import { useGetBooks } from "@/features/books/shared/hooks/useBooks";
+import ContentFeed from "@/features/content/catalog/ContentFeed";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { HeroSearch } from "./HeroSearch";
 import { BooksGrid, HomeTitle, HomeWrapper } from "./styles/HomePage.styled";
@@ -49,6 +50,13 @@ export const HomePage = () => {
   return (
     <HomeWrapper>
       <HeroSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+
+      <HomeTitle>
+        Conteúdos Recentes
+      </HomeTitle>
+      <Box sx={{ mb: 4 }}>
+        <ContentFeed />
+      </Box>
 
       <HomeTitle>
         Livros Disponíveis
