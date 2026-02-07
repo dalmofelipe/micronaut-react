@@ -52,10 +52,10 @@ public class BookController {
         @Nullable @QueryValue(defaultValue = "") String search
     ) {
         if (page == -1) {
-            List<Book> books = bookRepository.findAll();
-            List<BookResponse> response = books.stream()
+            List<BookResponse> response = bookRepository.findAll()
+                .stream()
                 .map(this::toResponse)
-                .collect(Collectors.toList());
+                .toList();
             return HttpResponse.ok(response);
         }
 
@@ -63,7 +63,7 @@ public class BookController {
         long total = bookRepository.count(search);
         List<BookResponse> content = books.stream()
             .map(this::toResponse)
-            .collect(Collectors.toList());
+            .toList();
         
         PagedResponse<BookResponse> response = PagedResponse.<BookResponse>builder()
             .content(content)
