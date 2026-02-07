@@ -1,19 +1,22 @@
 package mn_react.adapter.persistence.entity;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.micronaut.data.annotation.GeneratedValue;
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.serde.annotation.Serdeable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mn_react.core.domain.entities.Content;
-import java.time.LocalDateTime;
-import java.util.List;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Serdeable
 @MappedEntity(value = "contents")
@@ -42,6 +45,7 @@ public class ContentEntity {
     
     private String mediaUrlsJson;
     
+    @Default
     private boolean ativo = true;
     
     private LocalDateTime createdAt;

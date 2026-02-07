@@ -1,9 +1,13 @@
 package mn_react.core.usecase;
 
+import java.time.LocalDateTime;
+
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Document.OutputSettings;
+
 import jakarta.inject.Singleton;
 import mn_react.core.domain.entities.Content;
 import mn_react.core.repository.ContentRepository;
-import java.time.LocalDateTime;
 
 @Singleton
 public class CreateContentUseCase {
@@ -14,6 +18,11 @@ public class CreateContentUseCase {
     }
 
     public Content execute(Content content) {
+        // Sanitizar HTML WYSIWYG antes de validações e persistência
+        if (content.getConteudo() != null) {
+            content.setConteudo(sanitizeHtml(content.getConteudo()));
+        }
+
         // Validações
         validateContent(content);
 
@@ -25,6 +34,23 @@ public class CreateContentUseCase {
         }
 
         return contentRepository.save(content);
+    }
+
+    private String sanitizeHtml(String html) {
+        if (html == null || html.trim().isEmpty()) return html;
+        // Start from a relaxed safelist and tighten it for our use-case
+        org.jsoup.safety.Safelist safelist = org.jsoup.safety.Safelist.relaxed()
+            .removeTags("iframe", "script", "style")
+            .addTags("picture", "source")
+            .addAttributes("img", "loading", "decoding")
+            .preserveRelativeLinks(true);
+
+        // Allow only http/https data for src/href (Jsoup removes javascript: URIs by default in urls)
+        OutputSettings outputSettings = new Document.OutputSettings();
+        outputSettings.prettyPrint(false);
+
+        String cleaned = org.jsoup.Jsoup.clean(html, "", safelist, outputSettings);
+        return cleaned;
     }
 
     private void validateContent(Content content) {

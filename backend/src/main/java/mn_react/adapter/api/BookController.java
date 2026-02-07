@@ -1,7 +1,6 @@
 package mn_react.adapter.api;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpResponse;
@@ -47,10 +46,10 @@ public class BookController {
 
     @Get
     HttpResponse<?> getAllBooks(
-        @QueryValue(defaultValue = "0") int page,
-        @QueryValue(defaultValue = "10") int size,
-        @Nullable @QueryValue(defaultValue = "") String search
-    ) {
+            @QueryValue(defaultValue = "0") int page,
+            @QueryValue(defaultValue = "10") int size,
+            @Nullable @QueryValue(defaultValue = "") String search) {
+
         if (page == -1) {
             List<BookResponse> response = bookRepository.findAll()
                 .stream()
