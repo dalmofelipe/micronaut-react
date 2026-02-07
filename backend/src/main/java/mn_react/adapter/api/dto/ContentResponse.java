@@ -10,6 +10,7 @@ public class ContentResponse {
     private Long id;
     private String titulo;
     private String conteudo;
+    private String conteudoJson;
     private String categoria;
     private String status;
     private Long autorId;
@@ -27,6 +28,9 @@ public class ContentResponse {
 
     public String getConteudo() { return conteudo; }
     public void setConteudo(String conteudo) { this.conteudo = conteudo; }
+
+    public String getConteudoJson() { return conteudoJson; }
+    public void setConteudoJson(String conteudoJson) { this.conteudoJson = conteudoJson; }
 
     public String getCategoria() { return categoria; }
     public void setCategoria(String categoria) { this.categoria = categoria; }
@@ -54,6 +58,7 @@ public class ContentResponse {
         response.setId(content.getId());
         response.setTitulo(content.getTitulo());
         response.setConteudo(content.getConteudo());
+        response.setConteudoJson(content.getConteudoJson());
         response.setCategoria(content.getCategoria());
         response.setStatus(content.getStatus());
         response.setAutorId(content.getAutorId());

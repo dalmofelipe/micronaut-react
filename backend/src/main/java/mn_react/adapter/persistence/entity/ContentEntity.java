@@ -32,6 +32,8 @@ public class ContentEntity {
     
     private String conteudo;
     
+    private String conteudoJson; // optional ProseMirror JSON (serialized)
+    
     private String categoria;
     
     private String status;
@@ -61,6 +63,7 @@ public class ContentEntity {
             .id(this.id)
             .titulo(this.titulo)
             .conteudo(this.conteudo)
+            .conteudoJson(this.conteudoJson)
             .categoria(this.categoria)
             .status(this.status)
             .autorId(this.autorId)
@@ -84,6 +87,7 @@ public class ContentEntity {
             .id(content.getId())
             .titulo(content.getTitulo())
             .conteudo(content.getConteudo())
+            .conteudoJson(content.getConteudoJson())
             .categoria(content.getCategoria())
             .status(content.getStatus())
             .autorId(content.getAutorId())

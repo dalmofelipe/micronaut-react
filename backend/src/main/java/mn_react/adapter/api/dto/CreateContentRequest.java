@@ -12,6 +12,7 @@ public class CreateContentRequest {
 
     @NotBlank
     private String conteudo;
+    private String conteudoJson;
 
     private String categoria;
 
@@ -29,6 +30,9 @@ public class CreateContentRequest {
     public String getConteudo() { return conteudo; }
     public void setConteudo(String conteudo) { this.conteudo = conteudo; }
 
+    public String getConteudoJson() { return conteudoJson; }
+    public void setConteudoJson(String conteudoJson) { this.conteudoJson = conteudoJson; }
+
     public String getCategoria() { return categoria; }
     public void setCategoria(String categoria) { this.categoria = categoria; }
 
@@ -45,6 +49,7 @@ public class CreateContentRequest {
         Content content = new Content();
         content.setTitulo(this.titulo);
         content.setConteudo(this.conteudo);
+        content.setConteudoJson(this.conteudoJson);
         content.setCategoria(this.categoria);
         content.setStatus(this.status);
         content.setAutorId(this.autorId);

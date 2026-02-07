@@ -17,6 +17,7 @@ public class Content {
     private Long id;
     private String titulo;
     private String conteudo;  // Rich text
+    private String conteudoJson; // optional ProseMirror JSON (serialized)
     private String categoria;
     private String status;  // rascunho, publicado
     private Long autorId;
