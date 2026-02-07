@@ -43,6 +43,7 @@ public class ContentEntity {
     
     private Long autorId;
     
+    @io.micronaut.data.annotation.MappedProperty("media_urls")
     private String mediaUrlsJson;
     
     @Default

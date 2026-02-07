@@ -42,10 +42,13 @@ const MediaPicker: React.FC<Props> = ({ onUpload }) => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, multiple: false });
 
+  const inputProps = getInputProps();
+
   return (
     <Box {...getRootProps()} sx={{ display: 'inline-flex', alignItems: 'center' }}>
-      <input {...getInputProps()} />
-      <Button variant="outlined" size="small" component="div" disabled={upload.isPending} sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+      {/* visually hide native input but keep it accessible */}
+      <input {...inputProps} id="media-input" name="file" aria-labelledby="media-button" style={{ display: 'none' }} />
+      <Button id="media-button" variant="outlined" size="small" component="div" disabled={upload.isPending} sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         {upload.isPending ? <CircularProgress size={18} /> : isDragActive ? 'Solte para inserir' : 'Inserir mídia'}
         {preview ? <img src={preview} style={thumbStyle} alt="preview" /> : null}
       </Button>

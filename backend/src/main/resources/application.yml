@@ -9,11 +9,38 @@ micronaut:
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /swagger-ui/**
+      media:
+        paths:
+          - file:./target/uploads/media
+          - file:./uploads/media
+        mapping: /media/**
   server:
     cors:
       enabled: true
       configurations:
+        default:
+          paths:
+            - /**
+          allowed-origins:
+            - http://localhost:5173
+            - ${FRONTEND_URL:`http://localhost:5000`}
+          allowed-methods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+            - OPTIONS
+          allowed-headers:
+            - Content-Type
+            - Authorization
+            - X-Requested-With
+            - Accept
+            - Origin
+          allow-credentials: true
+          max-age-seconds: 1800
         ui:
+          paths:
+            - /swagger-ui/**
           allowed-origins:
             - ${ FRONTEND_URL:`http://localhost:5000` }
 datasources:
@@ -31,8 +58,8 @@ flyway:
       locations: classpath:db/migration
 media:
   upload:
-    dir: ./uploads/media
-  base-url: http://localhost:8000/media/
+    dir: ./target/uploads/media
+  base-url: http://localhost:8080/media/
   storage:
     type: local
 jpa:

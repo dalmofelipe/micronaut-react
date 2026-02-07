@@ -1,9 +1,10 @@
 package mn_react.adapter.api.dto;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.validation.constraints.*;
 import mn_react.core.domain.entities.Content;
-import java.util.List;
+import java.util.List; 
 
 @Serdeable
 public class CreateContentRequest {
@@ -12,7 +13,8 @@ public class CreateContentRequest {
 
     @NotBlank
     private String conteudo;
-    private String conteudoJson;
+    private Object conteudoJson;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private String categoria;
 
@@ -30,8 +32,8 @@ public class CreateContentRequest {
     public String getConteudo() { return conteudo; }
     public void setConteudo(String conteudo) { this.conteudo = conteudo; }
 
-    public String getConteudoJson() { return conteudoJson; }
-    public void setConteudoJson(String conteudoJson) { this.conteudoJson = conteudoJson; }
+    public Object getConteudoJson() { return conteudoJson; }
+    public void setConteudoJson(Object conteudoJson) { this.conteudoJson = conteudoJson; }
 
     public String getCategoria() { return categoria; }
     public void setCategoria(String categoria) { this.categoria = categoria; }
@@ -49,7 +51,17 @@ public class CreateContentRequest {
         Content content = new Content();
         content.setTitulo(this.titulo);
         content.setConteudo(this.conteudo);
-        content.setConteudoJson(this.conteudoJson);
+        if (this.conteudoJson == null) {
+            content.setConteudoJson(null);
+        } else if (this.conteudoJson instanceof String) {
+            content.setConteudoJson((String) this.conteudoJson);
+        } else {
+            try {
+                content.setConteudoJson(objectMapper.writeValueAsString(this.conteudoJson));
+            } catch (Exception e) {
+                content.setConteudoJson(null);
+            }
+        }
         content.setCategoria(this.categoria);
         content.setStatus(this.status);
         content.setAutorId(this.autorId);
