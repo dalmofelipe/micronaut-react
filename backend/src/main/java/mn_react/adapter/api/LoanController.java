@@ -14,15 +14,15 @@ import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
 import jakarta.validation.Valid;
-import mn_react.adapter.api.dto.CreateLoanRequest;
-import mn_react.adapter.api.dto.LoanResponse;
-import mn_react.adapter.api.dto.PagedResponse;
+import mn_react.adapter.api.dto.requests.CreateLoanRequest;
+import mn_react.adapter.api.dto.responses.LoanResponse;
+import mn_react.adapter.api.dto.responses.PagedResponse;
 import mn_react.core.domain.entities.Loan;
 import mn_react.core.domain.entities.LoanStatus;
 import mn_react.core.domain.exception.NotFoundException;
 import mn_react.core.repository.LoanRepository;
-import mn_react.core.usecase.CreateLoanUseCase;
-import mn_react.core.usecase.ReturnLoanUseCase;
+import mn_react.core.usecase.loan.CreateLoanUseCase;
+import mn_react.core.usecase.loan.ReturnLoanUseCase;
 
 @Controller("/loans")
 public class LoanController {

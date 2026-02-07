@@ -13,16 +13,16 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import jakarta.validation.Valid;
-import mn_react.adapter.api.dto.BookResponse;
-import mn_react.adapter.api.dto.CreateBookRequest;
-import mn_react.adapter.api.dto.PagedResponse;
-import mn_react.adapter.api.dto.UpdateBookRequest;
+import mn_react.adapter.api.dto.requests.CreateBookRequest;
+import mn_react.adapter.api.dto.requests.UpdateBookRequest;
+import mn_react.adapter.api.dto.responses.BookResponse;
+import mn_react.adapter.api.dto.responses.PagedResponse;
 import mn_react.core.domain.entities.Book;
 import mn_react.core.domain.exception.NotFoundException;
 import mn_react.core.repository.BookRepository;
-import mn_react.core.usecase.CreateBookUseCase;
-import mn_react.core.usecase.DeleteBookUseCase;
-import mn_react.core.usecase.UpdateBookUseCase;
+import mn_react.core.usecase.book.CreateBookUseCase;
+import mn_react.core.usecase.book.DeleteBookUseCase;
+import mn_react.core.usecase.book.UpdateBookUseCase;
 
 @Controller("/books")
 public class BookController {

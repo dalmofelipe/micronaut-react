@@ -6,8 +6,8 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.multipart.CompletedFileUpload;
 import jakarta.inject.Inject;
-import mn_react.adapter.api.dto.MediaUploadResponse;
-import mn_react.core.usecase.UploadMediaUseCase;
+import mn_react.adapter.api.dto.responses.MediaUploadResponse;
+import mn_react.core.usecase.media.UploadMediaUseCase;
 
 @Controller("/media")
 public class MediaController {

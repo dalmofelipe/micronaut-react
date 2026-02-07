@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import mn_react.core.domain.entities.Content;
 import mn_react.core.repository.ContentRepository;
+import mn_react.core.usecase.content.CreateContentUseCase;
+import mn_react.core.usecase.content.impl.CreateContentUseCaseImpl;
 
 class CreateContentUseCaseTest {
 
@@ -22,7 +24,7 @@ class CreateContentUseCaseTest {
     void setup() {
         contentRepository = mock(ContentRepository.class);
         when(contentRepository.save(any())).thenAnswer(i -> i.getArgument(0));
-        createContentUseCase = new CreateContentUseCase(contentRepository);
+        createContentUseCase = new CreateContentUseCaseImpl(contentRepository);
     }
 
     @Test

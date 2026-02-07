@@ -14,16 +14,16 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import jakarta.validation.Valid;
-import mn_react.adapter.api.dto.CreateUserRequest;
-import mn_react.adapter.api.dto.PagedResponse;
-import mn_react.adapter.api.dto.UpdateUserRequest;
-import mn_react.adapter.api.dto.UserResponse;
+import mn_react.adapter.api.dto.requests.CreateUserRequest;
+import mn_react.adapter.api.dto.requests.UpdateUserRequest;
+import mn_react.adapter.api.dto.responses.PagedResponse;
+import mn_react.adapter.api.dto.responses.UserResponse;
 import mn_react.core.domain.entities.User;
 import mn_react.core.domain.exception.NotFoundException;
 import mn_react.core.repository.UserRepository;
-import mn_react.core.usecase.CreateUserUseCase;
-import mn_react.core.usecase.DeleteUserUseCase;
-import mn_react.core.usecase.UpdateUserUseCase;
+import mn_react.core.usecase.user.CreateUserUseCase;
+import mn_react.core.usecase.user.DeleteUserUseCase;
+import mn_react.core.usecase.user.UpdateUserUseCase;
 
 @Controller("/users")
 public class UserController {
