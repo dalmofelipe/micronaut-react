@@ -1,12 +1,17 @@
 # Copilot Instructions - Padrões de Código
 
-## 📚 Documentação por Área
+## � Architectural Decision Records (ADRs)
 
-Para instruções específicas de cada stack, consulte:
+As decisões arquiteturais deste projeto estão documentadas em **ADRs** (Architectural Decision Records).
 
-- **Frontend (React + TypeScript):** [copilot-instructions-frontend.md](./copilot-instructions-frontend.md)
-- **Backend (Micronaut + Java):** [copilot-instructions-backend.md](./copilot-instructions-backend.md)
+**Leia os ADRs relevantes ANTES de implementar novas features ou fazer refatorações:**
 
+➡️ [**docs/adr/README.md**](../docs/adr/README.md)
+
+Os ADRs cobrem:
+- **Frontend:** Feature-Based Architecture, Manager vs Repository, Decomposição de Componentes, TypeScript Conventions
+- **Backend:** Clean Architecture, Use Case Pattern, SOLID Principles, Exception Handling, Testing Strategy
+- **Cross-cutting:** Naming Conventions, MCP Usage Policy
 
 ## 🔌 MCPs Disponíveis
 
