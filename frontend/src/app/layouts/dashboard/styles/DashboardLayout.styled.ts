@@ -1,5 +1,7 @@
 import { Box, styled } from '@mui/material';
 
+const DRAWER_WIDTH = 240;
+
 export const StyledDashboardContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   minHeight: '100vh',

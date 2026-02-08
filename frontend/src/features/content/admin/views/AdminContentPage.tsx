@@ -1,6 +1,6 @@
-import React from 'react';
 import { Box, Typography } from '@mui/material';
-import ContentEditor from '../admin/ContentEditor';
+import React from 'react';
+import ContentEditor from './ContentEditor';
 
 const AdminContentPage: React.FC = () => {
   return (

@@ -6,7 +6,8 @@ import { DashboardHomePage } from "@/features/dashboard/views/DashboardHomePage"
 import { HomePage } from "@/features/home/views/HomePage";
 import { AdminLoansPage } from "@/features/loans/admin/views/AdminLoansPage";
 import { AdminUsersPage } from "@/features/users/admin/views/AdminUsersPage";
-import AdminContentPage from "@/features/content/admin/AdminContentPage";
+import ContentListPage from "@/features/content/admin/views/ContentListPage";
+import ContentFormPage from "@/features/content/admin/views/ContentFormPage";
 import { NotificationSnackbar } from '@/shared/components/NotificationSnackbar';
 import { useThemeStore } from "@/shared/store/useThemeStore";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -36,7 +37,9 @@ export const Router = () => {
               <Route path="users" element={<AdminUsersPage />} />
               <Route path="books" element={<AdminBooksPage />} />
               <Route path="loans" element={<AdminLoansPage />} />
-              <Route path="content" element={<AdminContentPage />} />
+              <Route path="content" element={<ContentListPage />} />
+              <Route path="content/new" element={<ContentFormPage />} />
+              <Route path="content/edit/:id" element={<ContentFormPage />} />
             </Route>
           </Routes>
           <NotificationSnackbar />

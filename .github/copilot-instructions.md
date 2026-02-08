@@ -1,15 +1,27 @@
 # Copilot Instructions - Padrões de Código
 
+## ⚠️ OBRIGATÓRIO: Consulta aos ADRs
+
+**🚨 ATENÇÃO: É OBRIGATÓRIO consultar e analisar os ADRs relevantes ANTES de qualquer implementação!**
+
+- ✅ Ler ADRs relevantes à tarefa em [docs/adr/README.md](../docs/adr/README.md)
+- ✅ Identificar padrões, convenções e constraints que se aplicam
+- ✅ Código DEVE seguir ADRs desde a primeira geração
+- ✅ Verificar conformidade com ADRs antes de finalizar
+- ✅ Refatorar PROATIVAMENTE se necessário
+
+**❌ NÃO gere código que precise ser refatorado depois para seguir ADRs!**
+
+---
+
 ## � Architectural Decision Records (ADRs)
 
 As decisões arquiteturais deste projeto estão documentadas em **ADRs** (Architectural Decision Records).
 
-**Leia os ADRs relevantes ANTES de implementar novas features ou fazer refatorações:**
-
 ➡️ [**docs/adr/README.md**](../docs/adr/README.md)
 
 Os ADRs cobrem:
-- **Frontend:** Feature-Based Architecture, Manager vs Repository, Decomposição de Componentes, TypeScript Conventions
+- **Frontend:** Feature-Based Architecture, Manager vs Repository, Decomposição de Componentes, TypeScript Conventions, Zero `sx` Props Policy
 - **Backend:** Clean Architecture, Use Case Pattern, SOLID Principles, Exception Handling, Testing Strategy
 - **Cross-cutting:** Naming Conventions, MCP Usage Policy
 
