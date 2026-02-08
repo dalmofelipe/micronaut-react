@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Document.OutputSettings;
 
 import mn_react.core.domain.entities.Content;
+import mn_react.core.domain.exception.ValidationException;
 import mn_react.core.repository.ContentRepository;
 import mn_react.core.usecase.content.CreateContentUseCase;
 
@@ -55,13 +56,13 @@ public class CreateContentUseCaseImpl implements CreateContentUseCase {
 
     private void validateContent(Content content) {
         if (content.getTitulo() == null || content.getTitulo().trim().isEmpty()) {
-            throw new IllegalArgumentException("Título é obrigatório");
+            throw new ValidationException("Título é obrigatório");
         }
         if (content.getConteudo() == null || content.getConteudo().trim().isEmpty()) {
-            throw new IllegalArgumentException("Conteúdo é obrigatório");
+            throw new ValidationException("Conteúdo é obrigatório");
         }
         if (content.getAutorId() == null) {
-            throw new IllegalArgumentException("Autor é obrigatório");
+            throw new ValidationException("Autor é obrigatório");
         }
     }
 }
