@@ -11,8 +11,7 @@ micronaut:
         mapping: /swagger-ui/**
       media:
         paths:
-          - file:./target/uploads/media
-          - file:./uploads/media
+          - file:${MEDIA_STORAGE_PATH:../../storage/media}
         mapping: /media/**
   server:
     cors:
@@ -58,8 +57,8 @@ flyway:
       locations: classpath:db/migration
 media:
   upload:
-    dir: ./target/uploads/media
-  base-url: http://localhost:8080/media/
+    dir: ${MEDIA_STORAGE_PATH:../../storage/media}
+  base-url: ${MEDIA_BASE_URL:`http://localhost:8080/media/`}
   storage:
     type: local
 jpa:

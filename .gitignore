@@ -1,0 +1,20 @@
+# Storage (user uploads)
+/storage/
+
+# Legacy upload directories (deprecated)
+backend/uploads/
+backend/target/uploads/
+
+# Build outputs
+backend/target/
+frontend/dist/
+frontend/node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
