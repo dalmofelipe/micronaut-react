@@ -1,6 +1,6 @@
 import { BookCard } from "@/features/books/catalog/views/BookCard";
 import { useGetBooks } from "@/features/books/shared/hooks/useBooks";
-import ContentFeed from "@/features/content/catalog/ContentFeed";
+import ContentFeed from "@/features/content/views/public/ContentFeed";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { HeroSearch } from "./HeroSearch";

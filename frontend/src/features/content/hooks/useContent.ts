@@ -1,18 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { contentService } from './services';
-import type { ICreateContentRequest, IMediaUploadResponse } from './types';
+import * as ContentManager from '../service/ContentManager';
+import type { ICreateContentRequest, IMediaUploadResponse } from '../types/Content';
 
 export const useContents = () => {
   return useQuery({
     queryKey: ['contents'],
-    queryFn: contentService.getAll,
+    queryFn: () => ContentManager.getAllContents(),
   });
 };
 
 export const useContent = (id: number) => {
   return useQuery({
     queryKey: ['content', id],
-    queryFn: () => contentService.getById(id),
+    queryFn: () => ContentManager.getContentById(id),
     enabled: !!id,
   });
 };
@@ -20,7 +20,7 @@ export const useContent = (id: number) => {
 export const useCreateContent = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: contentService.create,
+    mutationFn: ContentManager.createContent,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contents'] });
     },
@@ -29,7 +29,7 @@ export const useCreateContent = () => {
 
 export const useUploadMedia = () => {
   return useMutation<IMediaUploadResponse, unknown, File>({
-    mutationFn: (file: File) => contentService.uploadMedia(file),
+    mutationFn: ContentManager.uploadMedia,
   });
 };
 
@@ -37,7 +37,7 @@ export const useUpdateContent = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<ICreateContentRequest> }) =>
-      contentService.update(id, data),
+      ContentManager.updateContent(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contents'] });
     },
@@ -47,7 +47,7 @@ export const useUpdateContent = () => {
 export const useDeleteContent = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: contentService.delete,
+    mutationFn: ContentManager.deleteContent,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contents'] });
     },

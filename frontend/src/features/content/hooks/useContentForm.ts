@@ -1,6 +1,6 @@
+import { useCreateContent, useUpdateContent } from '@/features/content/hooks/useContent';
+import type { IContent, ICreateContentRequest } from '@/features/content/types/Content';
 import { useEffect, useState } from 'react';
-import { useCreateContent, useUpdateContent } from '../../shared/hooks';
-import type { IContent, ICreateContentRequest } from '../../shared/types';
 
 export const useContentForm = (selectedContent?: IContent | null) => {
   const [form, setForm] = useState<ICreateContentRequest>({

@@ -1,6 +1,6 @@
+import type { ICreateContentRequest } from '@/features/content/types/Content';
 import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import React from 'react';
-import type { ICreateContentRequest } from '../../shared/types';
 
 interface IContentFormFieldsProps {
   form: ICreateContentRequest;

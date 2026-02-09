@@ -1,8 +1,8 @@
+import { useContent } from '@/features/content/hooks/useContent';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useContent } from '../../shared/hooks';
 import ContentFormView from './ContentFormView';
 import { PanelPaper } from './styles/ContentForm.styled';
 

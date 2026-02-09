@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Paper, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import ContentListDataGrid from './ContentListDataGrid';
@@ -19,7 +19,9 @@ const ContentListPage: React.FC = () => {
         </Button>
       </ListPageHeader>
 
-      <ContentListDataGrid onSelectContent={(content) => navigate(`/admin/content/edit/${content.id}`)} />
+      <Paper>
+        <ContentListDataGrid onSelectContent={(content) => navigate(`/admin/content/edit/${content.id}`)} />
+      </Paper>
     </Box>
   );
 };

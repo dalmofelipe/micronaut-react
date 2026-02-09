@@ -1,8 +1,8 @@
+import type { IContent } from '@/features/content/types/Content';
 import { Box, Grid, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import type { IContent } from '../../shared/types';
+import ContentListDataGrid from '../content-list/ContentListDataGrid';
 import ContentFormView from './ContentFormView';
-import ContentListDataGrid from './ContentListDataGrid';
 import { PanelPaper } from './styles/ContentForm.styled';
 
 const ContentEditor: React.FC = () => {

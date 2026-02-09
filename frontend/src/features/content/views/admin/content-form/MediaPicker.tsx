@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CircularProgress, Typography } from '@mui/material';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useUploadMedia } from '../../shared/hooks';
+import { useUploadMedia } from '@/features/content/hooks/useContent';
+
 import {
-  PickerContainer,
-  PickerButton,
-  HintContainer,
-  PreviewThumb,
   HiddenFileInput,
+  HintContainer,
+  PickerButton,
+  PickerContainer,
+  PreviewThumb,
 } from './styles/MediaPicker.styled';
 
 type Props = {
@@ -45,8 +46,8 @@ const MediaPicker: React.FC<Props> = ({ onUpload }) => {
     };
   }, [preview]);
 
-  const { getRootProps, isDragActive } = useDropzone({ 
-    onDrop, 
+  const { getRootProps, isDragActive } = useDropzone({
+    onDrop,
     multiple: false,
     noClick: true,
   });
@@ -62,24 +63,24 @@ const MediaPicker: React.FC<Props> = ({ onUpload }) => {
 
   return (
     <PickerContainer {...getRootProps()}>
-      <HiddenFileInput 
+      <HiddenFileInput
         ref={inputRef}
         type="file"
         accept="image/*,audio/*,video/*"
         onChange={handleFileChange}
       />
 
-      <PickerButton 
+      <PickerButton
         onClick={handleButtonClick}
-        variant="outlined" 
-        size="small" 
+        variant="outlined"
+        size="small"
         disabled={upload.isPending}
       >
         {upload.isPending && <CircularProgress size={18} />}
         {getButtonText()}
         {preview && <PreviewThumb src={preview} alt="preview" />}
       </PickerButton>
-      
+
       <HintContainer>
         <Typography variant="caption" color="text.secondary">
           Arraste ou clique para inserir imagem/áudio/vídeo

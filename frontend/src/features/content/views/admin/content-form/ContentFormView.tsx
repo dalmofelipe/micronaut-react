@@ -1,7 +1,7 @@
+import { useContentForm } from '@/features/content/hooks/useContentForm';
+import type { IContent } from '@/features/content/types/Content';
 import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
-import type { IContent } from '../../shared/types';
-import { useContentForm } from '../hooks/useContentForm';
 import { ContentFormFields } from './ContentFormFields';
 import { RichTextEditor } from './RichTextEditor';
 

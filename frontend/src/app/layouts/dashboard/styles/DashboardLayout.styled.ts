@@ -1,6 +1,6 @@
 import { Box, styled } from '@mui/material';
 
-const DRAWER_WIDTH = 240;
+// const DRAWER_WIDTH = 240;
 
 export const StyledDashboardContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -11,7 +11,9 @@ export const StyledDashboardContainer = styled(Box)(({ theme }) => ({
 export const StyledMainContent = styled(Box)(({ theme }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  marginTop: '64px',
+  margin: '64px auto 0 auto',
+  width: '100%',
+  maxWidth: '1920px',
   minHeight: 'calc(100vh - 64px)',
   [theme.breakpoints.down('sm')]: {
     padding: theme.spacing(2),

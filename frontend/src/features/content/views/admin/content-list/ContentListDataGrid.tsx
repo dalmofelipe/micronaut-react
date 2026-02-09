@@ -1,8 +1,8 @@
+import { useContents, useDeleteContent } from '@/features/content/hooks/useContent';
+import type { IContent } from '@/features/content/types/Content';
 import { Alert, Box, CircularProgress, Typography } from '@mui/material';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import React from 'react';
-import { useContents, useDeleteContent } from '../../shared/hooks';
-import type { IContent } from '../../shared/types';
 import { ContentRowActions } from './ContentRowActions';
 
 interface ContentListProps {

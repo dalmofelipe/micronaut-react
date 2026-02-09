@@ -28,4 +28,4 @@ export interface IMediaUploadResponse {
   size: number;
   width?: number;
   height?: number;
-} 
+}

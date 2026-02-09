@@ -1,7 +1,8 @@
+import { Box, Card, CardContent, Chip, Skeleton, Typography } from '@mui/material';
 import React from 'react';
-import { Box, Card, CardContent, Typography, Chip, Skeleton } from '@mui/material';
-import { useContents } from '../shared/hooks';
-import type { IContent } from '../shared/types';
+
+import { useContents } from '@/features/content/hooks/useContent';
+import type { IContent } from '@/features/content/types/Content';
 
 const ContentCard: React.FC<{ content: IContent }> = ({ content }) => (
   <Card sx={{ mb: 2 }}>
