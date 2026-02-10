@@ -4,7 +4,7 @@
 
 **Tags:** `[frontend, architecture, organization]`
 
-**Date:** 2026-02-07
+**Date:** 2026-02-07 | **Updated:** 2026-02-09
 
 ---
 
@@ -24,40 +24,44 @@ Misturar ambos contextos em uma pasta `views/` única cria:
 Para features com **múltiplos contextos de usuário**, dividir em **sub-features**:
 
 ```
-features/books/
-├── admin/              # Contexto administrativo
-│   ├── views/         # AdminBooksPage, BookFormDialog, BooksTable
-│   ├── hooks/         # useBookForm, useBookFilters
-│   └── styles/        # BooksTable.styled.ts
-├── catalog/           # Contexto público/catálogo
-│   ├── views/         # BookCard, BookList, BookDetailPage
-│   └── styles/        # BookCard.styled.ts
-└── shared/            # Código compartilhado entre sub-features
-    ├── services/      # BookManager, BookRepository
-    ├── hooks/         # useBooks, useBookMutations (React Query)
-    └── types/         # IBook, TBookStatus
+features/content/
+├── hooks/             # Raiz da feature (compartilhados)
+├── service/           # Raiz da feature (Manager + Repository)
+├── types/             # Raiz da feature (interfaces/types)
+├── utils/             # Raiz da feature (funções puras)
+├── views/
+│   ├── admin/         # Sub-feature (contexto administrativo)
+│   │   ├── content-form/      # Subpasta temática
+│   │   │   ├── ContentFormPage.tsx
+│   │   │   └── styles/
+│   │   └── content-list/      # Subpasta temática
+│   └── public/        # Sub-feature (contexto público)
+│       └── ContentFeed.tsx
+└── index.ts           # Barrel export (ADR-016)
 ```
 
-### Regras de Sub-features
+### Regras de Organização
 
-1. **Separação por perfil de acesso:**
+1. **Raiz da feature:**
+   - `hooks/`: Custom hooks compartilhados entre sub-features
+   - `service/`: Manager + Repository (camada de dados)
+   - `types/`: Interfaces/types TypeScript compartilhados
+   - `utils/`: Funções puras (formatação, cálculos, validações) - SEM hooks
+   - `index.ts`: Barrel export obrigatório (ADR-016)
+
+2. **Sub-features (views/):**
    - `admin/`: Telas de gestão (CRUD, dashboards, relatórios)
-   - `catalog/` ou `public/`: Telas para usuário final (catálogo, busca)
-   - `shared/`: Hooks de API, services, types usados por ambos
-
-2. **Cada sub-feature tem estrutura completa:**
-   - Pode ter seu próprio `views/`, `hooks/`, `styles/`
-   - Pode importar de `shared/` da mesma feature
-   - Pode importar de `@/shared/` global
+   - `public/`: Telas para usuário final (catálogo, busca)
+   - Contém apenas `views/` com subpastas temáticas (ADR-003)
 
 3. **Sub-features NÃO importam entre si:**
 
 ```typescript
-// ❌ ERRADO: admin importando de catalog
-import { BookCard } from '../catalog/views/BookCard';
+// ❌ ERRADO: admin importando de public
+import { ContentFeed } from '../public/ContentFeed';
 
 // ✅ CORRETO: Criar componente genérico em shared
-import { BookCard } from '@/shared/components/BookCard';
+import { ContentCard } from '@/shared/components/ContentCard';
 ```
 
 ### Quando usar Sub-features?
@@ -80,6 +84,18 @@ features/dashboard/
 └── hooks/
     └── useDashboardStats.ts
 ```
+
+### Pasta utils/
+
+Funções puras **SEM** dependências de React ou backend:
+
+```typescript
+// utils/formatCurrency.ts
+export const formatCurrency = (value: number) => 
+  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+```
+
+**Regra:** `utils/` deve ter testes unitários obrigatórios (ADR-013).
 
 ## Consequences
 

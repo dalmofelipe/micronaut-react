@@ -4,7 +4,7 @@
 
 **Tags:** `[frontend, architecture, folder-structure]`
 
-**Date:** 2026-02-07
+**Date:** 2026-02-07 | **Updated:** 2026-02-09
 
 ---
 
@@ -29,21 +29,26 @@ src/
 
 ### Estrutura de Features
 
-Cada feature representa um **domínio de negócio** (ex: `books`, `loans`, `users`):
+Cada feature representa um **domínio de negócio** (ex: `content`, `books`, `loans`):
 
 ```
-features/books/
-├── admin/              # Contexto administrativo
-│   ├── views/         # Componentes e páginas
-│   ├── hooks/         # Lógica de formulários/UI
-│   └── styles/        # Estilos específicos
-├── catalog/           # Contexto público/catálogo
-│   ├── views/
-│   └── styles/
-└── shared/            # Código compartilhado entre sub-features
-    ├── services/      # Manager + Repository
-    ├── hooks/         # useBooks, useBookMutations
-    └── types/         # Book.ts, BookFilters.ts
+features/content/
+├── hooks/             # Custom hooks (useContent, useContentForm)
+├── service/           # Manager + Repository (camada de dados)
+├── types/             # TypeScript types/interfaces
+├── utils/             # Funções puras (formatação, cálculos)
+├── views/             # Componentes visuais
+│   ├── admin/         # Contexto administrativo
+│   │   ├── content-form/      # Subpasta temática
+│   │   │   ├── ContentFormPage.tsx
+│   │   │   ├── ContentEditor.tsx
+│   │   │   └── styles/
+│   │   └── content-list/      # Subpasta temática
+│   │       ├── ContentListPage.tsx
+│   │       └── styles/
+│   └── public/        # Contexto público
+│       └── ContentFeed.tsx
+└── index.ts           # Barrel export (API pública)
 ```
 
 ### Regras de Dependência
@@ -54,19 +59,38 @@ features/books/
 // ✅ CORRETO
 import { Button } from '@/shared/components/Button';
 
-// ❌ ERRADO
-// shared/ nunca pode importar de features/
+// ❌ ERRADO: shared/ nunca pode importar de features/
 import { BookCard } from '@/features/books/catalog/views/BookCard';
 ```
 
-### Sub-features (Separação de Contexto)
+### Barrel Exports (index.ts)
 
-Para domínios complexos, dividir em sub-features baseadas no **perfil do usuário**:
-- `admin/`: Telas de gestão (CRUD, dashboards)
-- `catalog/` ou `public/`: Telas para usuário final
-- `shared/`: Hooks, services, types usados por ambos
+**OBRIGATÓRIO:** Toda feature deve ter `index.ts` na raiz exportando API pública:
 
-Cada sub-feature tem sua própria estrutura interna (`views/`, `hooks/`, `styles/`).
+```typescript
+// features/content/index.ts
+export { useContent, useContentForm } from './hooks';
+export type { IContent, TContentStatus } from './types/Content';
+export { ContentListPage } from './views/admin/content-list/ContentListPage';
+```
+
+**Regra:** Outras features importam APENAS via barrel export (ver ADR-016).
+
+### Organização de Pastas
+
+**Raiz da feature:**
+- `hooks/`: Custom hooks compartilhados
+- `service/`: Manager + Repository (singular)
+- `types/`: Interfaces e types TypeScript
+- `utils/`: Funções puras (formatação, cálculos, validações)
+- `index.ts`: Barrel export obrigatório
+
+**Sub-features (views/):**
+- `admin/`, `public/`: Contextos por perfil de usuário
+- Subpastas temáticas: agrupam componentes relacionados (`content-form/`, `content-list/`)
+- Cada subpasta tem seu próprio `styles/`
+
+Ver ADR-006 para detalhes sobre separação de contextos.
 
 ## Consequences
 

@@ -4,7 +4,7 @@
 
 **Tags:** `[frontend, data-layer, architecture]`
 
-**Date:** 2026-02-07
+**Date:** 2026-02-07 | **Updated:** 2026-02-09
 
 ---
 
@@ -25,61 +25,46 @@ Dentro de `features/*/services/`, separamos em **dois arquivos**:
 **Responsabilidade:** Apenas fazer chamadas HTTP. Zero lógica de negócio.
 
 ```typescript
-// BookRepository.ts
+// ContentRepository.ts
 import api from '@/app/config/axios';
-import type { IBook, ICreateBookRequest } from '../types/Book';
+import type { IContent } from '../types/Content';
 
-export const BookRepository = {
-  getAll: () => api.get<IBook[]>('/books'),
-  
-  getById: (id: number) => api.get<IBook>(`/books/${id}`),
-  
-  create: (data: ICreateBookRequest) => 
-    api.post<IBook>('/books', data),
+export const ContentRepository = {
+  getAll: () => api.get<IContent[]>('/content'),
+  getById: (id: number) => api.get<IContent>(`/content/${id}`),
+  create: (data: IContent) => api.post<IContent>('/content', data),
 };
 ```
 
-**Regras:**
-- Apenas chamadas Axios/Fetch
-- Retorna dados "crus" tipados (DTOs)
-- Sem try/catch, sem formatação, sem validação
+**Regras:** Apenas chamadas HTTP, retorna dados tipados, sem try/catch.
 
 ### 2. Manager (`*Manager.ts`)
 
 **Responsabilidade:** Orquestrar chamadas, tratar erros, formatar dados.
 
 ```typescript
-// BookManager.ts
-import { BookRepository } from './BookRepository';
+// ContentManager.ts
+import { ContentRepository } from './ContentRepository';
 
-export const BookManager = {
-  async getAllBooks() {
+export const ContentManager = {
+  async getAll() {
     // Futuramente: cache, retry, error handling
-    return BookRepository.getAll();
-  },
-  
-  async createBook(data: ICreateBookRequest) {
-    // Futuramente: validação extra, sanitização, logging
-    return BookRepository.create(data);
+    return ContentRepository.getAll();
   },
 };
 ```
 
-**Regras:**
-- Re-exporta métodos do Repository
-- Pode adicionar: validação, retry logic, cache, transformações
-- Não faz chamadas HTTP diretamente (usa Repository)
+**Regras:** Re-exporta Repository, pode adicionar validação/cache/transformations.
 
 ### Localização
 
-Ambos vivem em `features/*/shared/services/`:
+Ambos vivem em `features/*/service/` (raiz da feature, singular):
 
 ```
-features/books/
-└── shared/
-    └── services/
-        ├── BookManager.ts
-        └── BookRepository.ts
+features/content/
+└── service/
+    ├── ContentManager.ts
+    └── ContentRepository.ts
 ```
 
 ### Consumo (React Query Hooks)
@@ -87,16 +72,18 @@ features/books/
 Hooks **SEMPRE** chamam Manager, nunca Repository:
 
 ```typescript
-// hooks/useBooks.ts
-import { BookManager } from '../services/BookManager';
+// hooks/useContent.ts
+import { ContentManager } from '../service/ContentManager';
 
-export const useBooks = () => {
+export const useContent = () => {
   return useQuery({
-    queryKey: ['books'],
-    queryFn: BookManager.getAllBooks, // ✅ Manager
+    queryKey: ['content'],
+    queryFn: ContentManager.getAll, // ✅ Manager
   });
 };
 ```
+
+**Barrel Export:** Manager deve ser exportado via `index.ts` da feature (ADR-016).
 
 ## Consequences
 

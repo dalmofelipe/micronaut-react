@@ -6,12 +6,13 @@ Este diretório contém as decisões arquiteturais do projeto Micronaut + React.
 
 ### Frontend
 
-- [ADR-001](001-feature-based-architecture.md) - Arquitetura baseada em Features (Ramon Prata Model)
-- [ADR-002](002-manager-vs-repository-pattern.md) - Pattern Manager vs Repository na camada de dados
-- [ADR-003](003-component-decomposition-rules.md) - Regras de tamanho e decomposição de componentes
+- [ADR-001](001-feature-based-architecture.md) - Arquitetura baseada em Features (Ramon Prata Model) `[UPDATED 2026-02-09]`
+- [ADR-002](002-manager-vs-repository-pattern.md) - Pattern Manager vs Repository na camada de dados `[UPDATED 2026-02-09]`
+- [ADR-003](003-component-decomposition-rules.md) - Regras de tamanho e decomposição de componentes `[UPDATED 2026-02-09]`
 - [ADR-004](004-zero-sx-props-policy.md) - Política de evitar props `sx` do MUI
-- [ADR-005](005-typescript-naming-conventions.md) - Convenções de nomenclatura TypeScript
-- [ADR-006](006-subfeature-context-separation.md) - Separação de contextos em sub-features
+- [ADR-005](005-typescript-naming-conventions.md) - Convenções de nomenclatura TypeScript `[UPDATED 2026-02-09]`
+- [ADR-006](006-subfeature-context-separation.md) - Separação de contextos em sub-features `[UPDATED 2026-02-09]`
+- [ADR-016](016-barrel-exports-policy.md) - Política de Barrel Exports (index.ts obrigatório) `[NEW 2026-02-09]`
 
 ### Backend
 
@@ -21,7 +22,7 @@ Este diretório contém as decisões arquiteturais do projeto Micronaut + React.
 - [ADR-010](010-solid-principles-enforcement.md) - Enforcement dos princípios SOLID
 - [ADR-011](011-clean-code-function-rules.md) - Regras Clean Code para funções
 - [ADR-012](012-exception-handling-strategy.md) - Estratégia de tratamento de exceções em camadas
-- [ADR-013](013-test-pyramid-strategy.md) - Estratégia de testes (Pirâmide de Testes)
+- [ADR-013](013-test-pyramid-strategy.md) - Estratégia de testes (Pirâmide de Testes) `[UPDATED 2026-02-09]`
 
 ### Cross-cutting
 

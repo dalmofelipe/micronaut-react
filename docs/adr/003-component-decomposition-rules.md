@@ -4,7 +4,7 @@
 
 **Tags:** `[frontend, components, clean-code]`
 
-**Date:** 2026-02-07
+**Date:** 2026-02-07 | **Updated:** 2026-02-09
 
 ---
 
@@ -21,19 +21,7 @@ Componentes React tendem a crescer descontroladamente quando não há regras cla
 
 **Limite máximo:** 150-200 linhas por componente.
 
-Quando ultrapassar, **REFATORAR IMEDIATAMENTE**:
-
-```typescript
-// ❌ ERRADO: Componente monolítico de 300 linhas
-export const AdminBooksPage = () => {
-  const [books, setBooks] = useState([]);
-  const [filters, setFilters] = useState({});
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedBook, setSelectedBook] = useState(null);
-  
-  // ... 250 linhas de JSX misturadas com lógica
-};
-```
+Quando ultrapassar, **REFATORAR IMEDIATAMENTE** usando estratégias abaixo.
 
 ### Estratégia de Decomposição
 
@@ -42,56 +30,43 @@ export const AdminBooksPage = () => {
 Mova estado e lógica para `hooks/`:
 
 ```typescript
-// hooks/useBookForm.ts (lógica extraída)
-export const useBookForm = (book?: IBook) => {
-  const [formData, setFormData] = useState(book || {});
-  const mutation = useCreateBookMutation();
-  
-  const handleSubmit = async () => { /* ... */ };
-  
-  return { formData, setFormData, handleSubmit, isLoading };
-};
-
-// views/AdminBooksPage.tsx (componente enxuto)
-export const AdminBooksPage = () => {
-  const { formData, handleSubmit } = useBookForm();
-  
-  return <BookForm data={formData} onSubmit={handleSubmit} />;
+// hooks/useContentForm.ts
+export const useContentForm = () => {
+  const [formData, setFormData] = useState({});
+  const mutation = useCreateContentMutation();
+  return { formData, setFormData, handleSubmit };
 };
 ```
 
 #### 2. **Extract Styles → Styled Files**
 
-Mova CSS-in-JS para `styles/`:
+Mova CSS-in-JS para `styles/` dentro de cada subpasta temática (ADR-004).
 
-```typescript
-// views/styles/BookTable.styled.ts
-import { styled, TableCell } from '@mui/material';
+#### 3. **Extract Components → Subpastas Temáticas**
 
-export const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  fontWeight: 600,
-  backgroundColor: theme.palette.primary.light,
-}));
-```
-
-#### 3. **Extract Components → Flat Views**
-
-Componentes grandes viram vários componentes pequenos **na mesma pasta `views/`**:
+Agrupe componentes relacionados em **subpastas temáticas** dentro de `views/`:
 
 ```
-views/
-├── AdminBooksPage.tsx      # Orquestrador (layout + estado global)
-├── BookFormDialog.tsx      # Dialog extraído
-├── BookTable.tsx           # Tabela extraída
-└── BookTableRow.tsx        # Linha da tabela extraída
+views/admin/
+├── content-form/          # Subpasta temática
+│   ├── ContentFormPage.tsx
+│   ├── ContentEditor.tsx
+│   ├── ContentFormFields.tsx
+│   └── styles/
+└── content-list/          # Subpasta temática
+    ├── ContentListPage.tsx
+    ├── ContentListDataGrid.tsx
+    └── styles/
 ```
 
-**PROIBIDO:** Criar subpastas `components/` ou `partials/`:
+**PROIBIDO:** Pasta genérica `components/`:
 
 ```
-❌ views/components/BookFormDialog.tsx
-✅ views/BookFormDialog.tsx
+❌ views/admin/components/ContentEditor.tsx  # Genérico
+✅ views/admin/content-form/ContentEditor.tsx # Temático
 ```
+
+**Regra:** Agrupar por **tema/funcionalidade**, não por tipo técnico.
 
 ### Single Responsibility Principle
 

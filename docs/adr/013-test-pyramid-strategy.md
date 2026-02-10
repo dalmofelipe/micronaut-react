@@ -193,6 +193,7 @@ class BookRepositoryTest implements TestPropertyProvider {
 1. Use Cases (100% ideal)
 2. Domain entities (métodos de lógica)
 3. Exception handling (cenários de erro)
+4. **Utils (frontend):** Funções puras em `features/*/utils/` devem ter 100% coverage (obrigatório)
 
 **Não priorizar:**
 - DTOs (POJOs simples)

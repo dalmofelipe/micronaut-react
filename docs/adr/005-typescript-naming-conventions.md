@@ -4,7 +4,7 @@
 
 **Tags:** `[frontend, typescript, naming]`
 
-**Date:** 2026-02-07
+**Date:** 2026-02-07 | **Updated:** 2026-02-09
 
 ---
 
@@ -77,6 +77,18 @@ interface IUser {
 type TStatus = 'active' | 'inactive';
 type TPartialBook = Partial<IBook>;
 ```
+
+### Folder Naming Conventions
+
+| Tipo de Pasta | Convenção | Exemplo | Quando Usar |
+|---------------|-----------|---------|-------------|
+| **Features** | kebab-case | `book-loans/` | Nomes de features |
+| **Subpastas temáticas** | kebab-case | `content-form/` | Agrupamento em `views/` |
+| **Pastas técnicas (relacionadas)** | singular | `service/`, `types/` | Arquivos intimamente relacionados |
+| **Pastas técnicas (independentes)** | plural | `hooks/`, `utils/` | Múltiplos arquivos independentes |
+| **Arquivos de componentes** | PascalCase | `ContentFormPage.tsx` | Componentes React |
+| **Arquivos de hooks** | camelCase | `useContent.ts` | Custom hooks |
+| **Arquivos de styles** | PascalCase + `.styled` | `ContentForm.styled.ts` | Styled components |
 
 ## Consequences
 
