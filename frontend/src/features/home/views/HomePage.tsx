@@ -1,5 +1,5 @@
-import { BookCard } from "@/features/books/catalog/views/BookCard";
-import { useGetBooks } from "@/features/books/shared/hooks/useBooks";
+import { useGetBooks } from "@/features/books";
+import { BookCard } from "@/features/books/views/catalog/book-list/BookCard";
 import { CircularProgress, Typography } from "@mui/material";
 import { HomeWrapper } from "./styles/HomePage.styled";
 

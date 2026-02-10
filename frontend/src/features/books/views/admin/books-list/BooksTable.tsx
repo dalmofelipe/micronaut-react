@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { BooksTableRow } from "./BooksTableRow";
-import type { IBook } from "../../shared/types/Book";
+import type { IBook } from "../../../types/Book";
 
 interface BooksTableProps {
   books: IBook[];

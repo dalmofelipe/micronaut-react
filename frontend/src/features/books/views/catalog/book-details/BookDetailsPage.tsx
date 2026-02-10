@@ -1,7 +1,7 @@
 import { CircularProgress, Typography, Chip, Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useGetBookById } from "../../shared/hooks/useBooks";
+import { useGetBookById } from "../../../hooks/useBooks";
 import {
   BookDetailsCard,
   BookDetailsHeader,
@@ -9,7 +9,7 @@ import {
   BookDetailsWrapper,
   StyledBackButton,
   StyledErrorBackButton
-} from "../styles/BookDetailsPage.styled";
+} from "./styles/BookDetailsPage.styled";
 
 export const BookDetailsPage = () => {
   const { id } = useParams<{ id: string }>();

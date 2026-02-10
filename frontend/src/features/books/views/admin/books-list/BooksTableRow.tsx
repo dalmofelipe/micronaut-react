@@ -1,6 +1,6 @@
 import { TableCell, TableRow, IconButton } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
-import type { IBook } from "../../shared/types/Book";
+import type { IBook } from "../../../types/Book";
 
 interface BooksTableRowProps {
   book: IBook;

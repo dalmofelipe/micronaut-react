@@ -1,4 +1,4 @@
-import * as BookManager from "@/features/books/shared/services/BookManager";
+import * as BookManager from "@/features/books/service/BookManager";
 import { MenuBook } from '@mui/icons-material';
 import { Box, Grid, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';

@@ -1,7 +1,6 @@
 import { DashboardLayout } from '@/app/layouts/dashboard/DashboardLayout';
 import { DefaultLayout } from '@/app/layouts/default/DefaultLayout';
-import { AdminBooksPage } from '@/features/books/admin/views/AdminBooksPage';
-import { BookDetailsPage } from '@/features/books/catalog/views/BookDetailsPage';
+import { AdminBooksPage, BookDetailsPage } from '@/features/books';
 import { DashboardHomePage } from '@/features/dashboard/views/DashboardHomePage';
 import { HomePage } from '@/features/home/views/HomePage';
 import { NotificationSnackbar } from '@/shared/components/NotificationSnackbar';

@@ -3,11 +3,11 @@ import { useState } from "react";
 import {
   useCreateBook,
   useUpdateBook,
-} from "../../shared/hooks/useBooks";
+} from "../../../hooks/useBooks";
 import type {
   IBook,
   IBookRequest
-} from "../../shared/types/Book";
+} from "../../../types/Book";
 
 
 const initialFormData: IBookRequest = {

@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -7,7 +6,8 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import type { IBookRequest } from "../../shared/types/Book";
+import type { IBookRequest } from "../../../types/Book";
+import { StyledFormContent } from "./styles/BookFormDialog.styled";
 
 interface BookFormDialogProps {
   open: boolean;
@@ -37,7 +37,7 @@ export function BookFormDialog({
     >
       <DialogTitle>{isEditing ? "Editar Livro" : "Novo Livro"}</DialogTitle>
       <DialogContent>
-        <Box display="flex" flexDirection="column" gap={2} mt={1}>
+        <StyledFormContent>
           <TextField
             label="Título"
             value={formData.title}
@@ -93,7 +93,7 @@ export function BookFormDialog({
             onChange={(e) => onChange("imageUrl", e.target.value)}
             fullWidth
           />
-        </Box>
+        </StyledFormContent>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} disabled={isLoading}>

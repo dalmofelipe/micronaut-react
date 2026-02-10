@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import * as BookManager from "../services/BookManager";
+import * as BookManager from "../service/BookManager";
 import type { IBookRequest } from "../types/Book";
 
 export const useGetBooks = (page: number, size: number, search: string) => {

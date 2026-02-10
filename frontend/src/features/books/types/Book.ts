@@ -21,5 +21,3 @@ export interface IBookRequest {
   imageUrl?: string;
   pages?: number;
 }
-
-export type TBook = IBook;

@@ -1,4 +1,5 @@
-import { Box, Paper, TextField } from "@mui/material";
+import { Paper, TextField } from "@mui/material";
+import { StyledSearchWrapper } from "./styles/BooksSearchBar.styled";
 
 interface BooksSearchBarProps {
   value: string;
@@ -8,14 +9,14 @@ interface BooksSearchBarProps {
 export function BooksSearchBar({ value, onChange }: BooksSearchBarProps) {
   return (
     <Paper>
-      <Box p={2} mb={2}>
+      <StyledSearchWrapper>
         <TextField
           fullWidth
           placeholder="Buscar por título..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />
-      </Box>
+      </StyledSearchWrapper>
     </Paper>
   );
 }

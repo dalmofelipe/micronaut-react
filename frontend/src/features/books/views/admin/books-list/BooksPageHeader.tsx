@@ -1,5 +1,6 @@
-import { Box, Typography, Button } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
+import { StyledPageHeader } from "./styles/BooksPageHeader.styled";
 
 interface BooksPageHeaderProps {
     onCreateClick: () => void;
@@ -7,12 +8,7 @@ interface BooksPageHeaderProps {
 
 export function BooksPageHeader({ onCreateClick }: BooksPageHeaderProps) {
     return (
-        <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            mb={3}
-        >
+        <StyledPageHeader>
             <Typography variant="h4" fontWeight={700}>
                 Livros
             </Typography>
@@ -23,6 +19,6 @@ export function BooksPageHeader({ onCreateClick }: BooksPageHeaderProps) {
             >
                 Novo Livro
             </Button>
-        </Box>
+        </StyledPageHeader>
     );
 }
