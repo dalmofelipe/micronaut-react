@@ -1,13 +1,13 @@
 import { BookCard } from "@/features/books/catalog/views/BookCard";
 import { useGetBooks } from "@/features/books/shared/hooks/useBooks";
-import ContentFeed from "@/features/content/views/public/ContentFeed";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { HeroSearch } from "./HeroSearch";
-import { BooksGrid, HomeTitle, HomeWrapper } from "./styles/HomePage.styled";
+import { BlogButton, BooksGrid, HomeTitle, HomeWrapper } from "./styles/HomePage.styled";
 
 export const HomePage = () => {
-
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
@@ -52,11 +52,16 @@ export const HomePage = () => {
       <HeroSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
 
       <HomeTitle>
-        Conteúdos Recentes
+        Blog
       </HomeTitle>
-      <Box sx={{ mb: 4 }}>
-        <ContentFeed />
-      </Box>
+      <BlogButton
+        variant="contained"
+        color="primary"
+        size="large"
+        onClick={() => navigate('/blog')}
+      >
+        Ir para o Blog
+      </BlogButton>
 
       <HomeTitle>
         Livros Disponíveis

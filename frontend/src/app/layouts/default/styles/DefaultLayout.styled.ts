@@ -11,5 +11,5 @@ export const DefaultLayoutWrapper = styled(Box)({
 });
 
 export const StyledMainContainer = styled(Container)<{ headerheight: number }>(({ headerheight }) => ({
-  padding: `${headerheight}px 0`,
+  padding: `${headerheight+25}px 0`,
 }));

@@ -1,5 +1,6 @@
 import { DashboardLayout } from '@/app/layouts/dashboard/DashboardLayout';
 import { DefaultLayout } from '@/app/layouts/default/DefaultLayout';
+import { BlogFeed, BlogPostPage } from '@/features/blog';
 import { AdminBooksPage } from "@/features/books/admin/views/AdminBooksPage";
 import { BookDetailsPage } from "@/features/books/catalog/views/BookDetailsPage";
 import ContentFormPage from '@/features/content/views/admin/content-form/ContentFormPage';
@@ -30,6 +31,8 @@ export const Router = () => {
             <Route element={<DefaultLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/books/:id" element={<BookDetailsPage />} />
+              <Route path="/blog" element={<BlogFeed />} />
+              <Route path="/blog/:id" element={<BlogPostPage />} />
             </Route>
 
             <Route path="/admin" element={<DashboardLayout />}>
