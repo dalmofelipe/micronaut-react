@@ -2,13 +2,18 @@
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type
-             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+            ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
             <pattern>%cyan(%d{HH:mm:ss.SSS}) %gray([%thread]) %highlight(%-5level) %magenta(%logger{36}) - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <root level="info">
+    <!-- enable package-specific logging for troubleshooting -->
+    <logger name="mn_react" level="DEBUG" />
+    <logger name="io.micronaut" level="INFO" />
+
+    <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>
+
 </configuration>

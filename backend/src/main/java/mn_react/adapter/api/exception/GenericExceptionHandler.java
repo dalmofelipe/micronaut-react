@@ -1,5 +1,7 @@
 package mn_react.adapter.api.exception;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +39,15 @@ public class GenericExceptionHandler
             ? exception.getMessage() 
             : "An unexpected error occurred";
         
+        List<ErrorField> errors = List.of(ErrorField.builder()
+            .field(null)
+            .message(message)
+            .build()
+        );
+
         ErrorResponse error = errorResponseFactory
-            .create(request, HttpStatus.INTERNAL_SERVER_ERROR, message);
+            .create(request, HttpStatus.INTERNAL_SERVER_ERROR, message, errors);
+
         return HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 

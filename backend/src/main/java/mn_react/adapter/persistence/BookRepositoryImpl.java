@@ -22,20 +22,50 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> findAll() {
         return jdbcRepository.findAll().stream()
-            .map(this::toDomain)
+            .map(BookEntity::toDomain)
             .collect(Collectors.toList());
     }
 
     @Override
+    public List<Book> findAll(int page, int size, String search) {
+        int offset = page * size;
+        return jdbcRepository.findAllPaginated(offset, size, search).stream()
+            .map(BookEntity::toDomain)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public long count() {
+        return jdbcRepository.count();
+    }
+
+    @Override
+    public long count(String search) {
+        return jdbcRepository.countWithSearch(search);
+    }
+
+    @Override
     public Optional<Book> findById(Long id) {
-        return jdbcRepository.findById(id).map(this::toDomain);
+        return jdbcRepository.findById(id).map(BookEntity::toDomain);
     }
 
     @Override
     public Book save(Book book) {
-        BookEntity entity = toEntity(book);
+        BookEntity entity = BookEntity.fromDomain(book);
         BookEntity saved = jdbcRepository.save(entity);
-        return toDomain(saved);
+        return saved.toDomain();
+    }
+
+    @Override
+    public Book update(Book book) {
+        BookEntity entity = BookEntity.fromDomain(book);
+        BookEntity updated = jdbcRepository.update(entity);
+        return updated.toDomain();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        jdbcRepository.deleteById(id);
     }
 
     @Override
@@ -43,20 +73,9 @@ public class BookRepositoryImpl implements BookRepository {
         return jdbcRepository.existsByTitleIgnoreCase(title);
     }
 
-    // mappers
-    private Book toDomain(BookEntity entity) {
-        return Book.builder()
-            .id(entity.getId())
-            .title(entity.getTitle())
-            .pages(entity.getPages())
-            .build();
-    }
-
-    private BookEntity toEntity(Book domain) {
-        return BookEntity.builder()
-            .id(domain.getId())
-            .title(domain.getTitle())
-            .pages(domain.getPages())
-            .build();
+    @Override
+    public boolean existsByTitleIgnoreCaseAndIdNot(String title, Long id) {
+        return jdbcRepository.findAll().stream()
+            .anyMatch(book -> book.getTitle().equalsIgnoreCase(title) && !book.getId().equals(id));
     }
 }

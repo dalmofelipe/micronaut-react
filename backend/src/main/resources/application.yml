@@ -38,3 +38,7 @@ jpa:
         hbm2ddl:
           auto: update
         show_sql: true
+logging:
+  level:
+    root: INFO
+    mn_react: DEBUG

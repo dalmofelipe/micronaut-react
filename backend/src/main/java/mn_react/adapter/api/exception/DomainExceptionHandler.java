@@ -1,5 +1,7 @@
 package mn_react.adapter.api.exception;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +12,13 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.server.exceptions.ExceptionHandler;
 import jakarta.inject.Singleton;
-import mn_react.core.domain.exception.*;
+import mn_react.core.domain.exception.ConflictException;
+import mn_react.core.domain.exception.DomainException;
+import mn_react.core.domain.exception.ForbiddenException;
+import mn_react.core.domain.exception.NotFoundException;
+import mn_react.core.domain.exception.UnauthorizedException;
+import mn_react.core.domain.exception.UnprocessableEntityException;
+import mn_react.core.domain.exception.ValidationException;
 
 @Produces
 @Singleton
@@ -38,7 +46,17 @@ public class DomainExceptionHandler
                 request.getPath(), exception.getMessage(), status.getReason());
         }
         
-        ErrorResponse error = errorResponseFactory.create(request, status, exception);
+        List<ErrorField> errors = List.of(ErrorField.builder()
+            .field(null)
+            .message(exception.getMessage())
+            .build()
+        );
+
+        ErrorResponse error = errorResponseFactory
+            .create(request, status, exception.getMessage(), errors);
+
+        LOG.info("Returning error response: {} - {}", status.getCode(), error.getMessage());
+        
         return HttpResponse.status(status).body(error);
     }
 
