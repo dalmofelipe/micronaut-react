@@ -1,8 +1,8 @@
-import { Typography } from "@mui/material"
 import { ThemeToggleButton } from "@/shared/components/ThemeToggleButton";
 import { useThemeStore } from "@/shared/store/useThemeStore";
-import { Logo } from "./Logo"
-import { HeaderActions, HeaderContainer, HeaderWrapper } from "./styles/Header.styled"
+import { Link } from "react-router-dom";
+import { Logo } from "./Logo";
+import { HeaderActions, HeaderContainer, HeaderNavLink, HeaderWrapper } from "./styles/Header.styled";
 
 export const Header = () => {
   const { headerHeight } =  useThemeStore()
@@ -13,11 +13,11 @@ export const Header = () => {
         <Logo />
         
         <HeaderActions>
-          <ThemeToggleButton />
+          <Link to="/blog">
+            <HeaderNavLink>Blog</HeaderNavLink>
+          </Link>
 
-          <Typography fontWeight={"bold"} >
-            Micronaut React Template
-          </Typography>
+          <ThemeToggleButton />
         </HeaderActions>
       </HeaderContainer>
     </HeaderWrapper>

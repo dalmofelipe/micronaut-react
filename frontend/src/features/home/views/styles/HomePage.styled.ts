@@ -1,4 +1,4 @@
-import { Box, Button, styled } from "@mui/material"
+import { Box, styled } from "@mui/material"
 
 export const HomeWrapper = styled('div')({
   display: "flex",
@@ -20,11 +20,3 @@ export const BooksGrid = styled(Box)(({ theme }) => ({
   width: '100%',
 }))
 
-export const BlogButton = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-  marginBottom: theme.spacing(4),
-  alignSelf: 'center',
-  padding: theme.spacing(1.5, 4),
-  fontSize: '1rem',
-  fontWeight: 600,
-}))

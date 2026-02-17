@@ -2,12 +2,10 @@ import { BookCard } from "@/features/books/catalog/views/BookCard";
 import { useGetBooks } from "@/features/books/shared/hooks/useBooks";
 import { CircularProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { HeroSearch } from "./HeroSearch";
-import { BlogButton, BooksGrid, HomeTitle, HomeWrapper } from "./styles/HomePage.styled";
+import { BooksGrid, HomeTitle, HomeWrapper } from "./styles/HomePage.styled";
 
 export const HomePage = () => {
-  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
@@ -52,19 +50,7 @@ export const HomePage = () => {
       <HeroSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
 
       <HomeTitle>
-        Blog
-      </HomeTitle>
-      <BlogButton
-        variant="contained"
-        color="primary"
-        size="large"
-        onClick={() => navigate('/blog')}
-      >
-        Ir para o Blog
-      </BlogButton>
-
-      <HomeTitle>
-        Livros Disponíveis
+        Lançamentos e Destaques
       </HomeTitle>
 
       {booksToDisplay.length === 0 ? (
