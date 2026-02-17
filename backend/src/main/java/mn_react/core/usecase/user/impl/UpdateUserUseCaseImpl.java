@@ -4,6 +4,7 @@ import mn_react.core.domain.entities.User;
 import mn_react.core.domain.exception.ConflictException;
 import mn_react.core.domain.exception.NotFoundException;
 import mn_react.core.domain.exception.ValidationException;
+import mn_react.core.domain.message.UserMessages;
 import mn_react.core.repository.UserRepository;
 import mn_react.core.usecase.user.UpdateUserUseCase;
 
@@ -18,7 +19,7 @@ public class UpdateUserUseCaseImpl implements UpdateUserUseCase {
     @Override
     public User execute(Long id, String name, String email, Boolean active) {
         User existingUser = userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("User not found with id: " + id));
+            .orElseThrow(() -> new NotFoundException(UserMessages.notFound(id)));
 
         validateName(name);
         validateEmail(email);
@@ -27,7 +28,7 @@ public class UpdateUserUseCaseImpl implements UpdateUserUseCase {
         
         if (!existingUser.getEmail().equalsIgnoreCase(normalizedEmail)) {
             if (userRepository.existsByEmailAndIdNot(normalizedEmail, id)) {
-                throw new ConflictException("User with email '" + normalizedEmail + "' already exists");
+                throw new ConflictException(UserMessages.duplicateEmail(normalizedEmail));
             }
         }
 
@@ -44,16 +45,16 @@ public class UpdateUserUseCaseImpl implements UpdateUserUseCase {
 
     private void validateName(String name) {
         if (name == null || name.trim().isEmpty()) {
-            throw new ValidationException("Name cannot be empty");
+            throw new ValidationException(UserMessages.NAME_REQUIRED);
         }
     }
 
     private void validateEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
-            throw new ValidationException("Email cannot be empty");
+            throw new ValidationException(UserMessages.EMAIL_REQUIRED);
         }
         if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            throw new ValidationException("Invalid email format");
+            throw new ValidationException(UserMessages.EMAIL_INVALID);
         }
     }
 }

@@ -1,6 +1,6 @@
 package mn_react.core.domain.exception;
 
-public class NotFoundException extends DomainException {
+public final class NotFoundException extends DomainException {
     
     public NotFoundException(String message) {
         super(message);

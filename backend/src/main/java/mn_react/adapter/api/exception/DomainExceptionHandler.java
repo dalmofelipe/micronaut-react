@@ -50,7 +50,6 @@ public class DomainExceptionHandler
             case UnprocessableEntityException e -> HttpStatus.UNPROCESSABLE_ENTITY;
             case UnauthorizedException e -> HttpStatus.UNAUTHORIZED;
             case ForbiddenException e -> HttpStatus.FORBIDDEN;
-            default -> HttpStatus.INTERNAL_SERVER_ERROR;
         };
     }
 }

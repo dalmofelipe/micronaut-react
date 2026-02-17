@@ -21,7 +21,7 @@ Este diretório contém as decisões arquiteturais do projeto Micronaut + React.
 - [ADR-009](009-use-case-pattern.md) - Pattern Use Case para lógica de negócio
 - [ADR-010](010-solid-principles-enforcement.md) - Enforcement dos princípios SOLID
 - [ADR-011](011-clean-code-function-rules.md) - Regras Clean Code para funções
-- [ADR-012](012-exception-handling-strategy.md) - Estratégia de tratamento de exceções em camadas
+- [ADR-012](012-exception-handling-strategy.md) - Estratégia de tratamento de exceções em camadas `[UPDATED 2026-02-17]`
 - [ADR-013](013-test-pyramid-strategy.md) - Estratégia de testes (Pirâmide de Testes) `[UPDATED 2026-02-09]`
 
 ### Cross-cutting

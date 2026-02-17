@@ -5,6 +5,7 @@ import java.io.InputStream;
 import io.micronaut.http.multipart.CompletedFileUpload;
 import mn_react.adapter.api.dto.responses.MediaUploadResponse;
 import mn_react.core.domain.exception.ValidationException;
+import mn_react.core.domain.message.MediaMessages;
 import mn_react.core.repository.MediaStorage;
 import mn_react.core.usecase.media.UploadMediaUseCase;
 
@@ -39,17 +40,17 @@ public class UploadMediaUseCaseImpl implements UploadMediaUseCase {
             
             return res;
         } catch (Exception e) {
-            throw new ValidationException("Failed to upload file: " + e.getMessage());
+            throw new ValidationException(MediaMessages.uploadFailed(e.getMessage()));
         }
     }
 
     private void validateFile(CompletedFileUpload file) {
         if (file.getSize() <= 0) {
-            throw new ValidationException("File is empty");
+            throw new ValidationException(MediaMessages.FILE_EMPTY);
         }
 
         if (file.getSize() > MAX_FILE_SIZE) {
-            throw new ValidationException("File size exceeds maximum allowed size of 1MB");
+            throw new ValidationException(MediaMessages.FILE_TOO_LARGE);
         }
 
         String contentType = file.getContentType()
@@ -58,12 +59,12 @@ public class UploadMediaUseCaseImpl implements UploadMediaUseCase {
 
         for (String forbiddenType : FORBIDDEN_TYPES) {
             if (forbiddenType.equalsIgnoreCase(contentType)) {
-                throw new ValidationException("File type '" + contentType + "' is not allowed");
+                throw new ValidationException(MediaMessages.forbiddenType(contentType));
             }
         }
 
         if (file.getFilename().isEmpty()) {
-            throw new ValidationException("Filename is required");
+            throw new ValidationException(MediaMessages.FILENAME_REQUIRED);
         }
     }
 }

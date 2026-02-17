@@ -3,6 +3,7 @@ package mn_react.core.usecase.book.impl;
 import mn_react.core.domain.entities.Book;
 import mn_react.core.domain.exception.ConflictException;
 import mn_react.core.domain.exception.ValidationException;
+import mn_react.core.domain.message.BookMessages;
 import mn_react.core.repository.BookRepository;
 import mn_react.core.usecase.book.CreateBookUseCase;
 
@@ -33,19 +34,19 @@ public class CreateBookUseCaseImpl implements CreateBookUseCase {
 
     private void validateTitle(String title) {
         if (title == null || title.trim().isEmpty()) {
-            throw new ValidationException("Title cannot be empty");
+            throw new ValidationException(BookMessages.TITLE_REQUIRED);
         }
         if (title.length() > 200) {
-            throw new ValidationException("Title cannot exceed 200 characters");
+            throw new ValidationException(BookMessages.titleTooLong(200));
         }
     }
 
     private void validatePages(int pages) {
         if (pages <= 0) {
-            throw new ValidationException("Pages must be greater than 0");
+            throw new ValidationException(BookMessages.PAGES_POSITIVE);
         }
         if (pages > 10000) {
-            throw new ValidationException("Pages cannot exceed 10000 (unrealistic book size)");
+            throw new ValidationException(BookMessages.pagesTooMany(10000));
         }
     }
 
@@ -55,7 +56,7 @@ public class CreateBookUseCaseImpl implements CreateBookUseCase {
 
     private void checkForDuplicates(String title) {
         if (bookRepository.existsByTitleIgnoreCase(title)) {
-            throw new ConflictException("A book with title '" + title + "' already exists");
+            throw new ConflictException(BookMessages.duplicateTitle(title));
         }
     }
 }

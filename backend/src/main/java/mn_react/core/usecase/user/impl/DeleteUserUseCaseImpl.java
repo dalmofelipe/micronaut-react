@@ -2,6 +2,7 @@ package mn_react.core.usecase.user.impl;
 
 import mn_react.core.domain.exception.NotFoundException;
 import mn_react.core.domain.exception.UnprocessableEntityException;
+import mn_react.core.domain.message.UserMessages;
 import mn_react.core.repository.LoanRepository;
 import mn_react.core.repository.UserRepository;
 import mn_react.core.usecase.user.DeleteUserUseCase;
@@ -22,7 +23,7 @@ public class DeleteUserUseCaseImpl implements DeleteUserUseCase {
     @Override
     public void execute(Long id) {
         if (!userRepository.findById(id).isPresent()) {
-            throw new NotFoundException("User not found with id: " + id);
+            throw new NotFoundException(UserMessages.notFound(id));
         }
 
         long activeLoans = loanRepository.findByUserId(id).stream()
@@ -30,7 +31,7 @@ public class DeleteUserUseCaseImpl implements DeleteUserUseCase {
             .count();
 
         if (activeLoans > 0) {
-            throw new UnprocessableEntityException("Cannot delete user with active loans");
+            throw new UnprocessableEntityException(UserMessages.HAS_ACTIVE_LOANS);
         }
 
         userRepository.deleteById(id);

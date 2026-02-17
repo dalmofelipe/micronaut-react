@@ -1,6 +1,6 @@
 # ADR-012: Layered Exception Handling Strategy
 
-**Status:** Accepted
+**Status:** Accepted `[UPDATED 2026-02-17]`
 
 **Tags:** `[backend, exceptions, error-handling]`
 
@@ -47,13 +47,15 @@ Estratégia de **exceções em camadas** com hierarquia customizada.
 
 ### 1. Hierarquia de Exceções
 
-**Estrutura:** `DomainException` (base abstrata) → 6 exceções específicas
+**Estrutura:** `DomainException` (base abstrata **sealed**) → 6 exceções específicas (**final**)
 
 ```java
 // core/domain/exception/DomainException.java
-public abstract class DomainException extends RuntimeException { /* ... */ }
+public abstract sealed class DomainException extends RuntimeException
+        permits NotFoundException, ValidationException, ConflictException,
+                UnprocessableEntityException, UnauthorizedException, ForbiddenException { /* ... */ }
 
-// Exceções específicas (todas estendem DomainException):
+// Exceções específicas (todas final, estendem DomainException):
 NotFoundException           // 404
 ValidationException         // 400
 ConflictException          // 409
@@ -63,6 +65,11 @@ ForbiddenException         // 403
 ```
 
 **Localização:** `core/domain/exception/` (domínio, não infraestrutura)
+
+**Regras:**
+- `DomainException` é `sealed` — o compilador garante que o switch no handler é exaustivo
+- Todas as subclasses são `final` — impede sub-hierarquias não mapeadas
+- Ao criar nova exceção: adicionar ao `permits` de `DomainException` e ao switch no `DomainExceptionHandler`
 
 ### 2. Global Exception Handler
 
@@ -83,7 +90,9 @@ public class DomainExceptionHandler
             case ValidationException e -> HttpStatus.BAD_REQUEST;
             case ConflictException e -> HttpStatus.CONFLICT;
             case UnprocessableEntityException e -> HttpStatus.UNPROCESSABLE_ENTITY;
-            // ... demais exceções
+            case UnauthorizedException e -> HttpStatus.UNAUTHORIZED;
+            case ForbiddenException e -> HttpStatus.FORBIDDEN;
+            // Sem default — sealed class garante exhaustiveness em compile-time
         };
     }
 }
@@ -107,10 +116,10 @@ public class CreateBookRequest {
 **Camada 2: Business Validation (Use Cases)** - Regras de negócio
 ```java
 if (!loan.getBook().isAvailable()) {
-    throw new UnprocessableEntityException("Livro indisponível");
+    throw new UnprocessableEntityException(BookMessages.unavailableForLoan(bookId));
 }
 if (hasOverdueLoans(loan.getUser())) {
-    throw new ConflictException("Usuário possui empréstimos em atraso");
+    throw new ConflictException(LoanMessages.userHasOverdueLoans(userId));
 }
 ```
 
@@ -124,13 +133,15 @@ if (hasOverdueLoans(loan.getUser())) {
 
 | Exceção | Código HTTP | Uso | Exemplo |
 |---------|-------------|-----|---------|
-| `NotFoundException` | 404 | Recurso não encontrado | `new NotFoundException("Book", bookId)` |
-| `ValidationException` | 400 | Entrada inválida | `new ValidationException("ISBN inválido")` |
-| `ConflictException` | 409 | Estado inconsistente | `new ConflictException("ISBN já cadastrado")` |
-| `UnprocessableEntityException` | 422 | Regra de negócio | `new UnprocessableEntityException("Livro indisponível")` |
+| `NotFoundException` | 404 | Recurso não encontrado | `new NotFoundException(BookMessages.notFound(id))` |
+| `ValidationException` | 400 | Entrada inválida | `new ValidationException(BookMessages.TITLE_REQUIRED)` |
+| `ConflictException` | 409 | Estado inconsistente | `new ConflictException(BookMessages.duplicateTitle(title))` |
+| `UnprocessableEntityException` | 422 | Regra de negócio | `new UnprocessableEntityException(UserMessages.HAS_ACTIVE_LOANS)` |
 | `UnauthorizedException` | 401 | Não autenticado | `new UnauthorizedException("Token inválido")` |
 | `ForbiddenException` | 403 | Sem permissão | `new ForbiddenException("Acesso negado")` |
-| `DomainException` (base) | 500 | Fallback genérico | Erros não mapeados |
+
+> **Nota:** Não existe mais fallback `default → 500` no switch. O uso de `sealed class` garante que
+> toda nova exceção será obrigatoriamente mapeada em compile-time.
 
 ### 5. Logs Automáticos
 
@@ -147,9 +158,10 @@ Use log manual apenas para auditoria ou eventos de negócio (não erros).
 ### Positive
 
 - **Type Safety (Compile-time):** Impossível mapear exceção para HTTP status inválido
-- **Pattern Matching:** Compilador avisa se esquecer de mapear nova exceção no switch
+- **Sealed + Exhaustiveness:** `sealed class` + switch sem `default` = compilador **obriga** mapeamento de novas exceções
 - **Domain-Driven Design:** Exceções expressam conceitos de negócio, não detalhes HTTP
 - **Consistência:** Respostas de erro padronizadas via Factory
+- **Message Catalogs:** Mensagens centralizadas por domínio em `core/domain/message/`
 - **Logs automáticos:** Handler centraliza logging por severidade
 - **Segurança:** Stack traces apenas em logs, nunca na resposta
 - **Menos código:** Não precisa de enums ou tabelas de mapeamento
@@ -157,9 +169,10 @@ Use log manual apenas para auditoria ou eventos de negócio (não erros).
 
 ### Negative
 
-- **Mais classes:** 6 exceções em vez de 1 genérica com error code
-- **Switch expression manual:** Precisa adicionar case para cada nova exceção (mas compilador avisa)
+- **Mais classes:** 6 exceções + 1 catálogo de mensagens por domínio
+- **Switch expression manual:** Precisa adicionar case para cada nova exceção (compilador garante via sealed)
 - **Decisão necessária:** Dev precisa escolher qual exceção usar (trade-off aceito pela clareza)
+- **`permits` explícito:** Ao criar nova exceção, precisa atualizar `DomainException.permits`
 
 ### Neutral
 
@@ -169,3 +182,68 @@ Use log manual apenas para auditoria ou eventos de negócio (não erros).
 - Use `Optional` para queries (ex: `findById`) - reserve exceções para violações de regras
 - `NotFoundException` tem construtor conveniente: `new NotFoundException("Book", id)`
 - Abordagem orientada a **tipos** em vez de **strings/enums** (mais verbosa, mas muito mais segura)
+
+### 6. Message Catalogs
+
+Mensagens de erro são centralizadas em **catálogos por domínio** em `core/domain/message/`.
+
+**Convenção:** Código (nomes de classes, constantes e métodos) em **inglês**. Valores das mensagens (texto para o usuário final) em **PT-BR**.
+
+**Estrutura:**
+```
+core/domain/message/
+├── BookMessages.java      ← Mensagens do domínio Book
+├── UserMessages.java      ← Mensagens do domínio User
+├── MediaMessages.java     ← Mensagens do domínio Media
+└── ContentMessages.java   ← Mensagens do domínio Content
+```
+
+**Padrão do catálogo:**
+```java
+public final class BookMessages {
+    private BookMessages() {}
+
+    // Constantes para mensagens fixas
+    public static final String TITLE_REQUIRED = "Título não pode estar vazio";
+    public static final String PAGES_POSITIVE = "Número de páginas deve ser maior que 0";
+
+    // Métodos estáticos para mensagens parametrizadas
+    public static String notFound(Long id) {
+        return "Livro não encontrado com id: %d".formatted(id);
+    }
+    public static String duplicateTitle(String title) {
+        return "Já existe um livro com o título '%s'".formatted(title);
+    }
+}
+```
+
+**Uso nos Use Cases:**
+```java
+throw new ValidationException(BookMessages.TITLE_REQUIRED);
+throw new NotFoundException(BookMessages.notFound(id));
+throw new ConflictException(BookMessages.duplicateTitle(title));
+```
+
+**Regras:**
+- Nunca usar strings inline em `throw new XxxException("...")` — sempre usar o catálogo
+- Ao criar nova entidade de domínio, criar catálogo de mensagens correspondente
+- Constantes (`static final String`) para mensagens sem parâmetros
+- Métodos estáticos para mensagens com parâmetros (usando `String.formatted()`)
+
+### 7. GenericExceptionHandler
+
+`GenericExceptionHandler` captura exceções não-domínio e retorna HTTP 500.
+
+**Detecção de ambiente:** Via `io.micronaut.context.env.Environment` injetado por construtor (nunca `@Value`).
+
+```java
+public GenericExceptionHandler(ErrorResponseFactory errorResponseFactory, Environment environment) {
+    this.errorResponseFactory = errorResponseFactory;
+    this.isDevelopment = environment.getActiveNames().contains("dev")
+            || environment.getActiveNames().contains("test");
+}
+```
+
+**Comportamento:**
+- **Dev/Test:** Retorna message real da exceção (para debug)
+- **Produção:** Retorna mensagem genérica `"Ocorreu um erro inesperado"` (segurança)

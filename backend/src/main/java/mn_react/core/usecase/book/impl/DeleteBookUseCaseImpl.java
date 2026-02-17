@@ -1,6 +1,7 @@
 package mn_react.core.usecase.book.impl;
 
 import mn_react.core.domain.exception.NotFoundException;
+import mn_react.core.domain.message.BookMessages;
 import mn_react.core.repository.BookRepository;
 import mn_react.core.usecase.book.DeleteBookUseCase;
 
@@ -15,7 +16,7 @@ public class DeleteBookUseCaseImpl implements DeleteBookUseCase {
     @Override
     public void execute(Long id) {
         if (!bookRepository.findById(id).isPresent()) {
-            throw new NotFoundException("Book not found with id: " + id);
+            throw new NotFoundException(BookMessages.notFound(id));
         }
         bookRepository.deleteById(id);
     }
