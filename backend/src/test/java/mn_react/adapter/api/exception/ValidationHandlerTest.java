@@ -11,6 +11,7 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
+import mn_react.infrastructure.http.exception.ErrorResponse;
 
 @MicronautTest
 class ValidationHandlerTest {
