@@ -6,6 +6,8 @@
 
 **Date:** 2026-02-07
 
+**Updated:** 2026-02-24
+
 ---
 
 ## Context
@@ -18,30 +20,32 @@ Controllers tradicionais misturam responsabilidades:
 
 ## Decision
 
-Toda **lógica de negócio** vive em **Use Cases** dedicados em `core/usecase/`.
+Toda **lógica de negócio** vive em **Use Cases** dedicados em `application/usecase/`.
 
 ### Estrutura de Use Case
 
 Use Cases seguem o padrão **Interface + Implementação**:
 
 ```java
-// core/usecase/book/CreateBookUseCase.java (interface)
-package mn_react.core.usecase.book;
+// application/usecase/book/CreateBookUseCase.java (interface)
+package mn_react.application.usecase.book;
 
-import mn_react.core.domain.entities.Book;
+import mn_react.domain.entities.Book;
 
 public interface CreateBookUseCase {
-    Book execute(Book book);
+    Book execute(String title, int pages);
 }
 ```
 
 ```java
-// core/usecase/book/impl/CreateBookUseCaseImpl.java (implementação)
-package mn_react.core.usecase.book.impl;
+// application/usecase/book/impl/CreateBookUseCaseImpl.java (implementação)
+package mn_react.application.usecase.book.impl;
 
-import mn_react.core.domain.entities.Book;
-import mn_react.core.repository.BookRepository;
-import mn_react.core.usecase.book.CreateBookUseCase;
+import mn_react.domain.entities.Book;
+import mn_react.application.repository.BookRepository;
+import mn_react.application.usecase.book.CreateBookUseCase;
+import mn_react.domain.exception.ConflictException;
+import mn_react.domain.exception.ValidationException;
 
 public class CreateBookUseCaseImpl implements CreateBookUseCase {
     private final BookRepository bookRepository;
@@ -51,31 +55,40 @@ public class CreateBookUseCaseImpl implements CreateBookUseCase {
         this.bookRepository = bookRepository;
     }
     
-    // Método da interface
     @Override
-    public Book execute(Book book) {
+    public Book execute(String title, int pages) {
         // 1. Validações de negócio
-        validateIsbn(book.getIsbn());
-        validateUniqueness(book);
+        validateTitle(title);
+        validatePages(pages);
         
-        // 2. Lógica de negócio
-        book.setAtivo(true);
-        book.setQuantidadeDisponivel(book.getQuantidadeTotal());
+        String normalizedTitle = title.trim().replaceAll("\\s+", " ");
+        
+        // 2. Verifica duplicidade
+        checkForDuplicates(normalizedTitle);
         
         // 3. Persistência
-        return bookRepository.save(book);
+        return bookRepository.save(Book.builder()
+            .title(normalizedTitle)
+            .pages(pages)
+            .build());
     }
     
     // Métodos privados para organização
-    private void validateIsbn(String isbn) {
-        if (isbn == null || !isValidIsbnFormat(isbn)) {
-            throw new InvalidIsbnException(isbn);
+    private void validateTitle(String title) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new ValidationException("Title cannot be empty");
         }
     }
     
-    private void validateUniqueness(Book book) {
-        if (bookRepository.existsByIsbn(book.getIsbn())) {
-            throw new DuplicateIsbnException(book.getIsbn());
+    private void validatePages(int pages) {
+        if (pages <= 0) {
+            throw new ValidationException("Pages must be greater than 0");
+        }
+    }
+    
+    private void checkForDuplicates(String title) {
+        if (bookRepository.existsByTitleIgnoreCase(title)) {
+            throw new ConflictException("A book with title '" + title + "' already exists");
         }
     }
 }
@@ -86,14 +99,18 @@ public class CreateBookUseCaseImpl implements CreateBookUseCase {
 Use Cases são registrados como beans via `@Factory`:
 
 ```java
-// config/factories/BookUseCaseFactory.java
-package mn_react.config.factories;
+// infrastructure/config/factories/BookUseCaseFactory.java
+package mn_react.infrastructure.config.factories;
 
 import io.micronaut.context.annotation.Factory;
 import jakarta.inject.Singleton;
-import mn_react.core.repository.BookRepository;
-import mn_react.core.usecase.book.CreateBookUseCase;
-import mn_react.core.usecase.book.impl.CreateBookUseCaseImpl;
+import mn_react.application.repository.BookRepository;
+import mn_react.application.usecase.book.CreateBookUseCase;
+import mn_react.application.usecase.book.UpdateBookUseCase;
+import mn_react.application.usecase.book.DeleteBookUseCase;
+import mn_react.application.usecase.book.impl.CreateBookUseCaseImpl;
+import mn_react.application.usecase.book.impl.UpdateBookUseCaseImpl;
+import mn_react.application.usecase.book.impl.DeleteBookUseCaseImpl;
 
 @Factory
 public class BookUseCaseFactory {
@@ -107,10 +124,15 @@ public class BookUseCaseFactory {
     UpdateBookUseCase updateBookUseCase(BookRepository bookRepository) {
         return new UpdateBookUseCaseImpl(bookRepository);
     }
+    
+    @Singleton
+    DeleteBookUseCase deleteBookUseCase(BookRepository bookRepository) {
+        return new DeleteBookUseCaseImpl(bookRepository);
+    }
 }
 ```
 
-**Localização:** Factories vivem em `config/factories/` (camada de configuração)
+**Localização:** Factories vivem em `infrastructure/config/factories/` (configuração de DI, pertence à infra)
 
 ### Regras de Use Cases
 
@@ -124,8 +146,8 @@ public class BookUseCaseFactory {
    - ❌ `BookService`, `UserManager`
 
 3. **Estrutura:** Interface + Implementação
-   - Interface em `core/usecase/<entity>/`
-   - Implementação em `core/usecase/<entity>/impl/`
+   - Interface em `application/usecase/<entity>/`
+   - Implementação em `application/usecase/<entity>/impl/`
    - Sufixo `Impl` obrigatório na classe concreta
 
 4. **Método principal:** `execute()` ou nome descritivo
@@ -135,7 +157,7 @@ public class BookUseCaseFactory {
    - Injeta **interfaces** (repositories, outros use cases)
    - Nunca injeta classes concretas
 
-6. **Registro:** Via `@Factory` em `config/factories/`
+6. **Registro:** Via `@Factory` em `infrastructure/config/factories/`
    - Uma factory por domínio (BookUseCaseFactory, LoanUseCaseFactory)
    - Factory retorna interface, não implementação
 
@@ -182,14 +204,19 @@ public class BookController {
 ### Organização por Feature
 
 ```
-core/usecase/
+application/usecase/
 ├── book/
 │   ├── CreateBookUseCase.java
 │   ├── UpdateBookUseCase.java
-│   └── DeleteBookUseCase.java
+│   ├── DeleteBookUseCase.java
+│   └── impl/
+│       ├── CreateBookUseCaseImpl.java
+│       ├── UpdateBookUseCaseImpl.java
+│       └── DeleteBookUseCaseImpl.java
 └── loan/
     ├── CreateLoanUseCase.java
-    └── RenewLoanUseCase.java
+    ├── RenewLoanUseCase.java
+    └── impl/
 ```
 
 ## Consequences

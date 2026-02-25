@@ -6,6 +6,8 @@
 
 **Date:** 2026-02-07
 
+**Updated:** 2026-02-24
+
 ---
 
 ## Context
@@ -50,7 +52,7 @@ Estratégia de **exceções em camadas** com hierarquia customizada.
 **Estrutura:** `DomainException` (base abstrata) → 6 exceções específicas
 
 ```java
-// core/domain/exception/DomainException.java
+// domain/exception/DomainException.java
 public abstract class DomainException extends RuntimeException { /* ... */ }
 
 // Exceções específicas (todas estendem DomainException):
@@ -62,7 +64,7 @@ UnauthorizedException      // 401
 ForbiddenException         // 403
 ```
 
-**Localização:** `core/domain/exception/` (domínio, não infraestrutura)
+**Localização:** `domain/exception/` (domínio, não infraestrutura)
 
 ### 2. Global Exception Handler
 
@@ -72,8 +74,9 @@ ForbiddenException         // 403
 - Produz `ErrorResponse` padronizado via Factory
 
 ```java
-// adapter/api/exception/DomainExceptionHandler.java
+// infrastructure/http/exception/DomainExceptionHandler.java
 @Produces @Singleton
+@Requires(classes = {DomainException.class, ExceptionHandler.class})
 public class DomainExceptionHandler 
     implements ExceptionHandler<DomainException, HttpResponse<ErrorResponse>> {
     
@@ -84,6 +87,7 @@ public class DomainExceptionHandler
             case ConflictException e -> HttpStatus.CONFLICT;
             case UnprocessableEntityException e -> HttpStatus.UNPROCESSABLE_ENTITY;
             // ... demais exceções
+            default -> HttpStatus.INTERNAL_SERVER_ERROR;
         };
     }
 }
@@ -164,8 +168,8 @@ Use log manual apenas para auditoria ou eventos de negócio (não erros).
 ### Neutral
 
 - **Princípio:** "Make Illegal States Unrepresentable" (Martin Fowler)
-- Exceções vivem em `core/domain/exception` (conceitos de domínio, não infraestrutura)
-- Handler vive em `adapter/api/exception` (tradução domínio → HTTP)
+- Exceções vivem em `domain/exception` (conceitos de domínio, não infraestrutura)
+- Handler vive em `infrastructure/http/exception` (tradução domínio → HTTP)
 - Use `Optional` para queries (ex: `findById`) - reserve exceções para violações de regras
 - `NotFoundException` tem construtor conveniente: `new NotFoundException("Book", id)`
 - Abordagem orientada a **tipos** em vez de **strings/enums** (mais verbosa, mas muito mais segura)

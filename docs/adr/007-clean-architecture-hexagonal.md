@@ -6,6 +6,8 @@
 
 **Date:** 2026-02-07
 
+**Updated:** 2026-02-24
+
 ---
 
 ## Context
@@ -18,32 +20,45 @@ Arquiteturas tradicionais acoplam lógica de negócio à infraestrutura:
 
 ## Decision
 
-Adotamos **Clean Architecture** com padrão **Hexagonal (Ports & Adapters)**:
+Adotamos **Clean Architecture** em 3 camadas, com separação clara entre domínio, aplicação e infraestrutura:
 
 ```
 src/main/java/mn_react/
-├── core/                    # NÚCLEO (Business Logic)
-│   ├── domain/
-│   │   └── entities/       # Modelos de domínio puros
-│   ├── repository/         # Interfaces (ports)
-│   └── usecase/           # Lógica de negócio
-└── adapter/               # ADAPTADORES (Infrastructure)
-    ├── api/               # REST controllers
-    │   └── dto/          # Request/Response DTOs
-    └── persistence/      # Database adapters
-        └── entity/       # JPA entities
+├── domain/                  # DOMÍNIO (Business Core)
+│   ├── entities/            # Modelos de negócio puros
+│   └── exception/           # Hierarquia de exceções de domínio
+├── application/             # APLICAÇÃO (Ports & Use Cases)
+│   ├── repository/          # Interfaces (ports de saída)
+│   └── usecase/             # Lógica de negócio
+│       └── book/
+│           ├── impl/        # Implementações dos Use Cases
+│           └── *.java       # Interfaces dos Use Cases
+└── infrastructure/          # INFRAESTRUTURA (Adapters)
+    ├── config/
+    │   └── factories/       # Factories de injeção de dependência
+    ├── http/                # Adapter REST
+    │   ├── controllers/     # REST controllers
+    │   ├── dto/             # Request/Response DTOs
+    │   │   ├── requests/
+    │   │   └── responses/
+    │   └── exception/       # Exception handlers HTTP
+    └── persistence/         # Adapter de banco de dados
+        ├── entity/          # JPA/Micronaut Data entities
+        └── jdbc/            # Repositórios JDBC
 ```
 
 ### Camadas e Responsabilidades
 
-#### Core (Núcleo)
+#### Domínio (domain/)
 
-**Regra de Ouro:** Core **NUNCA** depende de adapters.
+**Regra de Ouro:** `domain` **NUNCA** depende de `application` ou `infrastructure`.
 
-1. **`core/domain/entities`:** Modelos de negócio puros (POJOs)
+1. **`domain/entities`:** Modelos de negócio puros (POJOs)
 
 ```java
-// Book.java - SEM anotações JPA, apenas Lombok
+// domain/entities/Book.java - SEM anotações JPA, apenas Lombok
+package mn_react.domain.entities;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -52,21 +67,7 @@ src/main/java/mn_react/
 public class Book {
     private Long id;
     private String title;
-    private String isbn;
-    private int quantidadeTotal;
-    private int quantidadeDisponivel;
-    
-    // Métodos de domínio (lógica de negócio)
-    public boolean isAvailable() {
-        return quantidadeDisponivel > 0;
-    }
-    
-    public void reservar() {
-        if (!isAvailable()) {
-            throw new BookUnavailableException(id);
-        }
-        this.quantidadeDisponivel--;
-    }
+    private int pages;
 }
 ```
 
@@ -74,52 +75,64 @@ public class Book {
 
 **Lombok proibido:** `@Data` (gera equals/hashCode incorreto), `@Value` (imutável demais)
 
-2. **`core/repository`:** Contratos (interfaces)
+2. **`domain/exception`:** Hierarquia de exceções de domínio (ver [ADR-012](012-exception-handling-strategy.md))
+
+#### Aplicação (application/)
+
+3. **`application/repository`:** Contratos (interfaces — ports de saída)
 
 ```java
+// application/repository/BookRepository.java
+package mn_react.application.repository;
+
 public interface BookRepository {
     Book save(Book book);
     Optional<Book> findById(Long id);
     List<Book> findAll();
+    boolean existsByTitleIgnoreCase(String title);
 }
 ```
 
-3. **`core/usecase`:** Regras de negócio
+4. **`application/usecase`:** Regras de negócio
 
 Use Cases são definidos como **interfaces** com implementações separadas:
 
 ```java
-// core/usecase/book/CreateBookUseCase.java (interface)
+// application/usecase/book/CreateBookUseCase.java (interface)
+package mn_react.application.usecase.book;
+
 public interface CreateBookUseCase {
-    Book execute(Book book);
+    Book execute(String title, int pages);
 }
 
-// core/usecase/book/impl/CreateBookUseCaseImpl.java (implementação)
+// application/usecase/book/impl/CreateBookUseCaseImpl.java (implementação)
+package mn_react.application.usecase.book.impl;
+
 public class CreateBookUseCaseImpl implements CreateBookUseCase {
-    private final BookRepository repository;
+    private final BookRepository bookRepository;
     
-    public CreateBookUseCaseImpl(BookRepository repository) {
-        this.repository = repository;
+    public CreateBookUseCaseImpl(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
     
     @Override
-    public Book execute(Book book) {
-        validateIsbn(book.getIsbn());
-        return repository.save(book);
-    }
-    
-    private void validateIsbn(String isbn) {
-        // Validação de negócio
+    public Book execute(String title, int pages) {
+        validateTitle(title);
+        validatePages(pages);
+        checkForDuplicates(title.trim());
+        return bookRepository.save(Book.builder().title(title.trim()).pages(pages).build());
     }
 }
 ```
 
 **Factory Pattern para Injeção:**
 
-Use Cases são registrados via `@Factory` em `config/factories/`:
+Use Cases são registrados via `@Factory` em `infrastructure/config/factories/`:
 
 ```java
-// config/factories/BookUseCaseFactory.java
+// infrastructure/config/factories/BookUseCaseFactory.java
+package mn_react.infrastructure.config.factories;
+
 @Factory
 public class BookUseCaseFactory {
     
@@ -133,11 +146,11 @@ public class BookUseCaseFactory {
 **Por quê Factory?**
 - Permite injetar **interface** (DIP - Dependency Inversion Principle)
 - Facilita testes (mock da interface, não da classe concreta)
-- Centraliza configuração de beans do core
+- Centraliza configuração de beans de aplicação
 
-#### Adapters (Adaptadores)
+#### Infraestrutura (infrastructure/)
 
-1. **`adapter/api`:** Controllers REST
+5. **`infrastructure/http/controllers`:** Controllers REST
 
 ```java
 @Controller("/books")
@@ -145,29 +158,30 @@ public class BookController {
     private final CreateBookUseCase createBookUseCase;
     
     @Post
+    @Status(HttpStatus.CREATED)
     public BookResponse create(@Valid @Body CreateBookRequest dto) {
-        Book book = createBookUseCase.execute(dto.toBook());
+        Book book = createBookUseCase.execute(dto.getTitle(), dto.getPages());
         return BookResponse.fromDomain(book);
     }
 }
 ```
 
-2. **`adapter/persistence`:** Implementações JPA
+6. **`infrastructure/persistence`:** Implementações Micronaut Data
 
 ```java
+// infrastructure/persistence/entity/BookEntity.java
+package mn_react.infrastructure.persistence.entity;
+
 @Serdeable
 @MappedEntity(value = "books")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class BookEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(GeneratedValue.Type.IDENTITY)
     private Long id;
     private String title;
+    private int pages;
     
-    // Conversores
+    // Conversores obrigatórios
     public Book toDomain() { /* ... */ }
     public static BookEntity fromDomain(Book book) { /* ... */ }
 }
@@ -175,10 +189,12 @@ public class BookEntity {
 
 ### Dependency Rule
 
-**Fluxo de dependências:** Adapters → Core (nunca o inverso)
+**Fluxo de dependências:** `infrastructure` → `application` → `domain` (nunca o inverso)
 
 ```
-adapter/api → core/usecase → core/repository ← adapter/persistence
+infrastructure/http → application/usecase → application/repository ← infrastructure/persistence
+                                                     ↑
+                                              domain/entities
 ```
 
 ## Consequences
@@ -199,4 +215,4 @@ adapter/api → core/usecase → core/repository ← adapter/persistence
 
 - Ver [ADR-008](008-domain-vs-persistence-entities.md) para detalhes de mapeamento
 - Ver [ADR-009](009-use-case-pattern.md) para regras de Use Cases
-- Factories vivem em `config/factories/` (camada de configuração, não core nem adapter)
+- Factories vivem em `infrastructure/config/factories/` (configuração de DI, pertence à infra)

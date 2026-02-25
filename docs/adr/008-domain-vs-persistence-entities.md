@@ -6,6 +6,8 @@
 
 **Date:** 2026-02-07
 
+**Updated:** 2026-02-24
+
 ---
 
 ## Context
@@ -20,12 +22,12 @@ Usar **uma única classe** como entidade de domínio E entidade JPA cria problem
 
 Separamos **Domain Entities** (core) de **Persistence Entities** (adapter).
 
-### Domain Entity (core/domain/entities)
+### Domain Entity (domain/entities)
 
 **Modelo de negócio puro** sem anotações de infraestrutura:
 
 ```java
-package mn_react.core.domain.entities;
+package mn_react.domain.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,22 +43,7 @@ import lombok.Setter;
 public class Book {
     private Long id;
     private String title;
-    private String autor;
-    private String isbn;
-    private int quantidadeTotal;
-    private int quantidadeDisponivel;
-    
-    // Métodos de domínio
-    public boolean isAvailable() {
-        return quantidadeDisponivel > 0;
-    }
-    
-    public void reservar() {
-        if (!isAvailable()) {
-            throw new BookUnavailableException(id);
-        }
-        this.quantidadeDisponivel--;
-    }
+    private int pages;
 }
 ```
 
@@ -67,12 +54,12 @@ public class Book {
 - Métodos de lógica de negócio
 - Pode ter validações de domínio
 
-### JPA Entity (adapter/persistence/entity)
+### JPA Entity (infrastructure/persistence/entity)
 
 **Mapeamento para banco de dados** com conversores:
 
 ```java
-package mn_react.adapter.persistence.entity;
+package mn_react.infrastructure.persistence.entity;
 
 import io.micronaut.data.annotation.GeneratedValue;
 import io.micronaut.data.annotation.Id;
@@ -83,7 +70,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mn_react.core.domain.entities.Book;
+import mn_react.domain.entities.Book;
 
 @Serdeable
 @MappedEntity(value = "books")
@@ -99,22 +86,14 @@ public class BookEntity {
     
     private String title;
     
-    private String autor;
-    
-    private String isbn;
-    
-    private int quantidadeTotal;
-    private int quantidadeDisponivel;
+    private int pages;
     
     // Conversores OBRIGATÓRIOS
     public Book toDomain() {
         return Book.builder()
             .id(this.id)
             .title(this.title)
-            .autor(this.autor)
-            .isbn(this.isbn)
-            .quantidadeTotal(this.quantidadeTotal)
-            .quantidadeDisponivel(this.quantidadeDisponivel)
+            .pages(this.pages)
             .build();
     }
     
@@ -122,10 +101,7 @@ public class BookEntity {
         return BookEntity.builder()
             .id(book.getId())
             .title(book.getTitle())
-            .autor(book.getAutor())
-            .isbn(book.getIsbn())
-            .quantidadeTotal(book.getQuantidadeTotal())
-            .quantidadeDisponivel(book.getQuantidadeDisponivel())
+            .pages(book.getPages())
             .build();
     }
 }
@@ -142,20 +118,21 @@ public class BookEntity {
 ### Conversão em Repositories
 
 ```java
+// infrastructure/persistence/BookRepositoryImpl.java
 @Singleton
 public class BookRepositoryImpl implements BookRepository {
-    private final BookEntityRepository jpaRepo;
+    private final BookJdbcRepository repository;
     
     @Override
     public Book save(Book book) {
         BookEntity entity = BookEntity.fromDomain(book);
-        BookEntity saved = jpaRepo.save(entity);
+        BookEntity saved = repository.save(entity);
         return saved.toDomain();
     }
     
     @Override
     public Optional<Book> findById(Long id) {
-        return jpaRepo.findById(id)
+        return repository.findById(id)
             .map(BookEntity::toDomain);
     }
 }
@@ -165,10 +142,10 @@ public class BookRepositoryImpl implements BookRepository {
 
 | Tipo | Localização | Nome | Exemplo |
 |------|-------------|------|---------|
-| Domain Entity | `core/domain/entities` | Sem sufixo | `Book.java` |
-| JPA Entity | `adapter/persistence/entity` | Sufixo `Entity` | `BookEntity.java` |
-| Repository Interface | `core/repository` | Sem sufixo | `BookRepository.java` |
-| Repository Impl | `adapter/persistence` | Sufixo `Impl` | `BookRepositoryImpl.java` |
+| Domain Entity | `domain/entities` | Sem sufixo | `Book.java` |
+| JPA Entity | `infrastructure/persistence/entity` | Sufixo `Entity` | `BookEntity.java` |
+| Repository Interface | `application/repository` | Sem sufixo | `BookRepository.java` |
+| Repository Impl | `infrastructure/persistence` | Sufixo `Impl` | `BookRepositoryImpl.java` |
 
 ## Consequences
 
