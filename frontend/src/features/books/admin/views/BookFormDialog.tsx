@@ -64,6 +64,14 @@ export function BookFormDialog({
             fullWidth
           />
           <TextField
+            label="Quantidade de Paginas"
+            type="number"
+            value={formData.pages}
+            onChange={(e) => onChange("pages", parseInt(e.target.value, 10))}
+            fullWidth
+            required
+          />
+          <TextField
             label="Quantidade Total"
             type="number"
             value={formData.quantidadeTotal}

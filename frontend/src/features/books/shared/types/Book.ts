@@ -4,10 +4,10 @@ export interface IBook {
   autor: string;
   isbn: string;
   genero: string;
+  pages: number;
   quantidadeTotal: number;
   resumo?: string;
   imagemUrl?: string;
-  pages?: number;
   description?: string;
   author?: string;
 }
@@ -17,10 +17,10 @@ export interface ICreateBookRequest {
   autor: string;
   isbn: string;
   genero: string;
+  pages: number;
   quantidadeTotal: number;
   resumo?: string;
   imagemUrl?: string;
-  pages?: number;
 }
 
 export interface IUpdateBookRequest {
@@ -28,10 +28,10 @@ export interface IUpdateBookRequest {
   autor?: string;
   isbn?: string;
   genero?: string;
+  pages?: number;
   quantidadeTotal?: number;
   resumo?: string;
   imagemUrl?: string;
-  pages?: number;
 }
 
 export type TBook = IBook;

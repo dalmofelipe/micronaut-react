@@ -2,6 +2,7 @@ package mn_react.infrastructure.http.dto.requests;
 
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,5 +22,6 @@ public class CreateBookRequest {
     @Size(max = 200, message = "Title cannot exceed 200 characters")
     private String title;
     
+    @NotNull(message = "Pages is required")
     private int pages;
 }

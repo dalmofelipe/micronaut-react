@@ -15,6 +15,7 @@ export interface BookFormData {
   autor: string;
   isbn: string;
   genero: string;
+  pages: number;
   quantidadeTotal: number;
   resumo: string;
   imagemUrl: string;
@@ -25,6 +26,7 @@ const initialFormData: BookFormData = {
   autor: "",
   isbn: "",
   genero: "",
+  pages: 1,
   quantidadeTotal: 1,
   resumo: "",
   imagemUrl: "",
@@ -55,6 +57,7 @@ export function useBookForm() {
       autor: book.autor || "",
       isbn: book.isbn || "",
       genero: book.genero || "",
+      pages: book.pages,
       quantidadeTotal: book.quantidadeTotal,
       resumo: book.resumo || "",
       imagemUrl: book.imagemUrl || "",

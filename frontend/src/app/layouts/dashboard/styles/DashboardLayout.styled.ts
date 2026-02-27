@@ -13,7 +13,7 @@ export const StyledMainContent = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
   margin: '64px auto 0 auto',
   width: '100%',
-  maxWidth: '1920px',
+  maxWidth: '1336px',
   minHeight: 'calc(100vh - 64px)',
   [theme.breakpoints.down('sm')]: {
     padding: theme.spacing(2),
