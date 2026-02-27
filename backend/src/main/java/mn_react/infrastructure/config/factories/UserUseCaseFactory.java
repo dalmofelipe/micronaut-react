@@ -6,9 +6,11 @@ import mn_react.application.repository.LoanRepository;
 import mn_react.application.repository.UserRepository;
 import mn_react.application.usecase.user.CreateUserUseCase;
 import mn_react.application.usecase.user.DeleteUserUseCase;
+import mn_react.application.usecase.user.ToggleUserActiveUseCase;
 import mn_react.application.usecase.user.UpdateUserUseCase;
 import mn_react.application.usecase.user.impl.CreateUserUseCaseImpl;
 import mn_react.application.usecase.user.impl.DeleteUserUseCaseImpl;
+import mn_react.application.usecase.user.impl.ToggleUserActiveUseCaseImpl;
 import mn_react.application.usecase.user.impl.UpdateUserUseCaseImpl;
 
 @Factory
@@ -17,6 +19,11 @@ public class UserUseCaseFactory {
     @Singleton
     CreateUserUseCase createUserUseCase(UserRepository userRepository) {
         return new CreateUserUseCaseImpl(userRepository);
+    }
+
+    @Singleton
+    ToggleUserActiveUseCase toggleUserActiveUseCase(UserRepository userRepository) {
+        return new ToggleUserActiveUseCaseImpl(userRepository);
     }
 
     @Singleton

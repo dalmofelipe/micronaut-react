@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import mn_react.application.repository.UserRepository;
 import mn_react.application.usecase.user.CreateUserUseCase;
 import mn_react.application.usecase.user.DeleteUserUseCase;
+import mn_react.application.usecase.user.ToggleUserActiveUseCase;
 import mn_react.application.usecase.user.UpdateUserUseCase;
 import mn_react.domain.entities.User;
 import mn_react.domain.exception.NotFoundException;
@@ -30,17 +31,20 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final CreateUserUseCase createUserUseCase;
+    private final ToggleUserActiveUseCase toggleUserActiveUseCase;
     private final UpdateUserUseCase updateUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
 
     public UserController(
         UserRepository userRepository, 
         CreateUserUseCase createUserUseCase,
+        ToggleUserActiveUseCase toggleUserActiveUseCase,
         UpdateUserUseCase updateUserUseCase,
         DeleteUserUseCase deleteUserUseCase
     ) {
         this.userRepository = userRepository;
         this.createUserUseCase = createUserUseCase;
+        this.toggleUserActiveUseCase = toggleUserActiveUseCase;
         this.updateUserUseCase = updateUserUseCase;
         this.deleteUserUseCase = deleteUserUseCase;
     }
@@ -89,8 +93,8 @@ public class UserController {
 
     @Post
     HttpResponse<UserResponse> createUser(@Valid @Body CreateUserRequest request) {
-        User created = createUserUseCase
-            .execute(request.getName(), request.getEmail(), request.getActive());
+        User created = createUserUseCase.execute(request.getName(), request.getEmail(), 
+            request.getActive());
         
         return HttpResponse.created(UserResponse.fromDomain(created));
     }
@@ -100,21 +104,16 @@ public class UserController {
             @PathVariable Long id, 
             @Valid @Body UpdateUserRequest request) {
 
-        User updated = updateUserUseCase
-            .execute(id, request.getName(), request.getEmail(), request.getActive());
+        User updated = updateUserUseCase.execute(id, request.getName(), request.getEmail(), 
+            request.getActive());
 
         return HttpResponse.ok(UserResponse.fromDomain(updated));
     }
 
     @Patch("/{id}/active")
     HttpResponse<UserResponse> toggleActive(@PathVariable Long id) {
-        User user = userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("User", id));
-
-        User updated = updateUserUseCase
-            .execute(id, user.getName(), user.getEmail(), !user.getActive());
-
-        return HttpResponse.ok(UserResponse.fromDomain(updated));
+        return HttpResponse.ok(UserResponse
+            .fromDomain(toggleUserActiveUseCase.execute(id)));
     }
 
     @Delete("/{id}")
