@@ -10,7 +10,7 @@ export const HeaderWrapper = styled(Box)<{
     height: headerheight,
     position: 'fixed',
     backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[4],
+    // boxShadow: theme.shadows[4],
     zIndex: theme.zIndex.appBar,
 }));
 

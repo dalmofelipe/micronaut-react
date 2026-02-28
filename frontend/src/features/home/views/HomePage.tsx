@@ -1,6 +1,7 @@
 import { BookCard } from "@/features/books/catalog/views/BookCard";
 import { useGetBooks } from "@/features/books/shared/hooks/useBooks";
-import { CircularProgress, Typography } from "@mui/material";
+import { Loading } from "@/shared/components/Loading/Loading";
+import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { HeroSearch } from "./HeroSearch";
 import { BooksGrid, HomeTitle, HomeWrapper } from "./styles/HomePage.styled";
@@ -25,19 +26,16 @@ export const HomePage = () => {
   } = useGetBooks(0, 50, debouncedSearchTerm);
 
   const booksToDisplay = searchResults?.content || [];
-  const loading = isSearchLoading;
   const hasError = isError;
   const errorMessage = error?.message;
 
-  if (loading) {
-    return (
-      <HomeWrapper>
-        <CircularProgress />
-      </HomeWrapper>
-    );
+  const renderLoading = () => {
+    if (!isSearchLoading) return null;
+
+    return <Loading />
   }
 
-  if (hasError) {
+  if (hasError && !isSearchLoading) {
     return (
       <HomeWrapper>
         <Typography color="error">Erro ao carregar livros: {errorMessage}</Typography>
@@ -45,31 +43,38 @@ export const HomePage = () => {
     );
   }
 
+  const renderBooks = () => {
+    if (!isSearchLoading && booksToDisplay.length === 0) {
+      return (
+        <Typography color="text.secondary" align="center">
+          Nenhum livro encontrado.
+        </Typography>
+      );
+    }
+
+    return (
+      <BooksGrid>
+        {booksToDisplay.map((book) => (
+          <BookCard
+            key={book.id}
+            id={book.id}
+            title={book.title}
+            author={book.autor || book.author || ""}
+            description={book.resumo || book.description}
+          />
+        ))}
+      </BooksGrid>
+    );
+  }
+
   return (
     <HomeWrapper>
       <HeroSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
 
-      <HomeTitle>
-        Lançamentos e Destaques
-      </HomeTitle>
+      <HomeTitle>Lançamentos e Destaques</HomeTitle>
 
-      {booksToDisplay.length === 0 ? (
-        <Typography color="text.secondary" align="center">
-          Nenhum livro encontrado.
-        </Typography>
-      ) : (
-        <BooksGrid>
-          {booksToDisplay.map((book) => (
-            <BookCard
-              key={book.id}
-              id={book.id}
-              title={book.title}
-              author={book.autor || book.author || ""}
-              description={book.resumo || book.description}
-            />
-          ))}
-        </BooksGrid>
-      )}
+      {renderLoading()}
+      {renderBooks()}
     </HomeWrapper>
   );
 };

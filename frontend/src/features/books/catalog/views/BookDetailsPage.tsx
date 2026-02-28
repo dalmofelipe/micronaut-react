@@ -1,6 +1,7 @@
-import { CircularProgress, Typography, Chip, Box } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { Loading } from '@/shared/components/Loading/Loading';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Box, Chip, Typography } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetBookById } from "../../shared/hooks/useBooks";
 import {
   BookDetailsCard,
@@ -24,21 +25,18 @@ export const BookDetailsPage = () => {
   const renderLoading = () => {
     if (!isLoadingBook) return null;
 
-    return (
-      <BookDetailsWrapper>
-        <CircularProgress />
-      </BookDetailsWrapper>
-    );
+    return <Loading />
   };
 
   const renderError = () => {
-    if (!isErrorBook && book) return null;
+    if (!isErrorBook) return null;
 
     return (
       <BookDetailsWrapper>
         <Typography variant="h5" color="error">
           Erro ao carregar detalhes do livro: {errorBook?.message}
         </Typography>
+
         <StyledErrorBackButton
           startIcon={<ArrowBackIcon />}
           onClick={() => navigate('/')}
@@ -80,12 +78,14 @@ export const BookDetailsPage = () => {
       {renderError()}
       {book && (
         <BookDetailsWrapper>
-          <StyledBackButton
-            startIcon={<ArrowBackIcon />}
-            onClick={() => navigate('/')}
-          >
-            Voltar
-          </StyledBackButton>
+          <div>
+            <StyledBackButton
+              startIcon={<ArrowBackIcon />}
+              onClick={() => navigate('/')}
+            >
+              Voltar
+            </StyledBackButton>
+          </div>
 
           <BookDetailsCard>
             <BookDetailsHeader>
