@@ -26,7 +26,7 @@ public class BookEntity {
     
     private String title;
     
-    private int pages;
+    private Integer pages;
 
     public Book toDomain() {
         return Book.builder()

@@ -29,10 +29,10 @@ public class LoanRepositoryImpl implements LoanRepository {
     }
 
     @Override
-    public List<Loan> findAll(int page, int size, LoanStatus status, Long userId) {
+    public List<Loan> findAll(int page, int size, LoanStatus status) {
         int offset = page * size;
         String statusStr = status != null ? status.name() : null;
-        return jdbcRepository.findAllPaginated(offset, size, statusStr, userId).stream()
+        return jdbcRepository.findAllPaginated(offset, size, statusStr).stream()
             .map(LoanEntity::toDomain)
             .collect(Collectors.toList());
     }
@@ -43,9 +43,9 @@ public class LoanRepositoryImpl implements LoanRepository {
     }
 
     @Override
-    public long count(LoanStatus status, Long userId) {
+    public long count(LoanStatus status) {
         String statusStr = status != null ? status.name() : null;
-        return jdbcRepository.countWithFilters(statusStr, userId);
+        return jdbcRepository.countWithFilters(statusStr);
     }
 
     @Override

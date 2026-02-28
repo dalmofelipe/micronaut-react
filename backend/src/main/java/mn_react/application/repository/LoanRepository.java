@@ -9,9 +9,9 @@ import mn_react.domain.entities.LoanStatus;
 
 public interface LoanRepository {
     List<Loan> findAll();
-    List<Loan> findAll(int page, int size, LoanStatus status, Long userId);
+    List<Loan> findAll(int page, int size, LoanStatus status);
     long count();
-    long count(LoanStatus status, Long userId);
+    long count(LoanStatus status);
     Optional<Loan> findById(Long id);
     List<Loan> findByUserId(Long userId);
     List<Loan> findByBookId(Long bookId);

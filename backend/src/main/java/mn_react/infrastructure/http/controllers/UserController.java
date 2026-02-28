@@ -71,7 +71,7 @@ public class UserController {
             .content(content)
             .page(page)
             .size(size)
-            .totalElements(total)
+            .totalElements((int) total)
             .build();
 
         return HttpResponse.ok(response);

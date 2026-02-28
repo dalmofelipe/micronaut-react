@@ -16,5 +16,5 @@ import lombok.Setter;
 public class BookResponse {
     private Long id;
     private String title;
-    private int pages;
+    private Integer pages;
 }

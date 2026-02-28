@@ -16,6 +16,7 @@ import io.micronaut.http.annotation.QueryValue;
 import jakarta.validation.Valid;
 import mn_react.application.repository.LoanRepository;
 import mn_react.application.usecase.loan.CreateLoanUseCase;
+import mn_react.application.usecase.loan.GetLoansUseCase;
 import mn_react.application.usecase.loan.ReturnLoanUseCase;
 import mn_react.domain.entities.Loan;
 import mn_react.domain.entities.LoanStatus;
@@ -28,15 +29,18 @@ import mn_react.infrastructure.http.dto.responses.PagedResponse;
 public class LoanController {
 
     private final LoanRepository loanRepository;
+    private final GetLoansUseCase getLoansUseCase;
     private final CreateLoanUseCase createLoanUseCase;
     private final ReturnLoanUseCase returnLoanUseCase;
 
     public LoanController(
-        LoanRepository loanRepository, 
+        LoanRepository loanRepository,
+        GetLoansUseCase getLoansUseCase,
         CreateLoanUseCase createLoanUseCase,
         ReturnLoanUseCase returnLoanUseCase
     ) {
         this.loanRepository = loanRepository;
+        this.getLoansUseCase = getLoansUseCase;
         this.createLoanUseCase = createLoanUseCase;
         this.returnLoanUseCase = returnLoanUseCase;
     }
@@ -45,30 +49,16 @@ public class LoanController {
     HttpResponse<?> getAllLoans(
         @QueryValue(defaultValue = "0") int page, 
         @QueryValue(defaultValue = "10") int size, 
-        @Nullable @QueryValue String status, 
-        @Nullable @QueryValue Long userId
+        @Nullable @QueryValue String status
     ) {
-        if (page == -1) {
-            return HttpResponse.ok(loanRepository.findAll().stream()
-                .map(LoanResponse::fromDomain).collect(Collectors.toList()));
-        }
-
-        LoanStatus loanStatus = status != null && !status.isEmpty() 
-            ? LoanStatus.valueOf(status) 
-            : null;
-
-        List<Loan> loans = loanRepository.findAll(page, size, loanStatus, userId);
-        Long total = loanRepository.count(loanStatus, userId);
-
-        List<LoanResponse> content = loans.stream()
-            .map(LoanResponse::fromDomain)
-            .collect(Collectors.toList());
+        List<Loan> loans = getLoansUseCase.execute(page, size, status);
+        List<LoanResponse> content = toResponseList(loans);
 
         PagedResponse<LoanResponse> response = PagedResponse.<LoanResponse>builder()
             .content(content)
             .page(page)
             .size(size)
-            .totalElements(total)
+            .totalElements(content.size())
             .build();
 
         return HttpResponse.ok(response);
@@ -110,5 +100,12 @@ public class LoanController {
         loanRepository.deleteById(id);
 
         return HttpResponse.noContent();
+    }
+
+
+    private List<LoanResponse> toResponseList(List<Loan> loans) {
+        return loans.stream()
+            .map(LoanResponse::fromDomain)
+            .collect(Collectors.toList());
     }
 }

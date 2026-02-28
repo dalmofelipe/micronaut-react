@@ -1,13 +1,14 @@
 package mn_react.infrastructure.persistence.jdbc;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.data.annotation.Query;
 import io.micronaut.data.jdbc.annotation.JdbcRepository;
 import io.micronaut.data.model.query.builder.sql.Dialect;
 import io.micronaut.data.repository.CrudRepository;
 import mn_react.infrastructure.persistence.entity.LoanEntity;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @JdbcRepository(dialect = Dialect.H2)
 public interface LoanJdbcRepository extends CrudRepository<LoanEntity, Long> {
@@ -30,17 +31,15 @@ public interface LoanJdbcRepository extends CrudRepository<LoanEntity, Long> {
     @Query("""
     SELECT * FROM loans 
     WHERE (:status IS NULL OR status = :status) 
-        AND (:userId IS NULL OR user_id = :userId) 
     ORDER BY data_emprestimo 
     DESC LIMIT :size 
     OFFSET :offset
     """)
-    List<LoanEntity> findAllPaginated(int offset, int size, String status, Long userId);
+    List<LoanEntity> findAllPaginated(int offset, int size, @Nullable String status);
     
     @Query("""
     SELECT COUNT(*) FROM loans 
-    WHERE (:status IS NULL OR status = :status) 
-        AND (:userId IS NULL OR user_id = :userId)
+    WHERE (:status IS NULL OR status = :status)
     """)
-    long countWithFilters(String status, Long userId);
+    Integer countWithFilters(@Nullable String status);
 }
