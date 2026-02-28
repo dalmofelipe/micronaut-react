@@ -15,37 +15,7 @@ micronaut:
         mapping: /media/**
   server:
     cors:
-      enabled: true
-      configurations:
-        default:
-          paths:
-            - /**
-          allowed-origins:
-            - http://localhost:5173
-            - ${FRONTEND_URL:`http://localhost:5000`}
-          allowed-methods:
-            - GET
-            - POST
-            - PUT
-            - PATCH
-            - DELETE
-            - OPTIONS
-          allowed-headers:
-            - Content-Type
-            - Authorization
-            - X-Requested-With
-            - Accept
-            - Origin
-          exposed-headers:
-            - Content-Type
-            - Authorization
-          allow-credentials: true
-          max-age-seconds: 1800
-        ui:
-          paths:
-            - /swagger-ui/**
-          allowed-origins:
-            - ${ FRONTEND_URL:`http://localhost:5000` }
+      enabled: false
 datasources:
   default:
     url: ${ JDBC_URL:`jdbc:h2:mem:testedb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE` }
