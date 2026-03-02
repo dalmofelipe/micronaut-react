@@ -12,18 +12,16 @@ import { AdminUsersPage } from "@/features/users/admin/views/AdminUsersPage";
 import { NotificationSnackbar } from '@/shared/components/NotificationSnackbar';
 import { useThemeStore } from "@/shared/store/useThemeStore";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryProvider } from '@/app/providers/QueryProvider';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { darkTheme, lightTheme } from "./theme";
-
-export const queryClient = new QueryClient();
 
 export const Router = () => {
   const mode = useThemeStore((state) => state.mode);
   const theme = mode === "light" ? lightTheme : darkTheme;
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
@@ -48,7 +46,7 @@ export const Router = () => {
           <NotificationSnackbar />
         </BrowserRouter>
       </ThemeProvider>
-    </QueryClientProvider>
+    </QueryProvider>
   )
 }
 
