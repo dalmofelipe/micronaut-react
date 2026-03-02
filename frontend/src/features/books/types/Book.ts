@@ -12,6 +12,12 @@ export interface IBook {
   author?: string;
 }
 
+export interface IBookFilters {
+  page: number;
+  size: number;
+  search: string;
+}
+
 export interface ICreateBookRequest {
   title: string;
   autor: string;

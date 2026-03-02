@@ -1,6 +1,6 @@
-import * as BookManager from "@/features/books/shared/services/BookManager";
-import { useGetLoansCount } from "@/features/loans/shared/hooks/useLoans";
-import { useGetUsersCount } from "@/features/users/shared/hooks/useUsers";
+import { BookManager } from "@/features/books/service/BookManager";
+import { useGetLoansCount } from "@/features/loans/hooks/useLoans";
+import { useGetUsersCount } from "@/features/users/hooks/useUsers";
 import { Assignment, MenuBook, People } from '@mui/icons-material';
 import { Box, Grid, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
@@ -11,7 +11,7 @@ export function DashboardHomePage() {
   const { data: loansCount, isLoading: isLoadingLoans } = useGetLoansCount('ATIVO');
   const { data: booksData, isLoading: isLoadingBooks } = useQuery({
     queryKey: ['books-count'],
-    queryFn: () => BookManager.getAllBooks(0, 1, ''),
+    queryFn: () => BookManager.getAll(0, 1, ''),
   });
 
   return (

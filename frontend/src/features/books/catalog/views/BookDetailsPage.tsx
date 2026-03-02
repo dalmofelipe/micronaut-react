@@ -2,7 +2,7 @@ import { Loading } from '@/shared/components/Loading/Loading';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Chip, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetBookById } from "../../shared/hooks/useBooks";
+import { useGetBookById } from "../../hooks/useBooks";
 import {
   BookDetailsCard,
   BookDetailsHeader,

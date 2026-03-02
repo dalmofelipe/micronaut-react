@@ -1,10 +1,10 @@
-import { useGetBooks } from '@/features/books/shared/hooks/useBooks';
-import { useGetUsers } from '@/features/users/shared/hooks/useUsers';
+import { useGetBooks } from '@/features/books/hooks/useBooks';
+import { useGetUsers } from '@/features/users/hooks/useUsers';
 import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
 import { Add } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import { useGetLoans } from '../../shared/hooks/useLoans';
-import { useLoanFiltersStore } from '../../shared/store/useLoanFiltersStore';
+import { useGetLoans } from '../../hooks/useLoans';
+import { useLoanFiltersStore } from '../../store/useLoanFiltersStore';
 import { useAdminLoans } from '../hooks/useAdminLoans';
 
 import { LoanActionsMenu } from './LoanActionsMenu';

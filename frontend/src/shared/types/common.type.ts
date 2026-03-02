@@ -5,9 +5,3 @@ export interface IPagedResponse<T> {
   totalElements: number;
   totalPages: number;
 }
-
-export interface IBookFilters {
-  page: number;
-  size: number;
-  search: string;
-}

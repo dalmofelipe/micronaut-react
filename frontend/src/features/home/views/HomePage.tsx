@@ -1,5 +1,5 @@
 import { BookCard } from "@/features/books/catalog/views/BookCard";
-import { useGetBooks } from "@/features/books/shared/hooks/useBooks";
+import { useGetBooks } from "@/features/books/hooks/useBooks";
 import { Loading } from "@/shared/components/Loading/Loading";
 import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";

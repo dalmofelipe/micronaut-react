@@ -1,6 +1,6 @@
 import { Menu, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 import { Edit, Delete, ToggleOn, ToggleOff } from '@mui/icons-material';
-import type { IUser } from '../../shared/types/User';
+import type { IUser } from '../../types/User';
 
 interface UserActionsMenuProps {
   anchorEl: HTMLElement | null;

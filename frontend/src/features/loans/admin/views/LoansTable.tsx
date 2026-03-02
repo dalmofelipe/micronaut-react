@@ -16,8 +16,8 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { useLoanFiltersStore } from '../../shared/store/useLoanFiltersStore';
-import type { ILoan, TLoanStatus } from '../../shared/types/Loan';
+import { useLoanFiltersStore } from '../../store/useLoanFiltersStore';
+import type { ILoan, TLoanStatus } from '../../types/Loan';
 import { FilterContainer } from './styles/AdminLoans.styled';
 
 interface ILoansTableProps {

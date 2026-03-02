@@ -1,6 +1,6 @@
 import { AssignmentReturn, Delete } from '@mui/icons-material';
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
-import type { ILoan } from '../../shared/types/Loan';
+import type { ILoan } from '../../types/Loan';
 
 interface ILoanActionsMenuProps {
   anchorEl: HTMLElement | null;

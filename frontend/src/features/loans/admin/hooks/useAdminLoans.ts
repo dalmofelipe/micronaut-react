@@ -1,7 +1,7 @@
 import { useNotificationStore } from '@/shared/store/useNotificationStore';
 import { useState } from 'react';
-import { useCreateLoan, useDeleteLoan, useReturnLoan } from '../../shared/hooks/useLoans';
-import type { ICreateLoanRequest, ILoan } from '../../shared/types/Loan';
+import { useCreateLoan, useDeleteLoan, useReturnLoan } from '../../hooks/useLoans';
+import type { ICreateLoanRequest, ILoan } from '../../types/Loan';
 
 export function useAdminLoans() {
   const createMutation = useCreateLoan();

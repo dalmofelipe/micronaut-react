@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
-import type { IUser } from '../../shared/types/User';
+import type { IUser } from '../../types/User';
 
 interface UsersTableProps {
   data?: {

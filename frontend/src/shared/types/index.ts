@@ -1,11 +1,19 @@
 // Common types
-export type { IPagedResponse, IBookFilters } from './common.type';
+export type {
+    IPagedResponse
+} from './common.type';
 
 // Book types
-export type { IBook, ICreateBookRequest, IUpdateBookRequest, TBook } from '@/features/books/shared/types/Book';
+export type {
+    IBook, ICreateBookRequest, IUpdateBookRequest, TBook
+} from '@/features/books/types/Book';
 
 // User types
-export type { IUser, IUserFilters, ICreateUserRequest, IUpdateUserRequest } from '@/features/users/shared/types/User';
+export type {
+    ICreateUserRequest, IUpdateUserRequest, IUser, IUserFilters
+} from '@/features/users/types/User';
 
 // Loan types
-export type { ILoan, ILoanFilters, ICreateLoanRequest, TLoanStatus } from '@/features/loans/shared/types/Loan';
+export type {
+    ICreateLoanRequest, ILoan, ILoanFilters, TLoanStatus
+} from '@/features/loans/types/Loan';
