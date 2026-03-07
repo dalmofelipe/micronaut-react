@@ -54,3 +54,11 @@ export const useGetBookById = (id: string) => {
     enabled: !!id,
   });
 };
+
+export const useGetBooksCount = () => {
+  return useQuery({
+    queryKey: ['books-count'],
+    queryFn: () => BookManager.getAll(0, 1, ''),
+    select: (data) => data.totalElements,
+  });
+};

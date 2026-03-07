@@ -2,13 +2,13 @@ import { useState } from "react";
 import {
   useCreateBook,
   useUpdateBook,
-} from "../../hooks/useBooks";
+} from "./useBooks";
 import { useNotificationStore } from "@/shared/store/useNotificationStore";
 import type {
   IBook,
   ICreateBookRequest,
   IUpdateBookRequest,
-} from "../../types/Book";
+} from "../types/Book";
 
 export interface BookFormData {
   title: string;

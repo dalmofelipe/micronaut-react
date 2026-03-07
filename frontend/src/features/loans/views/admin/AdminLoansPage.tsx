@@ -4,9 +4,8 @@ import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
 import { Add } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { useGetLoans } from '../../hooks/useLoans';
+import { useAdminLoans } from '../../hooks/useAdminLoans';
 import { useLoanFiltersStore } from '../../store/useLoanFiltersStore';
-import { useAdminLoans } from '../hooks/useAdminLoans';
-
 import { LoanActionsMenu } from './LoanActionsMenu';
 import { LoanFormDialog } from './LoanFormDialog';
 import { LoansTable } from './LoansTable';

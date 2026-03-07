@@ -7,7 +7,10 @@ interface BooksSearchBarProps {
 
 export function BooksSearchBar({ value, onChange }: BooksSearchBarProps) {
   return (
-    <Paper>
+    <Paper sx={{
+        borderBottomLeftRadius: '0px',
+        borderBottomRightRadius: '0px',
+      }}>
       <Box p={2}>
         <TextField
           fullWidth

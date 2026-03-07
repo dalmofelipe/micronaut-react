@@ -7,7 +7,7 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import type { BookFormData } from "../hooks/useBookForm";
+import type { BookFormData } from "../../hooks/useBookForm";
 
 interface BookFormDialogProps {
   open: boolean;
@@ -29,12 +29,7 @@ export function BookFormDialog({
   onChange,
 }: BookFormDialogProps) {
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="md"
-      fullWidth
-    >
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>{isEditing ? "Editar Livro" : "Novo Livro"}</DialogTitle>
       <DialogContent>
         <Box display="flex" flexDirection="column" gap={2} mt={1}>

@@ -2,9 +2,9 @@ import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { useNotificationStore } from "@/shared/store/useNotificationStore";
 import { Box } from "@mui/material";
 import { useState } from "react";
+import { useBookForm } from "../../hooks/useBookForm";
 import { useDeleteBook, useGetBooks } from "../../hooks/useBooks";
 import type { IBook } from "../../types/Book";
-import { useBookForm } from "../hooks/useBookForm";
 import { BookActionsMenu } from "./BookActionsMenu";
 import { BookFormDialog } from "./BookFormDialog";
 import { BooksPageHeader } from "./BooksPageHeader";
@@ -121,7 +121,8 @@ export function AdminBooksPage() {
       <ConfirmDeleteDialog
         open={deleteDialogOpen}
         title="Deletar Livro"
-        message={`Tem certeza que deseja deletar o livro "${menuSelectedBook?.title}"? Esta ação não pode ser desfeita.`}
+        message={`Tem certeza que deseja deletar o livro "
+          ${menuSelectedBook?.title}"? Esta ação não pode ser desfeita.`}
         onConfirm={handleDeleteConfirm}
         onCancel={() => setDeleteDialogOpen(false)}
         isLoading={deleteMutation.isPending}

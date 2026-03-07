@@ -1,18 +1,15 @@
-import { BookManager } from "@/features/books/service/BookManager";
+import { useGetBooksCount } from "@/features/books/hooks/useBooks";
 import { useGetLoansCount } from "@/features/loans/hooks/useLoans";
 import { useGetUsersCount } from "@/features/users/hooks/useUsers";
-import { Assignment, MenuBook, People } from '@mui/icons-material';
-import { Box, Grid, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import { StatsCard } from './StatsCard';
+import { Assignment, MenuBook, People } from "@mui/icons-material";
+import { Box, Grid, Typography } from "@mui/material";
+import { StatsCard } from "./StatsCard";
 
 export function DashboardHomePage() {
   const { data: usersCount, isLoading: isLoadingUsers } = useGetUsersCount();
-  const { data: loansCount, isLoading: isLoadingLoans } = useGetLoansCount('ATIVO');
-  const { data: booksData, isLoading: isLoadingBooks } = useQuery({
-    queryKey: ['books-count'],
-    queryFn: () => BookManager.getAll(0, 1, ''),
-  });
+  const { data: loansCount, isLoading: isLoadingLoans } =
+    useGetLoansCount("ATIVO");
+  const { data: booksCount, isLoading: isLoadingBooks } = useGetBooksCount();
 
   return (
     <Box>
@@ -32,16 +29,14 @@ export function DashboardHomePage() {
             isLoading={isLoadingUsers}
           />
         </Grid>
-
         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
           <StatsCard
             title="Total de Livros"
-            value={booksData?.totalElements}
+            value={booksCount}
             icon={<MenuBook fontSize="large" />}
             isLoading={isLoadingBooks}
           />
         </Grid>
-
         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
           <StatsCard
             title="Empréstimos Ativos"

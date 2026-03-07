@@ -1,18 +1,16 @@
-import { DashboardLayout } from '@/app/layouts/dashboard/DashboardLayout';
-import { DefaultLayout } from '@/app/layouts/default/DefaultLayout';
-import { BlogFeed, BlogPostPage } from '@/features/blog';
-import { AdminBooksPage } from "@/features/books/admin/views/AdminBooksPage";
-import { BookDetailsPage } from "@/features/books/catalog/views/BookDetailsPage";
-import ContentFormPage from '@/features/content/views/admin/content-form/ContentFormPage';
-import ContentListPage from '@/features/content/views/admin/content-list/ContentListPage';
-import { DashboardHomePage } from "@/features/dashboard/views/DashboardHomePage";
-import { HomePage } from "@/features/home/views/HomePage";
-import { AdminLoansPage } from "@/features/loans/admin/views/AdminLoansPage";
-import { AdminUsersPage } from "@/features/users/admin/views/AdminUsersPage";
-import { NotificationSnackbar } from '@/shared/components/NotificationSnackbar';
+import { DashboardLayout } from "@/app/layouts/dashboard/DashboardLayout";
+import { DefaultLayout } from "@/app/layouts/default/DefaultLayout";
+import { QueryProvider } from "@/app/providers/QueryProvider";
+import { BlogFeed, BlogPostPage } from "@/features/blog";
+import { AdminBooksPage, BookDetailsPage } from "@/features/books";
+import { ContentFormPage, ContentListPage } from "@/features/content";
+import { DashboardHomePage } from "@/features/dashboard/DashboardHomePage";
+import { HomePage } from "@/features/home/HomePage";
+import { AdminLoansPage } from "@/features/loans";
+import { AdminUsersPage } from "@/features/users";
+import { NotificationSnackbar } from "@/shared/components/NotificationSnackbar";
 import { useThemeStore } from "@/shared/store/useThemeStore";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { QueryProvider } from '@/app/providers/QueryProvider';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { darkTheme, lightTheme } from "./theme";
 
@@ -47,7 +45,7 @@ export const Router = () => {
         </BrowserRouter>
       </ThemeProvider>
     </QueryProvider>
-  )
-}
+  );
+};
 
 export default Router;

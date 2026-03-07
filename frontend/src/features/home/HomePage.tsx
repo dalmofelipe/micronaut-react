@@ -1,5 +1,5 @@
-import { BookCard } from "@/features/books/catalog/views/BookCard";
 import { useGetBooks } from "@/features/books/hooks/useBooks";
+import { BookCard } from "@/features/books/views/BookCard";
 import { Loading } from "@/shared/components/Loading/Loading";
 import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -14,7 +14,6 @@ export const HomePage = () => {
     const timer = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
     }, 500);
-
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
@@ -22,23 +21,22 @@ export const HomePage = () => {
     data: searchResults,
     isLoading: isSearchLoading,
     isError,
-    error
+    error,
   } = useGetBooks(0, 50, debouncedSearchTerm);
 
   const booksToDisplay = searchResults?.content || [];
-  const hasError = isError;
-  const errorMessage = error?.message;
 
   const renderLoading = () => {
     if (!isSearchLoading) return null;
+    return <Loading />;
+  };
 
-    return <Loading />
-  }
-
-  if (hasError && !isSearchLoading) {
+  if (isError && !isSearchLoading) {
     return (
       <HomeWrapper>
-        <Typography color="error">Erro ao carregar livros: {errorMessage}</Typography>
+        <Typography color="error">
+          Erro ao carregar livros: {error?.message}
+        </Typography>
       </HomeWrapper>
     );
   }
@@ -51,7 +49,6 @@ export const HomePage = () => {
         </Typography>
       );
     }
-
     return (
       <BooksGrid>
         {booksToDisplay.map((book) => (
@@ -65,14 +62,12 @@ export const HomePage = () => {
         ))}
       </BooksGrid>
     );
-  }
+  };
 
   return (
     <HomeWrapper>
       <HeroSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-
       <HomeTitle>Lançamentos e Destaques</HomeTitle>
-
       {renderLoading()}
       {renderBooks()}
     </HomeWrapper>

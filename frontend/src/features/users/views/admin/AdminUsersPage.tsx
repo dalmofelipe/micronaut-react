@@ -1,7 +1,7 @@
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { Add } from '@mui/icons-material';
 import { Box, Button, TextField, Typography } from '@mui/material';
-import { useAdminUsers } from '../hooks/useAdminUsers';
+import { useAdminUsers } from '../../hooks/useAdminUsers';
 import { FilterContainer, PageHeader, StyledPaper } from './styles/AdminUsers.styled';
 import { UserActionsMenu } from './UserActionsMenu';
 import { UserFormDialog } from './UserFormDialog';

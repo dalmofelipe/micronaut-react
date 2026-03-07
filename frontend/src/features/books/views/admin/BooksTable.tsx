@@ -67,7 +67,10 @@ export function BooksTable({
   };
 
   return (
-    <Paper>
+    <Paper sx={{
+      borderTopLeftRadius: '0px',
+      borderTopRightRadius: '0px'
+    }}>
       <TableContainer>
         <Table>
           <TableHead>

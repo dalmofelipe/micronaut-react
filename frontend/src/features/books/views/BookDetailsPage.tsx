@@ -2,7 +2,7 @@ import { Loading } from '@/shared/components/Loading/Loading';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Chip, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetBookById } from "../../hooks/useBooks";
+import { useGetBookById } from "../hooks/useBooks";
 import {
   BookDetailsCard,
   BookDetailsHeader,
@@ -10,7 +10,7 @@ import {
   BookDetailsWrapper,
   StyledBackButton,
   StyledErrorBackButton
-} from "../styles/BookDetailsPage.styled";
+} from "./styles/BookDetailsPage.styled";
 
 export const BookDetailsPage = () => {
   const { id } = useParams<{ id: string }>();

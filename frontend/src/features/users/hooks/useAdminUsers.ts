@@ -1,8 +1,8 @@
 import { useNotificationStore } from '@/shared/store/useNotificationStore';
 import { useState } from 'react';
-import { useCreateUser, useDeleteUser, useGetUsers, useToggleUserActive, useUpdateUser } from '../../hooks/useUsers';
-import { useUserFiltersStore } from '../../store/useUserFiltersStore';
-import type { ICreateUserRequest, IUpdateUserRequest, IUser } from '../../types/User';
+import { useCreateUser, useDeleteUser, useGetUsers, useToggleUserActive, useUpdateUser } from './useUsers';
+import { useUserFiltersStore } from '../store/useUserFiltersStore';
+import type { ICreateUserRequest, IUpdateUserRequest, IUser } from '../types/User';
 
 export function useAdminUsers() {
   const filters = useUserFiltersStore((state) => state.filters);

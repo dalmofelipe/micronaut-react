@@ -15,11 +15,11 @@ interface IStatsCardProps {
   isLoading?: boolean;
 }
 
-export const StatsCard: React.FC<IStatsCardProps> = ({ 
+export const StatsCard: React.FC<IStatsCardProps> = ({
   title,
   value,
   icon,
-  isLoading 
+  isLoading,
 }) => {
   const renderContent = () => {
     if (isLoading) {
@@ -55,4 +55,4 @@ export const StatsCard: React.FC<IStatsCardProps> = ({
       </CardContent>
     </Card>
   );
-}
+};
